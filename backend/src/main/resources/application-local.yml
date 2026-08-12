@@ -2,10 +2,12 @@ spring:
   cloud:
     nacos:
       discovery:
+        # 本地无 Nacos 时关闭服务注册；接入环境后由环境变量打开。
         enabled: ${NACOS_DISCOVERY_ENABLED:false}
         server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
       config:
         enabled: false
 
 esd:
+  # 仅本地联调可使用 X-ESD-Debug-* 请求头，生产必须保持 false。
   local-debug-auth-enabled: ${ESD_LOCAL_DEBUG_AUTH_ENABLED:false}

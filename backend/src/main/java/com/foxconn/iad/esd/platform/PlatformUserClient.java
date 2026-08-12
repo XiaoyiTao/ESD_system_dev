@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
         path = "/rpc-api/system/user")
 public interface PlatformUserClient {
 
+    /** 通过平台用户 ID 查询用户主数据。 */
     @GetMapping("/get")
     PlatformRpcResult<PlatformUserResp> getUser(@RequestParam("id") Long id);
 }

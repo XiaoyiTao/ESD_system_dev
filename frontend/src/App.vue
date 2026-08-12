@@ -8,16 +8,19 @@ const route = useRoute()
 const collapsed = ref(false)
 const session = useSessionStore()
 
+// 根布局只负责初始化一次平台会话，业务页面通过 Pinia 读取当前厂区。
 onMounted(() => session.initialize())
 </script>
 
 <template>
+  <!-- 统一后台壳：左侧导航、顶部平台上下文、右侧业务路由。 -->
   <el-container class="app-shell">
     <el-aside :width="collapsed ? '72px' : '232px'" class="app-aside">
       <div class="brand-mark">
         <span class="brand-icon">ESD</span>
         <span v-if="!collapsed" class="brand-name">靜電衣鞋管理</span>
       </div>
+      <!-- 菜单项先按阶段固定；后续可根据平台返回的菜单权限动态裁剪。 -->
       <el-menu :default-active="route.path" router class="app-menu">
         <el-menu-item index="/dashboard">
           <el-icon><Monitor /></el-icon>
@@ -48,6 +51,7 @@ onMounted(() => session.initialize())
           <div class="header-title">靜電防護資產中心</div>
         </div>
         <div class="header-actions">
+          <!-- 当前厂区同时驱动人员和资产列表，服务端仍会重新校验权限。 -->
           <el-select
             v-if="session.sites.length"
             :model-value="session.currentSite"
@@ -65,6 +69,7 @@ onMounted(() => session.initialize())
         </div>
       </el-header>
       <el-main class="app-main">
+        <!-- 会话未完成时不加载业务页面，避免用空厂区发出无效请求。 -->
         <div v-if="session.loading" class="page-loading"><el-skeleton :rows="5" animated /></div>
         <el-empty v-else-if="!session.currentSite" description="当前账号未配置厂区权限" />
         <router-view v-else />

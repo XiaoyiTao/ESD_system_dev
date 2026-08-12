@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+// 使用懒加载让 Dashboard、人员和资产页面按路由拆包，降低首屏下载量。
 const router = createRouter({
   history: createWebHistory(),
   routes: [

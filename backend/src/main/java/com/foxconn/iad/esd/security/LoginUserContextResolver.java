@@ -15,7 +15,9 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class LoginUserContextResolver {
 
+    /** 网关写入的 URL 编码 JSON 登录上下文。 */
     private static final String LOGIN_USER_HEADER = "login-user";
+    /** 本地开发专用用户 ID 头，生产配置必须关闭调试模式。 */
     private static final String DEBUG_USER_HEADER = "X-ESD-Debug-User-Id";
     private static final String DEBUG_SITE_HEADER = "X-ESD-Debug-Sites";
 
@@ -88,4 +90,15 @@ public class LoginUserContextResolver {
         return node.isNumber() ? node.longValue() : null;
     }
 }
-
+    /** 本地开发专用厂区权限头。 */
+    /** 当前 HTTP 请求，用于读取网关转发的认证头。 */
+    /** 复用 Spring Boot 的 Jackson 配置解析登录 JSON。 */
+    /** 是否允许使用本地调试头，默认关闭。 */
+    /** 优先解析真实平台上下文，只有明确开启本地调试时才接受调试头。 */
+        // 真实网关头优先，避免调试开关影响已经认证的生产请求。
+    /** 解析 gateway LoginUser 的 URL 编码 JSON。 */
+            // 平台登录上下文的 site 位于 info.site，多个厂区使用逗号分隔。
+    /** 解析本机联调使用的简化认证头，不代表正式鉴权方案。 */
+            // 本地请求没有租户网关时，使用固定租户值仅方便业务联调。
+    /** 读取必填的数值字段并转换成统一业务错误。 */
+    /** 读取可选数值字段；缺失或非数字时返回 null。 */

@@ -1,4 +1,5 @@
 server:
+  # ESD 业务服务端口；前端开发代理默认指向该端口。
   port: 48082
 
 spring:
@@ -10,6 +11,7 @@ spring:
     serialization:
       write-dates-as-timestamps: false
   datasource:
+    # 独立业务库，不保存 platform-system 的账号、密码和组织主数据。
     url: ${ESD_DB_URL:jdbc:mysql://127.0.0.1:3306/platform_esd?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&rewriteBatchedStatements=true}
     username: ${ESD_DB_USERNAME:root}
     password: ${ESD_DB_PASSWORD:}
@@ -25,6 +27,7 @@ management:
       show-details: when_authorized
 
 esd:
+  # 生产环境可通过环境变量或 Nacos 覆盖服务发现和调试配置。
   service-name: ${spring.application.name}
   platform-system-service: ${ESD_PLATFORM_SYSTEM_SERVICE:platform-system-server}
   local-debug-auth-enabled: false

@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AssetMapper extends BaseMapper<AssetDO> {
+    // 资产交易阶段会在此补充带版本条件的锁定/更新 SQL。
 }
-

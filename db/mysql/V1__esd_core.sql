@@ -1,11 +1,13 @@
 -- ESD System v0.1.0
 -- 只建立 ESD 業務資料；平台帳號、密碼、部門、角色和菜單由 platform-system-server 管理。
+-- 每張业务表保留 site_code；服务层还会依据网关登录上下文再次校验厂区权限。
 CREATE DATABASE IF NOT EXISTS platform_esd
   DEFAULT CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
 USE platform_esd;
 
+-- 人员扩展档只保存平台主数据快照和 ESD 现场属性。
 CREATE TABLE IF NOT EXISTS esd_person_profile (
   id BIGINT NOT NULL,
   site_code VARCHAR(32) NOT NULL,
@@ -33,6 +35,7 @@ CREATE TABLE IF NOT EXISTS esd_person_profile (
   CONSTRAINT ck_person_status CHECK (esd_status IN (0, 1))
 ) ENGINE=InnoDB COMMENT='ESD 人員擴展檔';
 
+-- 资产主档保存当前生命周期和当前持有人快照；历史变化写入事件账。
 CREATE TABLE IF NOT EXISTS esd_asset (
   id BIGINT NOT NULL,
   asset_code VARCHAR(64) NOT NULL,
@@ -45,7 +48,7 @@ CREATE TABLE IF NOT EXISTS esd_asset (
   current_holder_no VARCHAR(64) NULL,
   current_holder_name VARCHAR(100) NULL,
   clean_count INT NOT NULL DEFAULT 0,
-  version INT NOT NULL DEFAULT 0,
+  version INT NOT NULL DEFAULT 0 COMMENT '编辑和交易使用的乐观锁版本',
   creator VARCHAR(64) NULL,
   create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updater VARCHAR(64) NULL,
@@ -61,6 +64,7 @@ CREATE TABLE IF NOT EXISTS esd_asset (
   CONSTRAINT ck_asset_holder CHECK ((lifecycle_status = 20 AND current_holder_user_id IS NOT NULL) OR (lifecycle_status <> 20 AND current_holder_user_id IS NULL))
 ) ENGINE=InnoDB COMMENT='ESD 資產主檔';
 
+-- 发放记录保存员工和资产快照，保证历史记录不随主数据修改而改变。
 CREATE TABLE IF NOT EXISTS esd_issue_record (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,
@@ -87,6 +91,7 @@ CREATE TABLE IF NOT EXISTS esd_issue_record (
   KEY idx_issue_asset (site_code, asset_id, record_status)
 ) ENGINE=InnoDB COMMENT='ESD 發放記錄';
 
+-- 回收记录描述回收状态和后续处置：直接入库或送洗。
 CREATE TABLE IF NOT EXISTS esd_return_record (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,
@@ -116,6 +121,7 @@ CREATE TABLE IF NOT EXISTS esd_return_record (
   KEY idx_return_employee (site_code, employee_user_id, return_date)
 ) ENGINE=InnoDB COMMENT='ESD 回收記錄';
 
+-- 送洗完成后由交易服务将资产自动恢复为可用库存。
 CREATE TABLE IF NOT EXISTS esd_laundry_record (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,
@@ -141,6 +147,7 @@ CREATE TABLE IF NOT EXISTS esd_laundry_record (
   KEY idx_laundry_history (site_code, complete_time)
 ) ENGINE=InnoDB COMMENT='ESD 清洗記錄';
 
+-- 报废记录保存恢复前完整快照，供后续撤销操作校验。
 CREATE TABLE IF NOT EXISTS esd_scrap_record (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,
@@ -168,6 +175,7 @@ CREATE TABLE IF NOT EXISTS esd_scrap_record (
   KEY idx_scrap_asset (site_code, asset_id, scrap_date)
 ) ENGINE=InnoDB COMMENT='ESD 報廢記錄';
 
+-- 遗失记录保存责任人和恢复前快照，支持后续撤销。
 CREATE TABLE IF NOT EXISTS esd_loss_record (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,
@@ -198,6 +206,7 @@ CREATE TABLE IF NOT EXISTS esd_loss_record (
   KEY idx_loss_asset (site_code, asset_id, discover_date)
 ) ENGINE=InnoDB COMMENT='ESD 遺失記錄';
 
+-- 衣服和鞋子分别建立一人多持报警，超过 1 件即触发。
 CREATE TABLE IF NOT EXISTS esd_alert (
   id BIGINT NOT NULL,
   site_code VARCHAR(32) NOT NULL,
@@ -221,6 +230,7 @@ CREATE TABLE IF NOT EXISTS esd_alert (
   KEY idx_alert_status (site_code, status, last_trigger_time)
 ) ENGINE=InnoDB COMMENT='ESD 一人多持報警';
 
+-- 事件账只追加不更新，记录每一次资产状态变化。
 CREATE TABLE IF NOT EXISTS esd_asset_event (
   id BIGINT NOT NULL,
   site_code VARCHAR(32) NOT NULL,
@@ -240,6 +250,7 @@ CREATE TABLE IF NOT EXISTS esd_asset_event (
   KEY idx_event_request (request_id)
 ) ENGINE=InnoDB COMMENT='ESD 資產不可變事件帳';
 
+-- 为后续 Excel 原子导入预留批次审计表。
 CREATE TABLE IF NOT EXISTS esd_import_batch (
   id BIGINT NOT NULL,
   request_id VARCHAR(64) NOT NULL,

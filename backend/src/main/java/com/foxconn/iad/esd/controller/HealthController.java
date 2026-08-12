@@ -14,8 +14,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HealthController {
 
+    /** 当前服务的运行配置。 */
     private final EsdProperties properties;
 
+    /** 提供轻量级业务服务和平台服务标识，供网关或部署探针检查。 */
     @GetMapping
     public Map<String, Object> health() {
         Map<String, Object> result = new LinkedHashMap<>();

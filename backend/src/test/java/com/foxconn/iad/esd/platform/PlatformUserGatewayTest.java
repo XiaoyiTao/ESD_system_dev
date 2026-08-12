@@ -19,6 +19,7 @@ class PlatformUserGatewayTest {
     private PlatformUserGateway gateway;
 
     @Test
+    /** 平台停用用户不能绑定为 ESD 业务人员。 */
     void rejectsDisabledUser() {
         PlatformUserResp user = new PlatformUserResp();
         user.setId(7L);
@@ -32,6 +33,7 @@ class PlatformUserGatewayTest {
     }
 
     @Test
+    /** 平台用户必须拥有当前绑定厂区权限。 */
     void rejectsUserOutsideSite() {
         PlatformUserResp user = new PlatformUserResp();
         user.setId(7L);
@@ -44,6 +46,7 @@ class PlatformUserGatewayTest {
                 .hasMessage("平台用户不属于厂区：ZZ");
     }
 
+    /** 构造平台 CommonResult 成功响应，隔离 Feign DTO 细节。 */
     private PlatformRpcResult<PlatformUserResp> result(PlatformUserResp user) {
         PlatformRpcResult<PlatformUserResp> result = new PlatformRpcResult<>();
         result.setCode(0);

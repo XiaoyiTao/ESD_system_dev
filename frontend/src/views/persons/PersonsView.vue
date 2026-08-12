@@ -16,6 +16,7 @@ const rows = ref<PersonProfile[]>([])
 const query = reactive({ keyword: '', pageNo: 1, pageSize: 20, esdStatus: 1 })
 const form = reactive({ platformUserId: undefined as number | undefined, floorCode: '', shiftCode: '' })
 
+/** 按当前厂区、关键字和启停状态刷新人员档。 */
 async function load() {
   loading.value = true
   try {
@@ -30,6 +31,7 @@ async function load() {
   }
 }
 
+/** 使用平台用户 ID 创建绑定，员工主数据由后端 RPC 校验。 */
 async function submit() {
   const platformUserId = form.platformUserId
   if (!platformUserId) {
@@ -54,12 +56,14 @@ async function submit() {
   }
 }
 
+/** 清除关键字并回到第一页。 */
 function resetQuery() {
   query.keyword = ''
   query.pageNo = 1
   load()
 }
 
+// 厂区由顶部会话选择器控制，切换后重新从服务端加载隔离数据。
 onMounted(() => { if (siteCode.value) load() })
 watch(siteCode, (value, previous) => {
   if (value && value !== previous) {
@@ -70,6 +74,7 @@ watch(siteCode, (value, previous) => {
 </script>
 
 <template>
+  <!-- 人员扩展档页面：查询、持有数量展示和平台用户绑定。 -->
   <section class="page-heading page-heading-compact">
     <div>
       <div class="section-kicker">MASTER DATA / PEOPLE</div>
@@ -93,6 +98,7 @@ watch(siteCode, (value, previous) => {
       <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
     </div>
 
+    <!-- 持有数量由后端根据已发放资产实时统计，不能使用前端缓存推算。 -->
     <el-table v-loading="loading" :data="rows" row-key="id" empty-text="当前厂区暂无人员档案">
       <el-table-column prop="employeeNo" label="工号" min-width="130" />
       <el-table-column prop="employeeName" label="姓名" min-width="100" />
@@ -118,6 +124,7 @@ watch(siteCode, (value, previous) => {
     </div>
   </section>
 
+  <!-- 当前先输入平台 userId；后续接入平台员工选择器时只替换这一块表单。 -->
   <el-dialog v-model="dialogVisible" title="绑定平台人员" width="480px" destroy-on-close>
     <el-form label-position="top" @submit.prevent="submit">
       <el-form-item label="平台用户编号" required>

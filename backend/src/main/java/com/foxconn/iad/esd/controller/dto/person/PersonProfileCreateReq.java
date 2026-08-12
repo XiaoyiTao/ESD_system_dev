@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 public class PersonProfileCreateReq {
 
+    /** 人员绑定所属厂区。 */
     @NotBlank
     @Size(max = 32)
     private String siteCode;
@@ -24,4 +25,7 @@ public class PersonProfileCreateReq {
     @Size(max = 32)
     private String shiftCode;
 }
-
+    /** 平台用户 ID；姓名、工号和部门由平台 RPC 返回。 */
+    /** 可选责任主管平台用户 ID。 */
+    /** 现场楼层属性。 */
+    /** 现场班别属性。 */

@@ -19,8 +19,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class PersonProfileController {
 
+    /** 人员扩展档业务服务。 */
     private final PersonProfileService personProfileService;
 
+    /** 从平台校验用户后创建 ESD 人员档。 */
     @PostMapping
     public ApiResponse<Long> create(@Valid @RequestBody PersonProfileCreateReq request) {
         return ApiResponse.success(personProfileService.create(request));
@@ -44,4 +46,6 @@ public class PersonProfileController {
         return ApiResponse.success(personProfileService.get(id, siteCode));
     }
 }
-
+    /** 更新主管、楼层、班别和启停状态。 */
+    /** 按厂区分页查询人员档。 */
+    /** 查询人员档详情及当前持有数量。 */
