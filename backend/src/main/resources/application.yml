@@ -1,0 +1,30 @@
+server:
+  port: 48082
+
+spring:
+  application:
+    name: platform-esd-server
+  profiles:
+    active: local
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: ${ESD_DB_URL:jdbc:mysql://127.0.0.1:3306/platform_esd?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&rewriteBatchedStatements=true}
+    username: ${ESD_DB_USERNAME:root}
+    password: ${ESD_DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+
+esd:
+  service-name: ${spring.application.name}
+  platform-system-service: ${ESD_PLATFORM_SYSTEM_SERVICE:platform-system-server}
+

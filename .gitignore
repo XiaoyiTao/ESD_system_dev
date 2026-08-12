@@ -1,0 +1,24 @@
+# Java / Maven
+target/
+.flattened-pom.xml
+*.class
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.*
+!frontend/.env.example
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.~lock.*
+
+# Runtime
+logs/
+*.log
+
+# Existing platform source is an external dependency, not part of this repository.
+/platform-system-server-master/
