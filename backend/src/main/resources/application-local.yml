@@ -7,3 +7,5 @@ spring:
       config:
         enabled: false
 
+esd:
+  local-debug-auth-enabled: ${ESD_LOCAL_DEBUG_AUTH_ENABLED:false}

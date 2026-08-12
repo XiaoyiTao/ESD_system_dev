@@ -22,8 +22,7 @@ public class HealthController {
         result.put("status", "UP");
         result.put("service", properties.getServiceName());
         result.put("platformSystemService", properties.getPlatformSystemService());
-        result.put("version", "0.1.0");
+        result.put("version", "0.2.0");
         return result;
     }
 }
-

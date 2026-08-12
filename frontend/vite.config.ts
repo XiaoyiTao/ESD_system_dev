@@ -8,12 +8,15 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       proxy: {
-        '/admin-api': {
+        '/admin-api/esd': {
           target: env.VITE_DEV_API_TARGET || 'http://127.0.0.1:48082',
+          changeOrigin: true,
+        },
+        '/admin-api': {
+          target: env.VITE_PLATFORM_API_TARGET || 'http://127.0.0.1:48080',
           changeOrigin: true,
         },
       },
     },
   }
 })
-

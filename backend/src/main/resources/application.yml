@@ -27,4 +27,4 @@ management:
 esd:
   service-name: ${spring.application.name}
   platform-system-service: ${ESD_PLATFORM_SYSTEM_SERVICE:platform-system-server}
-
+  local-debug-auth-enabled: false

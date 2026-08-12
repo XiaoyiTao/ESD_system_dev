@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Monitor, Setting, User } from '@element-plus/icons-vue'
+import { Box, Location, Monitor, Setting, User } from '@element-plus/icons-vue'
+import { useSessionStore } from './stores/session'
 
 const route = useRoute()
 const collapsed = ref(false)
+const session = useSessionStore()
+
+onMounted(() => session.initialize())
 </script>
 
 <template>
@@ -18,6 +22,14 @@ const collapsed = ref(false)
         <el-menu-item index="/dashboard">
           <el-icon><Monitor /></el-icon>
           <template #title>運營概覽</template>
+        </el-menu-item>
+        <el-menu-item index="/persons">
+          <el-icon><User /></el-icon>
+          <template #title>人員檔案</template>
+        </el-menu-item>
+        <el-menu-item index="/assets">
+          <el-icon><Box /></el-icon>
+          <template #title>資產管理</template>
         </el-menu-item>
         <el-menu-item index="/settings" disabled>
           <el-icon><Setting /></el-icon>
@@ -35,15 +47,28 @@ const collapsed = ref(false)
           <div class="header-eyebrow">PVD / ESD OPERATIONS</div>
           <div class="header-title">靜電防護資產中心</div>
         </div>
-        <div class="header-user">
-          <el-icon><User /></el-icon>
-          <span>平台用戶</span>
+        <div class="header-actions">
+          <el-select
+            v-if="session.sites.length"
+            :model-value="session.currentSite"
+            class="site-selector"
+            aria-label="当前厂区"
+            @update:model-value="session.selectSite"
+          >
+            <template #prefix><el-icon><Location /></el-icon></template>
+            <el-option v-for="site in session.sites" :key="site" :label="site" :value="site" />
+          </el-select>
+          <div class="header-user">
+            <el-icon><User /></el-icon>
+            <span>{{ session.user?.nickname || '平台用户' }}</span>
+          </div>
         </div>
       </el-header>
       <el-main class="app-main">
-        <router-view />
+        <div v-if="session.loading" class="page-loading"><el-skeleton :rows="5" animated /></div>
+        <el-empty v-else-if="!session.currentSite" description="当前账号未配置厂区权限" />
+        <router-view v-else />
       </el-main>
     </el-container>
   </el-container>
 </template>
-

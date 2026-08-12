@@ -10,6 +10,14 @@ request.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
+  if (config.url?.startsWith('/esd/')) {
+    const debugUserId = import.meta.env.VITE_ESD_DEBUG_USER_ID
+    const debugSites = import.meta.env.VITE_ESD_DEBUG_SITES
+    if (debugUserId && debugSites) {
+      config.headers['X-ESD-Debug-User-Id'] = debugUserId
+      config.headers['X-ESD-Debug-Sites'] = debugSites
+    }
+  }
   return config
 })
 
@@ -24,4 +32,3 @@ request.interceptors.response.use(
 )
 
 export default request
-

@@ -13,7 +13,7 @@
 
     <groupId>com.foxconn.iad</groupId>
     <artifactId>platform-esd-server</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>platform-esd-server</name>
     <description>ESD garment and shoe management service</description>
 
@@ -63,6 +63,10 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
@@ -73,6 +77,11 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
@@ -101,4 +110,3 @@
         </plugins>
     </build>
 </project>
-
