@@ -16,6 +16,7 @@ import com.foxconn.iad.module.esd.domain.ReturnDisposition;
 import com.foxconn.iad.module.esd.exception.BusinessException;
 import com.foxconn.iad.module.esd.security.LoginUserContext;
 import com.foxconn.iad.module.esd.security.SiteAccessService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -53,7 +54,8 @@ class ReturnServiceImplTest {
     private final LoginUserContext operator = new LoginUserContext(1L, 1L, Set.of("ZZ"), false);
 
     @Test
-    void 回收直接入庫時結算發放記錄並回到庫存() {
+    @DisplayName("回收直接入庫時結算發放記錄並回到庫存")
+    void restockShouldSettleIssueRecordAndRestoreAvailable() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(assetMapper.selectOne(any())).thenReturn(issuedAsset());
         when(assetMapper.update(any(), any())).thenReturn(1);
@@ -69,7 +71,8 @@ class ReturnServiceImplTest {
     }
 
     @Test
-    void 回收送洗時進入待送洗並建立清洗記錄() {
+    @DisplayName("回收送洗時進入待送洗並建立清洗記錄")
+    void launderShouldEnterPendingLaundryAndCreateRecord() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(assetMapper.selectOne(any())).thenReturn(issuedAsset());
         when(assetMapper.update(any(), any())).thenReturn(1);
@@ -85,7 +88,8 @@ class ReturnServiceImplTest {
     }
 
     @Test
-    void 並發回收時條件更新失敗應拋出衝突() {
+    @DisplayName("並發回收時條件更新失敗應拋出衝突")
+    void createShouldThrowConflictWhenAssetAlreadyReturned() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(assetMapper.selectOne(any())).thenReturn(issuedAsset());
         when(assetMapper.update(any(), any())).thenReturn(0);

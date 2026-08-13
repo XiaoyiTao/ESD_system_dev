@@ -12,6 +12,7 @@ import com.foxconn.iad.module.esd.domain.BusinessRecordStatus;
 import com.foxconn.iad.module.esd.exception.BusinessException;
 import com.foxconn.iad.module.esd.security.LoginUserContext;
 import com.foxconn.iad.module.esd.security.SiteAccessService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,7 +48,8 @@ class IssueServiceImplTest {
     private final LoginUserContext operator = new LoginUserContext(1L, 1L, Set.of("ZZ"), false);
 
     @Test
-    void 發放成功時寫入發放記錄並快照員工信息() {
+    @DisplayName("發放成功時寫入發放記錄並快照員工信息")
+    void createShouldWriteRecordAndSnapshotEmployee() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(personProfileService.requireEnabledByUser("ZZ", 200L)).thenReturn(person());
         when(assetMapper.selectOne(any())).thenReturn(availableAsset());
@@ -68,7 +70,8 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void 並發發放同一資產時條件更新失敗應拋出衝突() {
+    @DisplayName("並發發放同一資產時條件更新失敗應拋出衝突")
+    void createShouldThrowConflictWhenAssetAlreadyTaken() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(personProfileService.requireEnabledByUser("ZZ", 200L)).thenReturn(person());
         when(assetMapper.selectOne(any())).thenReturn(availableAsset());

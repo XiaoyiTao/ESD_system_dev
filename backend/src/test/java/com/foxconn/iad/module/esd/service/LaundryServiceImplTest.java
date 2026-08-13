@@ -10,6 +10,7 @@ import com.foxconn.iad.module.esd.domain.BusinessRecordStatus;
 import com.foxconn.iad.module.esd.exception.BusinessException;
 import com.foxconn.iad.module.esd.security.LoginUserContext;
 import com.foxconn.iad.module.esd.security.SiteAccessService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -42,7 +43,8 @@ class LaundryServiceImplTest {
     private final LoginUserContext operator = new LoginUserContext(1L, 1L, Set.of("ZZ"), false);
 
     @Test
-    void 送洗登記時待送洗推進為清洗中並寫入送洗時間() {
+    @DisplayName("送洗登記時待送洗推進為清洗中並寫入送洗時間")
+    void startShouldAdvanceToInLaundryAndRecordSendTime() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(laundryRecordMapper.selectOne(any())).thenReturn(activeLaundry());
         when(assetMapper.selectOne(any())).thenReturn(asset(AssetLifecycleStatus.PENDING_LAUNDRY, 2));
@@ -56,7 +58,8 @@ class LaundryServiceImplTest {
     }
 
     @Test
-    void 完成清洗時回到庫存並累加清洗次數() {
+    @DisplayName("完成清洗時回到庫存並累加清洗次數")
+    void completeShouldRestoreAvailableAndIncrementCleanCount() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(laundryRecordMapper.selectOne(any())).thenReturn(activeLaundry());
         when(assetMapper.selectOne(any())).thenReturn(asset(AssetLifecycleStatus.IN_LAUNDRY, 2));
@@ -72,7 +75,8 @@ class LaundryServiceImplTest {
     }
 
     @Test
-    void 完成清洗時條件更新失敗應拋出衝突() {
+    @DisplayName("完成清洗時條件更新失敗應拋出衝突")
+    void completeShouldThrowConflictWhenConditionalUpdateFails() {
         when(siteAccessService.requireSite("ZZ")).thenReturn(operator);
         when(laundryRecordMapper.selectOne(any())).thenReturn(activeLaundry());
         when(assetMapper.selectOne(any())).thenReturn(asset(AssetLifecycleStatus.IN_LAUNDRY, 2));
