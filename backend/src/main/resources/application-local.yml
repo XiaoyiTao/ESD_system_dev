@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    # 本地開發使用專屬 esd_app 帳號（非 root），密碼可由 ESD_DB_PASSWORD 覆蓋。
+    username: ${ESD_DB_USERNAME:esd_app}
+    password: ${ESD_DB_PASSWORD:EsdApp_2026!}
   cloud:
     nacos:
       discovery:
