@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.controller.dto.asset;
+package com.foxconn.iad.module.esd.controller.admin.asset.vo;
 
 import lombok.Data;
 

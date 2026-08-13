@@ -1,11 +1,11 @@
-package com.foxconn.iad.module.esd.controller;
+package com.foxconn.iad.module.esd.controller.admin.person;
 
 import com.foxconn.iad.module.esd.common.ApiResponse;
 import com.foxconn.iad.module.esd.common.PageResponse;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileCreateReqVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfilePageReqVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileRespVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileUpdateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileUpdateReqVO;
 import com.foxconn.iad.module.esd.service.PersonProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

@@ -1,10 +1,10 @@
 package com.foxconn.iad.module.esd.service;
 
 import com.foxconn.iad.module.esd.common.PageResponse;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileCreateReqVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfilePageReqVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileRespVO;
-import com.foxconn.iad.module.esd.controller.dto.person.PersonProfileUpdateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
+import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileUpdateReqVO;
 
 /**
  * ESD 人員擴展檔業務服務。

@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.controller;
+package com.foxconn.iad.module.esd.controller.admin;
 
 import com.foxconn.iad.module.esd.config.EsdProperties;
 import lombok.RequiredArgsConstructor;

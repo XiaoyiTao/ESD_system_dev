@@ -1,6 +1,6 @@
-package com.foxconn.iad.module.esd.controller.dto.asset;
+package com.foxconn.iad.module.esd.controller.admin.asset.vo;
 
-import com.foxconn.iad.module.esd.controller.dto.common.PageQuery;
+import com.foxconn.iad.module.esd.common.PageQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

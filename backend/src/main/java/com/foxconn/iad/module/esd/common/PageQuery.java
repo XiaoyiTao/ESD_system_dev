@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.controller.dto.common;
+package com.foxconn.iad.module.esd.common;
 
 import lombok.Data;
 

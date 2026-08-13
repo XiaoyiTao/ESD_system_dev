@@ -1,11 +1,11 @@
-package com.foxconn.iad.module.esd.controller;
+package com.foxconn.iad.module.esd.controller.admin.asset;
 
 import com.foxconn.iad.module.esd.common.ApiResponse;
 import com.foxconn.iad.module.esd.common.PageResponse;
-import com.foxconn.iad.module.esd.controller.dto.asset.AssetCreateReqVO;
-import com.foxconn.iad.module.esd.controller.dto.asset.AssetPageReqVO;
-import com.foxconn.iad.module.esd.controller.dto.asset.AssetRespVO;
-import com.foxconn.iad.module.esd.controller.dto.asset.AssetUpdateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetCreateReqVO;
+import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
+import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
+import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetUpdateReqVO;
 import com.foxconn.iad.module.esd.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

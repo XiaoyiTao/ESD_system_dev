@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.controller.dto.person;
+package com.foxconn.iad.module.esd.controller.admin.person.vo;
 
 import lombok.Data;
 
