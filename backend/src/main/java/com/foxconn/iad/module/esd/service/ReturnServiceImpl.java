@@ -1,6 +1,7 @@
 package com.foxconn.iad.module.esd.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.foxconn.iad.module.esd.common.PageResponse;
@@ -60,16 +61,16 @@ public class ReturnServiceImpl implements ReturnService {
         AssetLifecycleStatus target = disposition == ReturnDisposition.LAUNDER
                 ? AssetLifecycleStatus.PENDING_LAUNDRY : AssetLifecycleStatus.AVAILABLE;
         // 條件更新：僅當資產仍為發放中且版本一致時才回收成功。
+        // 持有人欄位需用 set() 顯式置空，MyBatis-Plus 的 update(entity, wrapper) 會跳過 null 欄位。
         LocalDateTime now = LocalDateTime.now();
-        AssetDO patch = new AssetDO();
-        patch.setLifecycleStatus(target.getCode());
-        patch.setCurrentHolderUserId(null);
-        patch.setCurrentHolderNo(null);
-        patch.setCurrentHolderName(null);
-        patch.setVersion(asset.getVersion() + 1);
-        patch.setUpdater(String.valueOf(operator.getUserId()));
-        patch.setUpdateTime(now);
-        int updated = assetMapper.update(patch, new LambdaQueryWrapper<AssetDO>()
+        int updated = assetMapper.update(null, new LambdaUpdateWrapper<AssetDO>()
+                .set(AssetDO::getLifecycleStatus, target.getCode())
+                .set(AssetDO::getCurrentHolderUserId, null)
+                .set(AssetDO::getCurrentHolderNo, null)
+                .set(AssetDO::getCurrentHolderName, null)
+                .set(AssetDO::getVersion, asset.getVersion() + 1)
+                .set(AssetDO::getUpdater, String.valueOf(operator.getUserId()))
+                .set(AssetDO::getUpdateTime, now)
                 .eq(AssetDO::getId, asset.getId())
                 .eq(AssetDO::getSiteCode, request.getSiteCode())
                 .eq(AssetDO::getLifecycleStatus, AssetLifecycleStatus.ISSUED.getCode())

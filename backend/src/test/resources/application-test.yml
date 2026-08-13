@@ -1,0 +1,17 @@
+# 整合測試設定：使用本地獨立測試庫 platform_esd_test，關閉 Nacos 服務發現。
+# 密碼為本地測試資料庫密碼，正式環境密碼一律由環境變量或 Nacos 受控配置提供。
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:mysql://127.0.0.1:3306/platform_esd_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
+    username: ${TEST_DB_USERNAME:root}
+    password: ${TEST_DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+      config:
+        enabled: false
+
+esd:
+  local-debug-auth-enabled: false
