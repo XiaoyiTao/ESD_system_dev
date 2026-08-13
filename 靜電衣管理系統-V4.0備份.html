@@ -1,0 +1,2823 @@
+<!DOCTYPE html>
+<!-- saved from url=(0148)file:///E:/%E9%9D%9C%E9%9B%BB%E8%A1%A3%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1/%E9%9D%9C%E9%9B%BB%E8%A1%A3%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1-V4.0.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>静电衣鞋管理系统</title>
+    <script src="./靜電衣管理系統-V4.0_files/xlsx.full.min.js.下載"></script>
+    <script src="./靜電衣管理系統-V4.0_files/chart.umd.min.js.下載"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', Arial, sans-serif; background: #f5f5f5; display: flex; min-height: 100vh; }
+        .sidebar { width: 220px; background: #2c3e50; color: white; position: fixed; height: 100vh; overflow-y: auto; }
+        .sidebar-header { padding: 20px; background: #1a252f; text-align: center; }
+        .sidebar-header h2 { font-size: 16px; font-weight: normal; }
+        .nav-menu { list-style: none; padding: 10px 0; }
+        .nav-menu li { padding: 12px 20px; cursor: pointer; border-left: 3px solid transparent; transition: all 0.3s; }
+        .nav-menu li:hover { background: #34495e; }
+        .nav-menu li.active { background: #34495e; border-left-color: #3498db; }
+        .main-content { margin-left: 220px; flex: 1; padding: 20px; }
+        .top-bar { background: white; padding: 15px 20px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .top-bar h1 { font-size: 24px; color: #2c3e50; }
+        .alert-badge { background: #e74c3c; color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; margin-right: 15px; }
+        .content-area { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); min-height: 500px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }
+        .stat-card.blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-card.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .stat-card.orange { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-card.red { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .stat-card.purple { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .stat-number { font-size: 36px; font-weight: bold; margin: 10px 0; }
+        .stat-label { font-size: 14px; opacity: 0.9; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s; margin-right: 5px; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-warning:hover { background: #d68910; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        table th { background: #f8f9fa; font-weight: 600; color: #2c3e50; }
+        table tr:hover { background: #f8f9fa; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3498db; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { color: #2c3e50; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+        .modal-body { padding: 20px; }
+        .modal-footer { padding: 20px; border-top: 1px solid #eee; text-align: right; }
+        .alert-box { padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+        .alert-warning { background: #fff3cd; border: 1px solid #ffc107; color: #856404; }
+        .alert-info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .page { display: none; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        .loading-overlay.show { display: flex; }
+        .loading-spinner { width: 48px; height: 48px; border: 4px solid #e0e0e0; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading-text { margin-top: 16px; color: #555; font-size: 14px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .page.active { display: block; }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-bar input, .filter-bar select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; }
+        .chart-container { position: relative; height: 300px; margin: 20px 0; }
+        .tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab.active { border-bottom-color: #3498db; color: #3498db; }
+        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .status-available { background: #d4edda; color: #155724; }
+        .status-issued { background: #cce5ff; color: #004085; }
+        .status-cleaning { background: #fff3cd; color: #856404; }
+        .status-lost { background: #f8d7da; color: #721c24; }
+        .status-scrapped { background: #e2e3e5; color: #383d41; }
+        .action-btns { display: flex; gap: 5px; }
+        .action-btns .btn { padding: 5px 10px; font-size: 12px; }
+        .log-entry { padding: 10px; border-left: 3px solid #3498db; background: #f8f9fa; margin-bottom: 10px; }
+        .log-time { color: #999; font-size: 12px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .toast { position: fixed; top: 20px; right: 20px; background: #27ae60; color: white; padding: 15px 25px; border-radius: 5px; z-index: 2000; display: none; }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loading-overlay"><div class="loading-spinner"></div><div class="loading-text">加载中...</div></div>
+    <div class="toast" id="toast"></div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>静电衣鞋管理系统</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="active" data-page="dashboard">📊 首页概览</li>
+            <li data-page="alerts">🔔 报警中心</li>
+            <li data-page="personnel">👥 人员管理</li>
+            <li data-page="assets">📦 资产管理</li>
+            <li data-page="issue">📤 发放管理</li>
+            <li data-page="return">📥 回收管理</li>
+            <li data-page="cleaning">🧼 清洗管理</li>
+            <li data-page="scrapped">🗑️ 报废管理</li>
+            <li data-page="lost">❌ 丢失管理</li>
+            <li data-page="inventory">📋 库存管理</li>
+            <li data-page="reports">📈 报表中心</li>
+            <li data-page="settings">⚙️ 系统设置</li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <h1 id="page-title">首页概览</h1>
+            <div>
+                <span class="alert-badge" id="alert-count" onclick="app.navigate(&#39;alerts&#39;)">🔔 <span id="alert-num">25</span></span>
+                <span id="current-user">管理员</span>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <div id="page-dashboard" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-label">库存可用</div><div class="stat-number" id="stat-available">306</div><div class="stat-label">件/双</div></div>
+                    <div class="stat-card blue"><div class="stat-label">已发放</div><div class="stat-number" id="stat-issued">435</div><div class="stat-label">件/双</div></div>
+                    <div class="stat-card green"><div class="stat-label">清洗中</div><div class="stat-number" id="stat-cleaning">385</div><div class="stat-label">件/双</div></div>
+                    <div class="stat-card orange"><div class="stat-label">丢失</div><div class="stat-number" id="stat-lost">24</div><div class="stat-label">件/双</div></div>
+                    <div class="stat-card red"><div class="stat-label">报废</div><div class="stat-number" id="stat-scrapped">0</div><div class="stat-label">件/双</div></div>
+                    <div class="stat-card purple"><div class="stat-label">在职员工</div><div class="stat-number" id="stat-employees">187</div><div class="stat-label">人</div></div>
+                </div>
+                <div class="form-row">
+                    <div><h3>资产状态分布</h3><div class="chart-container"><canvas id="status-chart" width="765" height="270" style="display: block; box-sizing: border-box; height: 270px; width: 765px;"></canvas></div></div>
+                    <div><h3>按类型统计</h3><div class="chart-container"><canvas id="type-chart" width="765" height="270" style="display: block; box-sizing: border-box; height: 270px; width: 765px;"></canvas></div></div>
+                </div>
+                <style>
+                    .chart-container { background: #f8f9fa; border-radius: 8px; padding: 15px; }
+                </style>
+                <div style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>最近报警</h3>
+                        <button class="btn btn-primary" onclick="app.navigate(&#39;alerts&#39;)">查看全部</button>
+                    </div>
+                    <div id="recent-alerts"><div class="alert-box alert-warning"><strong>一人多持</strong>: 员工 F4204505 同时持有2件静电衣 (编码：Y-H-00007,Y-H-00113) <span style="float:right">2026/6/16 上午10:21:13</span></div><div class="alert-box alert-warning"><strong>一人多持</strong>: 员工 H6601460 同时持有2件静电衣 (编码：Y-H-00079,Y-H-00146)和2双静电鞋 (编码：X-H-00079,X-H-00146) <span style="float:right">2026/6/16 上午10:21:13</span></div><div class="alert-box alert-warning"><strong>一人多持</strong>: 员工 H4620335 同时持有2件静电衣 (编码：Y-H-00073,Y-H-00155)和2双静电鞋 (编码：X-H-00073,X-H-00155) <span style="float:right">2026/6/16 上午10:21:13</span></div></div>
+                </div>
+            </div>
+
+            <div id="page-alerts" class="page">
+                <div class="filter-bar">
+                    <button class="btn btn-secondary" onclick="app.alerts.clearResolved()">清除已处理</button>
+                </div>
+                <table id="alerts-table"><thead><tr><th>序号</th><th>类型</th><th>工号</th><th>姓名</th><th>描述</th><th>日期</th><th>状态</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-personnel" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="personnel-search" placeholder="搜索工号/姓名...">
+                    <select id="personnel-dept-filter"><option value="">全部课别</option></select>
+                    <button class="btn btn-primary" onclick="app.personnel.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.personnel.showAddModal()">+ 新增人员</button>
+                    <button class="btn btn-primary" onclick="app.personnel.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.personnel.import()">导入 Excel</button>
+                    <button class="btn btn-secondary" onclick="app.personnel.export()">导出 Excel</button>
+                </div>
+                <table id="personnel-table"><thead><tr><th>序号</th><th>工号</th><th>姓名</th><th>责任主管</th><th>课别</th><th>楼层</th><th>班别</th><th>静电衣数量</th><th>静电鞋数量</th><th>状态</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-assets" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="assets-search" placeholder="搜索编码/工号/姓名...">
+                    <select id="assets-type-filter"><option value="">全部类型</option><option value="静电衣">静电衣</option><option value="静电鞋">静电鞋</option></select>
+                    <select id="assets-color-filter"><option value="">全部颜色</option><option value="黄色">黄色</option><option value="白色">白色</option></select>
+                    <select id="assets-status-filter"><option value="">全部状态</option><option value="available">库存</option><option value="issued">发放中</option><option value="cleaning">清洗中</option><option value="lost">丢失</option><option value="scrapped">报废</option></select>
+                    <button class="btn btn-primary" onclick="app.assets.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.assets.showAddModal()">+ 资产入库</button>
+                    <button class="btn btn-primary" onclick="app.assets.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.assets.import()">导入 Excel</button>
+                    <button class="btn btn-secondary" onclick="app.assets.export()">导出 Excel</button>
+                </div>
+                <table id="assets-table"><thead><tr><th>序号</th><th>编码</th><th>类型</th><th>颜色</th><th>尺码</th><th>状态</th><th>工号</th><th>姓名</th><th>责任主管</th><th>课别</th><th>楼层</th><th>班别</th><th>清洗次数</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-issue" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="issue-search" placeholder="搜索工号/姓名/物品编码...">
+                    <input type="date" id="issue-date-start">
+                    <input type="date" id="issue-date-end">
+                    <button class="btn btn-primary" onclick="app.issue.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.issue.showIssueModal()">+ 单笔发放</button>
+                    <button class="btn btn-primary" onclick="app.issue.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.issue.import()">批量导入</button>
+                    <button class="btn btn-secondary" onclick="app.issue.export()">导出 Excel</button>
+                </div>
+                <table id="issue-table"><thead><tr><th>序号</th><th>工号</th><th>姓名</th><th>物品编码</th><th>类型</th><th>发放日期</th><th>发放人</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-return" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="return-search" placeholder="搜索物品编码...">
+                    <input type="date" id="return-date-start">
+                    <input type="date" id="return-date-end">
+                    <button class="btn btn-primary" onclick="app.return.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.return.showReturnModal()">+ 单笔回收</button>
+                    <button class="btn btn-primary" onclick="app.return.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.return.import()">批量导入</button>
+                    <button class="btn btn-secondary" onclick="app.return.export()">导出 Excel</button>
+                </div>
+                <table id="return-table"><thead><tr><th>序号</th><th>物品编码</th><th>类型</th><th>归还人</th><th>回收日期</th><th>回收人</th><th>状态</th><th>后续操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-cleaning" class="page">
+                <div class="tabs">
+                    <div class="tab active" onclick="app.cleaning.showPage(0)">清洗中物品</div>
+                    <div class="tab" onclick="app.cleaning.showPage(1)">清洗历史</div>
+                </div>
+                <div id="cleaning-page-0">
+                    <div class="filter-bar">
+				<input type="text" id="cleaning-search" placeholder="搜索编码/送洗人" style="margin-right: 10px; padding: 5px;">
+				<button class="btn btn-primary" onclick="app.cleaning.search()">搜索</button>
+                        <button class="btn btn-success" onclick="app.cleaning.showSendModal()">+ 送洗登记</button>
+                        <button class="btn btn-primary" onclick="app.cleaning.importTemplate()">下载模板</button>
+                        <button class="btn btn-primary" onclick="app.cleaning.import(&#39;send&#39;)">批量导入送洗</button>
+                        <button class="btn btn-success" onclick="app.cleaning.import(&#39;complete&#39;)">批量导入清洗完成</button>
+                    </div>
+                    <table id="cleaning-table"><thead><tr><th>序号</th><th>物品编码</th><th>类型</th><th>颜色</th><th>尺码</th><th>送洗日期</th><th>送洗人</th><th>操作</th></tr></thead><tbody></tbody></table>
+                </div>
+                <div id="cleaning-page-1" style="display:none;">
+                    <table id="cleaning-history-table"><thead><tr><th>序号</th><th>物品编码</th><th>类型</th><th>送洗日期</th><th>返回日期</th><th>清洗次数</th></tr></thead><tbody></tbody></table>
+                </div>
+            </div>
+
+            <div id="page-scrapped" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="scrapped-search" placeholder="搜索物品编码...">
+                    <select id="scrapped-reason-filter"><option value="">全部原因</option><option value="破损">破损</option><option value="老化">老化</option><option value="其他">其他</option></select>
+                    <input type="date" id="scrapped-date-start">
+                    <input type="date" id="scrapped-date-end">
+                    <button class="btn btn-primary" onclick="app.scrapped.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.scrapped.showScrapModal()">+ 报废登记</button>
+                    <button class="btn btn-primary" onclick="app.scrapped.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.scrapped.import()">批量导入</button>
+                    <button class="btn btn-secondary" onclick="app.scrapped.export()">导出 Excel</button>
+                </div>
+                <table id="scrapped-table"><thead><tr><th>序号</th><th>物品编码</th><th>类型</th><th>报废日期</th><th>报废原因</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-lost" class="page">
+                <div class="filter-bar">
+                    <input type="text" id="lost-search" placeholder="搜索物品编码/工号...">
+                    <input type="date" id="lost-date-start">
+                    <input type="date" id="lost-date-end">
+                    <button class="btn btn-primary" onclick="app.lost.search()">搜索</button>
+                    <button class="btn btn-success" onclick="app.lost.showLostModal()">+ 丢失登记</button>
+                    <button class="btn btn-primary" onclick="app.lost.importTemplate()">下载模板</button>
+                    <button class="btn btn-primary" onclick="app.lost.import()">批量导入</button>
+                    <button class="btn btn-secondary" onclick="app.lost.export()">导出 Excel</button>
+                </div>
+                <table id="lost-table"><thead><tr><th>序号</th><th>物品编码</th><th>类型</th><th>责任人</th><th>发现日期</th><th>处理方式</th><th>操作</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-inventory" class="page">
+                <div class="filter-bar">
+                    <select id="inventory-type-filter"><option value="">全部类型</option><option value="静电衣">静电衣</option><option value="静电鞋">静电鞋</option></select>
+                    <select id="inventory-color-filter"><option value="">全部颜色</option><option value="黄色">黄色</option><option value="白色">白色</option></select>
+                    <button class="btn btn-primary" onclick="app.inventory.search()">筛选</button>
+                    <button class="btn btn-secondary" onclick="app.inventory.export()">导出库存清单</button>
+                </div>
+                <h3>库存统计</h3>
+                <table id="inventory-summary-table"><thead><tr><th>序号</th><th>类型</th><th>颜色</th><th>尺码</th><th>库存数量</th><th>发放中</th><th>清洗中</th></tr></thead><tbody></tbody></table>
+                <h3 style="margin-top: 30px;">库存明细</h3>
+                <table id="inventory-detail-table"><thead><tr><th>序号</th><th>编码</th><th>类型</th><th>颜色</th><th>尺码</th><th>状态</th><th>持有人员</th></tr></thead><tbody></tbody></table>
+            </div>
+
+            <div id="page-reports" class="page">
+                <div class="tabs">
+                    <div class="tab active" onclick="app.reports.showType(&#39;issue&#39;)">发放统计</div>
+                    <div class="tab" onclick="app.reports.showType(&#39;return&#39;)">回收统计</div>
+                    <div class="tab" onclick="app.reports.showType(&#39;cleaning&#39;)">清洗统计</div>
+                    <div class="tab" onclick="app.reports.showType(&#39;scrapped&#39;)">报废统计</div>
+                    <div class="tab" onclick="app.reports.showType(&#39;lost&#39;)">丢失统计</div>
+                    <div class="tab" onclick="app.reports.showType(&#39;holding&#39;)">员工持有明细</div>
+                </div>
+                <div id="report-content">
+                    <div class="filter-bar">
+                        <input type="date" id="report-date-start">
+                        <input type="date" id="report-date-end">
+                        <button class="btn btn-primary" onclick="app.reports.generate()">生成报表</button>
+                        <button class="btn btn-secondary" onclick="app.reports.export()">导出 Excel</button>
+                    </div>
+                    <div id="report-chart-container" class="chart-container"></div>
+                    <table id="report-table"><thead></thead><tbody></tbody></table>
+                </div>
+            </div>
+
+            <div id="page-settings" class="page">
+                <h3 style="margin-top: 40px;">数据管理</h3>
+                <div class="form-row">
+                    <button class="btn btn-success" onclick="app.settings.backupJSON()">备份数据 (JSON)</button>
+                    <button class="btn btn-warning" onclick="app.settings.restoreJSON()">恢复数据 (JSON)</button>
+                    <button class="btn btn-danger" onclick="app.settings.clearAllData()">⚠️ 一键清除所有数据</button>
+                    <input type="file" id="restore-file" style="display:none" accept=".json" onchange="app.settings.handleRestoreFile(this)">
+                </div>
+                
+                <h3 style="margin-top: 40px;">操作日志</h3>
+                <button class="btn btn-secondary" onclick="app.settings.exportLogs()">导出日志</button>
+                <div id="log-container" style="margin-top: 20px; max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// ==================== IndexedDB 数据库封装 ====================
+const DB = {
+    name: 'StaticChargeDB',
+    version: 2,
+    db: null,
+    
+    async init() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.name, this.version);
+            request.onerror = () => reject(request.error);
+            request.onblocked = () => {
+                alert('数据库被其他标签页占用，请关闭所有其他打开本系统的标签页后刷新重试。');
+                reject(new Error('数据库被其他连接阻塞，请关闭其他标签页后重试'));
+            };
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve(this.db);
+            };
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('personnel')) {
+                    const store = db.createObjectStore('personnel', { keyPath: 'employeeId' });
+                    store.createIndex('name', 'name', { unique: false });
+                    store.createIndex('department', 'department', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('assets')) {
+                    const store = db.createObjectStore('assets', { keyPath: 'code' });
+                    store.createIndex('type', 'type', { unique: false });
+                    store.createIndex('status', 'status', { unique: false });
+                    store.createIndex('employeeId', 'employeeId', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('issueRecords')) {
+                    const store = db.createObjectStore('issueRecords', { keyPath: 'id', autoIncrement: true });
+                    store.createIndex('employeeId', 'employeeId', { unique: false });
+                    store.createIndex('assetCode', 'assetCode', { unique: false });
+                    store.createIndex('issueDate', 'issueDate', { unique: false });
+                    store.createIndex('returned', 'returned', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('returnRecords')) {
+                    db.createObjectStore('returnRecords', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('cleaningRecords')) {
+                    const store = db.createObjectStore('cleaningRecords', { keyPath: 'id', autoIncrement: true });
+                    store.createIndex('assetCode', 'assetCode', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('scrappedRecords')) {
+                    db.createObjectStore('scrappedRecords', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('lostRecords')) {
+                    db.createObjectStore('lostRecords', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('alerts')) {
+                    const store = db.createObjectStore('alerts', { keyPath: 'id', autoIncrement: true });
+                    store.createIndex('type', 'type', { unique: false });
+                    store.createIndex('resolved', 'resolved', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('logs')) {
+                    db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('config')) {
+                    db.createObjectStore('config', { keyPath: 'key' });
+                }
+            };
+        });
+    },
+    
+    async getAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const request = store.getAll();
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    async get(storeName, key) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const request = store.get(key);
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    async add(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const request = store.add(data);
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    async batchAdd(storeName, items) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            let success = 0, fail = 0;
+            tx.oncomplete = () => resolve({ success, fail });
+            tx.onerror = () => reject(tx.error);
+            for (const item of items) {
+                const request = store.add(item);
+                request.onsuccess = () => success++;
+                request.onerror = () => fail++;
+            }
+        });
+    },
+
+    async batchPut(storeName, items) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            let success = 0, fail = 0;
+            tx.oncomplete = () => resolve({ success, fail });
+            tx.onerror = () => reject(tx.error);
+            for (const item of items) {
+                const request = store.put(item);
+                request.onsuccess = () => success++;
+                request.onerror = () => fail++;
+            }
+        });
+    },
+    
+    async put(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const request = store.put(data);
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    async delete(storeName, key) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const request = store.delete(key);
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    async query(storeName, indexName, value) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            tx.onerror = () => reject(tx.error);
+            let index;
+            try {
+                index = store.index(indexName);
+            } catch (e) {
+                reject(e);
+                return;
+            }
+            const request = index.getAll(value);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    },
+    
+    async clear(storeName) {
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const request = store.clear();
+            tx.onerror = () => reject(tx.error);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+};
+
+// ==================== 工具函数 ====================
+const Utils = {
+    showToast(msg, type = 'success') {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        if (this._toastTimer) clearTimeout(this._toastTimer);
+        toast.textContent = msg;
+        toast.style.background = type === 'error' ? '#e74c3c' : '#27ae60';
+        toast.style.display = 'block';
+        this._toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    },
+    
+    showLoading(msg = '加载中...') {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) { overlay.querySelector('.loading-text').textContent = msg; overlay.classList.add('show'); }
+    },
+    
+    hideLoading() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) overlay.classList.remove('show');
+    },
+    
+    escapeHtml(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    },
+
+    escapeJs(str) {
+        return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+    },
+    
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                if (modal.parentNode) modal.remove();
+            }, 300);
+        }
+    },
+    
+    showModal(content) {
+        const idMatch = content.match(/id\s*=\s*["']([^"']+)["']/);
+        if (idMatch) {
+            const existing = document.getElementById(idMatch[1]);
+            if (existing) existing.remove();
+        }
+        document.body.insertAdjacentHTML('beforeend', content);
+    },
+    
+    formatDate(date) {
+        return new Date(date).toISOString().slice(0, 10);
+    },
+    
+    // 解析 Excel 日期，支持多种格式
+    parseExcelDate(dateValue) {
+        if (!dateValue && dateValue !== 0) return Utils.formatDate(new Date());
+        if (typeof dateValue === 'number' && dateValue === 0) return Utils.formatDate(new Date());
+        if (dateValue instanceof Date && !isNaN(dateValue.getTime())) return Utils.formatDate(dateValue);
+        if (typeof dateValue === 'number' && !isNaN(dateValue) && dateValue > 0) {
+            var utcDays = Math.floor(dateValue);
+            var utcMillis = (utcDays - 25569) * 86400000;
+            var excelDate = new Date(utcMillis);
+            if (!isNaN(excelDate.getTime())) return Utils.formatDate(excelDate);
+        }
+        var dateStr = String(dateValue).trim();
+        if (!dateStr) return Utils.formatDate(new Date());
+        var dateStrNormalized = dateStr.replace(/[\.]/g, '-').replace(/\s+/g, '');
+        var formats = [
+            /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/,       // 2026-6-10, 2026/6/16
+            /^(\d{4})年(\d{1,2})月(\d{1,2})日$/,              // 2026年6月16日
+            /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/,          // 6/16/2026
+            /^(\d{4})(\d{2})(\d{2})$/,                          // 20260616
+            /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{2})$/,           // 6/16/26
+            /^(\d{2})[-\/](\d{1,2})[-\/](\d{1,2})$/,           // 26/6/16
+            /^(\d{2})年(\d{1,2})月(\d{1,2})日$/                 // 26年6月16日
+        ];
+        for (var i = 0; i < formats.length; i++) {
+            var match = dateStrNormalized.match(formats[i]);
+            if (match) {
+                var parts = match.slice(1).map(Number);
+                var year, month, day;
+                if (parts[0] > 31) {
+                    year = parts[0]; month = parts[1]; day = parts[2];
+                } else if (parts[2] > 31) {
+                    year = parts[2]; month = parts[0]; day = parts[1];
+                } else {
+                    year = parts[0]; month = parts[1]; day = parts[2];
+                }
+                if (year >= 1900 && year <= 2100 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                    return year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                } else if (year >= 0 && year < 100) {
+                    year = year + (year < 50 ? 2000 : 1900);
+                    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                        return year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    }
+                }
+            }
+        }
+        var parsed = new Date(dateStr);
+        return isNaN(parsed.getTime()) ? Utils.formatDate(new Date()) : Utils.formatDate(parsed);
+    },
+    
+    // 简繁转换（简体中文 -> 繁体中文）
+    toTraditional(str) {
+        const map = {
+            '静': '靜', '电': '電', '衣': '衣', '鞋': '鞋',
+            '黄': '黃', '白': '白', '东': '東', '库': '庫',
+            '发': '發', '还': '還', '单': '單', '个': '個',
+            '门': '門', '号': '號', '码': '碼', '层': '層',
+            '类': '類', '颜': '顏', '报': '報', '管': '管',
+            '理': '理', '统': '統', '设': '設', '置': '置',
+            '员': '員', '遗': '遺', '失': '失', '损': '損',
+            '坏': '壞', '洗': '洗', '态': '態', '职': '職',
+            '别': '別', '班': '班', '主': '主', '责': '責',
+            '任': '任', '楼': '樓', '码': '碼', '色': '色',
+            '尺': '尺', '上': '上', '下': '下', '中': '中',
+            '人': '人', '工': '工', '姓': '姓', '名': '名',
+            '部': '部', '课': '課', '处': '處', '理': '理',
+            '补': '補', '废': '廢', '清': '清', '记': '記',
+            '录': '錄', '警': '警', '总': '總', '览': '覽',
+            '设': '設', '备': '備', '数': '數', '据': '據',
+            '导': '導', '出': '出', '入': '入', '搜': '搜',
+            '索': '索', '新': '新', '增': '增', '删': '刪',
+            '除': '除', '编': '編', '辑': '輯', '查': '查',
+            '看': '看', '确': '確', '认': '認', '取': '取',
+            '消': '消', '保': '保', '存': '存', '关': '關',
+            '闭': '閉', '日': '日', '期': '期', '页': '頁'
+        };
+        return str.split('').map(c => map[c] || c).join('');
+    },
+    
+    // 繁简转换（繁体中文 -> 简体中文）
+    toSimplified(str) {
+        const map = {
+            '靜': '静', '電': '电', '衣': '衣', '鞋': '鞋',
+            '黃': '黄', '白': '白', '東': '东', '庫': '库',
+            '發': '发', '還': '还', '單': '单', '個': '个',
+            '門': '门', '號': '号', '碼': '码', '層': '层',
+            '類': '类', '顏': '颜', '報': '报', '統': '统',
+            '設': '设', '員': '员', '遺': '遗', '損': '损',
+            '壞': '坏', '態': '态', '職': '职', '別': '别',
+            '責': '责', '樓': '楼', '課': '课', '處': '处',
+            '補': '补', '廢': '废', '記': '记', '錄': '录',
+            '總': '总', '覽': '览', '備': '备', '數': '数',
+            '據': '据', '導': '导', '刪': '删', '編': '编',
+            '輯': '辑', '確': '确', '認': '认', '關': '关',
+            '閉': '闭', '頁': '页', '員': '员', '種': '种',
+            '碼': '码', '曆': '历', '時': '时', '間': '间'
+        };
+        return str.split('').map(c => map[c] || c).join('');
+    },
+    
+    // 统一转换为简体进行比较
+    normalize(str) {
+        return this.toSimplified(String(str || '').trim());
+    },
+    
+    // 导入结果处理：有错误时自动下载错误报告
+    importResult(success, errors, moduleName) {
+        if (errors.length > 0) {
+            try {
+                const ws = XLSX.utils.json_to_sheet(errors);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '导入错误');
+                XLSX.writeFile(wb, `${moduleName}_导入错误_${this.formatDate(new Date())}.xlsx`);
+            } catch(e) { /* 导出失败则忽略 */ }
+            this.showToast(`导入完成：成功${success}条，失败${errors.length}条，错误报告已下载`, 'error');
+        } else {
+            this.showToast(`导入完成：成功${success}条`);
+        }
+    }
+};
+
+const Logger = {
+    async log(type, module, detail) {
+        try {
+            await DB.add('logs', {
+                timestamp: new Date().toISOString(),
+                type,
+                module,
+                detail,
+                user: '管理员'
+            });
+        } catch (e) {
+            console.error('Log write failed:', e);
+        }
+    },
+
+    async error(module, detail) {
+        try {
+            await DB.add('logs', {
+                timestamp: new Date().toISOString(),
+                type: 'error',
+                module,
+                detail,
+                user: '管理员'
+            });
+        } catch (e) {
+            console.error('Error log write failed:', e);
+        }
+    }
+};
+
+// ==================== 报警管理 ====================
+const AlertManager = {
+    async checkMultiHold() {
+        const assets = await DB.getAll('assets');
+        const issuedAssets = assets.filter(a => a.status === 'issued');
+
+        const existingAlerts = await DB.getAll('alerts');
+        const existingMultiHoldAlerts = existingAlerts.filter(a => a.type === 'multi-hold' && !a.resolved);
+
+        const holdings = {};
+        issuedAssets.forEach(a => {
+            if (!a.employeeId) return;
+            if (!holdings[a.employeeId]) holdings[a.employeeId] = { clothes: [], shoes: [] };
+            const normalizedType = Utils.normalize(a.type);
+            if (normalizedType === '静电衣') holdings[a.employeeId].clothes.push(a.code);
+            else if (normalizedType === '静电鞋') holdings[a.employeeId].shoes.push(a.code);
+        });
+
+        const currentEmpIds = new Set();
+        for (const empId in holdings) {
+            const clothesCount = holdings[empId].clothes.length;
+            const shoesCount = holdings[empId].shoes.length;
+            if (clothesCount > 1 || shoesCount > 1) {
+                currentEmpIds.add(empId);
+                const existing = existingMultiHoldAlerts.find(a => a.detail && a.detail.employeeId === empId);
+                if (!existing) {
+                    const parts = [];
+                    if (clothesCount > 1) parts.push(`${clothesCount}件静电衣 (编码：${holdings[empId].clothes.join(',')})`);
+                    if (shoesCount > 1) parts.push(`${shoesCount}双静电鞋 (编码：${holdings[empId].shoes.join(',')})`);
+                    await DB.add('alerts', {
+                        type: 'multi-hold',
+                        description: `员工 ${empId} 同时持有${parts.join('和')}`,
+                        timestamp: new Date().toISOString(),
+                        resolved: false,
+                        detail: { employeeId: empId, clothes: clothesCount, shoes: shoesCount }
+                    });
+                }
+            }
+        }
+        for (const existing of existingMultiHoldAlerts) {
+            const empId = existing.detail && existing.detail.employeeId;
+            if (empId && !currentEmpIds.has(empId)) {
+                existing.resolved = true;
+                existing.resolvedDate = new Date().toISOString();
+                await DB.put('alerts', existing);
+            }
+        }
+    },
+    
+    async getAll() { return await DB.getAll('alerts'); },
+    
+    async resolve(id) {
+        const alert = await DB.get('alerts', id);
+        if (!alert) return;
+        alert.resolved = true;
+        alert.resolvedDate = new Date().toISOString();
+        await DB.put('alerts', alert);
+    },
+    
+    async clearResolved() {
+        const alerts = await DB.getAll('alerts');
+        for (const alert of alerts) {
+            if (alert.resolved) await DB.delete('alerts', alert.id);
+        }
+    }
+};
+
+// ==================== 主应用 ====================
+const app = {
+    statusChart: null,
+    typeChart: null,
+    currentReportType: 'issue',
+    
+    async init() {
+        try {
+            await DB.init();
+            this.bindEvents();
+            document.addEventListener('visibilitychange', () => this._onVisibilityChange());
+            this.loadConfig();
+            this.navigate('dashboard');
+            this.updateAlertCount();
+            await AlertManager.checkMultiHold();
+        } catch (e) {
+            console.error('初始化失败:', e);
+            Logger.error('系统初始化', '系统初始化失败，请刷新页面重试');
+            Utils.showToast('系统初始化失败，请刷新页面重试', 'error');
+        }
+    },
+    
+    bindEvents() {
+        document.querySelectorAll('.nav-menu li').forEach(li => {
+            li.addEventListener('click', () => this.navigate(li.dataset.page));
+        });
+    },
+    
+    navigate(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-menu li').forEach(li => li.classList.remove('active'));
+        const pageEl = document.getElementById('page-' + page);
+        if (pageEl) pageEl.classList.add('active');
+        const navEl = document.querySelector(`[data-page="${page}"]`);
+        if (navEl) navEl.classList.add('active');
+        
+        const titles = {
+            dashboard: '首页概览', alerts: '报警中心', personnel: '人员管理', assets: '资产管理',
+            issue: '发放管理', return: '回收管理', cleaning: '清洗管理', scrapped: '报废管理',
+            lost: '丢失管理', inventory: '库存管理', reports: '报表中心', settings: '系统设置'
+        };
+        document.getElementById('page-title').textContent = titles[page];
+        
+        if (page === 'dashboard') this.updateDashboard();
+        if (page === 'alerts') this.alerts.load();
+        if (page === 'personnel') this.personnel.load().catch(console.error);
+        if (page === 'assets') this.assets.load().catch(console.error);
+        if (page === 'issue') this.issue.load().catch(console.error);
+        if (page === 'return') this.return.load().catch(console.error);
+        if (page === 'cleaning') this.cleaning.load().catch(console.error);
+        if (page === 'scrapped') this.scrapped.load().catch(console.error);
+        if (page === 'lost') this.lost.load().catch(console.error);
+        if (page === 'inventory') this.inventory.load().catch(console.error);
+        if (page === 'settings') this.settings.loadLogs();
+        if (page === 'reports') { this.reports.generate().catch(console.error); }
+    },
+    
+    async updateDashboard() {
+        const assets = await DB.getAll('assets');
+        const personnel = await DB.getAll('personnel');
+        
+        let available = 0, issued = 0, cleaning = 0, lost = 0, scrapped = 0;
+        assets.forEach(a => {
+            if (a.status === 'available') available++;
+            else if (a.status === 'issued') issued++;
+            else if (a.status === 'cleaning') cleaning++;
+            else if (a.status === 'lost') lost++;
+            else if (a.status === 'scrapped') scrapped++;
+        });
+        const employees = personnel.filter(p => p.status !== '离职').length;
+        
+        const stats = { available, issued, cleaning, lost, scrapped, employees };
+        
+        document.getElementById('stat-available').textContent = stats.available;
+        document.getElementById('stat-issued').textContent = stats.issued;
+        document.getElementById('stat-cleaning').textContent = stats.cleaning;
+        document.getElementById('stat-lost').textContent = stats.lost;
+        document.getElementById('stat-scrapped').textContent = stats.scrapped;
+        document.getElementById('stat-employees').textContent = stats.employees;
+        
+        this.renderCharts(stats, assets);
+        this.renderRecentAlerts();
+    },
+    
+    renderCharts(stats, assets) {
+        const statusCtx = document.getElementById('status-chart');
+        if (statusCtx) {
+            if (this.statusChart) this.statusChart.destroy();
+            this.statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['库存', '发放中', '清洗中', '丢失', '报废'],
+                    datasets: [{
+                        data: [stats.available, stats.issued, stats.cleaning, stats.lost, stats.scrapped],
+                        backgroundColor: ['#27ae60', '#3498db', '#f39c12', '#e74c3c', '#95a5a6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true, pointStyle: 'circle' } }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+        
+        const typeCount = {};
+        assets.forEach(a => {
+            const normalizedType = Utils.normalize(a.type);
+            const normalizedColor = Utils.normalize(a.color);
+            const key = `${normalizedType}-${normalizedColor}`;
+            typeCount[key] = (typeCount[key] || 0) + 1;
+        });
+        
+        const typeCtx = document.getElementById('type-chart');
+        if (typeCtx) {
+            if (this.typeChart) this.typeChart.destroy();
+            this.typeChart = new Chart(typeCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(typeCount),
+                    datasets: [{
+                        label: '数量',
+                        data: Object.values(typeCount),
+                        backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+    },
+    
+    async renderRecentAlerts() {
+        const alerts = await AlertManager.getAll();
+        const recent = alerts.filter(a => !a.resolved).slice(-3).reverse();
+        const container = document.getElementById('recent-alerts');
+        if (container) {
+            container.innerHTML = recent.length === 0 ? 
+                '<div class="empty-state">暂无未处理报警</div>' :
+                recent.map(a => `<div class="alert-box alert-warning"><strong>` + Utils.escapeHtml(a.type === 'multi-hold' ? '一人多持' : a.type) + `</strong>: ${Utils.escapeHtml(a.description || '')} <span style="float:right">${a.timestamp ? new Date(a.timestamp).toLocaleString() : '-'}</span></div>`).join('');
+        }
+    },
+    
+    async updateAlertCount() {
+        if (this._alertTimer) clearTimeout(this._alertTimer);
+        try {
+            const alerts = await AlertManager.getAll();
+            const el = document.getElementById('alert-num');
+            if (el) el.textContent = alerts.filter(a => !a.resolved).length;
+        } catch (e) { console.error('updateAlertCount error:', e); }
+        if (!document.hidden) {
+            this._alertTimer = setTimeout(() => this.updateAlertCount(), 60000);
+        }
+    },
+    
+    _onVisibilityChange() {
+        if (!document.hidden) this.updateAlertCount();
+    },
+    
+    async loadConfig() {
+        // 超期未归还功能已移除
+    },
+    
+    async confirm(message) { return new Promise(resolve => resolve(confirm(message))); },
+    alert(message) { alert(message); }
+};
+
+// ==================== 人员管理 ====================
+app.personnel = {
+    async load() {
+        this._assetCache = null;
+        const personnel = await DB.getAll('personnel');
+        await this.render(personnel);
+        this.updateDeptFilter(personnel);
+    },
+    
+    async render(list) {
+        const tbody = document.querySelector('#personnel-table tbody');
+        if (!tbody) return;
+        if (!this._assetCache) this._assetCache = await DB.getAll('assets');
+        const holdings = {};
+        this._assetCache.filter(a => a.status === 'issued').forEach(a => {
+            if (a.employeeId) {
+                if (!holdings[a.employeeId]) holdings[a.employeeId] = { clothes: 0, shoes: 0 };
+                const normalizedType = Utils.normalize(a.type);
+                if (normalizedType === '静电衣') holdings[a.employeeId].clothes++;
+                else if (normalizedType === '静电鞋') holdings[a.employeeId].shoes++;
+            }
+        });
+        tbody.innerHTML = list.map((p, i) => {
+            const h = holdings[p.employeeId] || { clothes: 0, shoes: 0 };
+            const escapedId = Utils.escapeHtml(p.employeeId);
+            return `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${escapedId}</td>
+                <td>${Utils.escapeHtml(p.name)}</td>
+                <td>${Utils.escapeHtml(p.supervisor)}</td>
+                <td>${Utils.escapeHtml(p.department)}</td>
+                <td>${Utils.escapeHtml(p.floor || '-')}</td>
+                <td>${Utils.escapeHtml(p.shift || '-')}</td>
+                <td>${h.clothes}</td>
+                <td>${h.shoes}</td>
+                <td><span class="status-badge ${p.status === '在职' ? 'status-available' : 'status-scrapped'}">${Utils.escapeHtml(p.status)}</span></td>
+                <td class="action-btns">
+                    <button class="btn btn-primary" onclick="app.personnel.edit('${Utils.escapeJs(p.employeeId)}')">编辑</button>
+                    <button class="btn btn-danger" onclick="app.personnel.delete('${Utils.escapeJs(p.employeeId)}')">删除</button>
+                </td>
+            </tr>
+            `;
+        }).join('');
+    },
+    
+    updateDeptFilter(personnel) {
+        const depts = [...new Set(personnel.map(p => p.department).filter(Boolean))];
+        const select = document.getElementById('personnel-dept-filter');
+        if (select) select.innerHTML = '<option value="">全部课别</option>' + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+    },
+    
+    showAddModal() {
+        Utils.showModal(`
+            <div id="personnel-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>新增人员</h3><button class="modal-close" onclick="Utils.closeModal('personnel-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>工号 *</label><input type="text" id="p-employeeId"></div>
+                        <div class="form-group"><label>姓名 *</label><input type="text" id="p-name"></div>
+                        <div class="form-group"><label>责任主管 *</label><input type="text" id="p-supervisor"></div>
+                        <div class="form-group"><label>课别 *</label><input type="text" id="p-department"></div>
+                        <div class="form-group"><label>楼层</label><input type="text" id="p-floor"></div>
+                        <div class="form-group"><label>班别</label><input type="text" id="p-shift"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('personnel-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.personnel.save()">保存</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const data = {
+            employeeId: document.getElementById('p-employeeId').value.trim(),
+            name: document.getElementById('p-name').value.trim(),
+            supervisor: document.getElementById('p-supervisor').value.trim(),
+            department: document.getElementById('p-department').value.trim(),
+            floor: document.getElementById('p-floor').value.trim(),
+            shift: document.getElementById('p-shift').value.trim(),
+            status: '在职'
+        };
+        if (!data.employeeId || !data.name || !data.supervisor || !data.department) { Logger.error('人员管理', '新增人员必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        if (await DB.get('personnel', data.employeeId)) { Logger.error('人员管理', '工号已存在'); Utils.showToast('工号已存在', 'error'); return; }
+        await DB.add('personnel', data);
+        await Logger.log('create', '人员管理', `新增人员：${data.employeeId}`);
+        Utils.closeModal('personnel-modal');
+        app.assets._personnelCache = null;
+        if (app.issue) app.issue._invalidateCache();
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async edit(employeeId) {
+        Utils.closeModal('personnel-modal');
+        const p = await DB.get('personnel', employeeId);
+        if (!p) return;
+        Utils.showModal(`
+            <div id="personnel-edit-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>编辑人员</h3><button class="modal-close" onclick="Utils.closeModal('personnel-edit-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>工号</label><input type="text" value="${p.employeeId}" disabled></div>
+                        <div class="form-group"><label>姓名</label><input type="text" id="p-name" value="${p.name}"></div>
+                        <div class="form-group"><label>责任主管</label><input type="text" id="p-supervisor" value="${p.supervisor}"></div>
+                        <div class="form-group"><label>课别</label><input type="text" id="p-department" value="${p.department}"></div>
+                        <div class="form-group"><label>楼层</label><input type="text" id="p-floor" value="${p.floor || ''}"></div>
+                        <div class="form-group"><label>班别</label><input type="text" id="p-shift" value="${p.shift || ''}"></div>
+                        <div class="form-group"><label>状态</label><select id="p-status"><option value="在职" ${p.status === '在职' ? 'selected' : ''}>在职</option><option value="离职" ${p.status === '离职' ? 'selected' : ''}>离职</option></select></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('personnel-edit-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.personnel.update('${Utils.escapeJs(p.employeeId)}')">保存</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async update(employeeId) {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const p = await DB.get('personnel', employeeId);
+        if (!p) return;
+        p.name = document.getElementById('p-name').value.trim();
+        p.supervisor = document.getElementById('p-supervisor').value.trim();
+        p.department = document.getElementById('p-department').value.trim();
+        if (!p.name || !p.supervisor || !p.department) { 
+            Logger.error('人员管理', '编辑人员必填项为空');
+            Utils.showToast('姓名/责任主管/课别不能为空', 'error'); 
+            return; 
+        }
+        p.floor = document.getElementById('p-floor').value.trim();
+        p.shift = document.getElementById('p-shift').value.trim();
+        p.status = document.getElementById('p-status').value;
+        await DB.put('personnel', p);
+        await Logger.log('update', '人员管理', `编辑人员：${employeeId}`);
+        Utils.closeModal('personnel-edit-modal');
+        app.assets._personnelCache = null;
+        this._assetCache = null;
+        if (app.issue) app.issue._invalidateCache();
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async delete(employeeId) {
+        const assets = await DB.getAll('assets');
+        if (assets.some(a => a.employeeId === employeeId && ['issued', 'cleaning'].includes(a.status))) { Logger.error('人员管理', '该员工仍有未归还物品'); Utils.showToast('该员工仍有未归还物品', 'error'); return; }
+        if (await app.confirm(`确定删除人员 ${employeeId} 吗？`)) {
+            await DB.delete('personnel', employeeId);
+            await Logger.log('delete', '人员管理', `删除人员：${employeeId}`);
+            app.assets._personnelCache = null;
+            this.load();
+        }
+    },
+    
+    async search() {
+        const keyword = document.getElementById('personnel-search').value.trim();
+        const dept = document.getElementById('personnel-dept-filter').value;
+        const personnel = await DB.getAll('personnel');
+        let filtered = personnel;
+        if (dept) filtered = filtered.filter(p => p.department === dept);
+        if (keyword) { const kw = keyword.toLowerCase(); filtered = filtered.filter(p => p.employeeId.toLowerCase().includes(kw) || p.name.toLowerCase().includes(kw)); }
+        await this.render(filtered);
+    },
+    
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'工号': 'E001', '姓名': '张三', '责任主管': '李四', '课别': '一课', '楼层': '1F', '班别': '早班'}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '人员模板');
+        XLSX.writeFile(wb, '人员导入模板.xlsx');
+    },
+    
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                const existingIds = new Set((await DB.getAll('personnel')).map(p => p.employeeId));
+                const toAdd = [];
+                const errors = [];
+                for (const row of jsonData) {
+                    const employeeId = String(row['工号'] || '').trim();
+                    const name = String(row['姓名']||'').trim();
+                    const supervisor = String(row['责任主管']||'').trim();
+                    const department = String(row['课别']||'').trim();
+                    if (!employeeId || !name || !supervisor || !department) {
+                        errors.push({ ...row, 失败原因: !employeeId ? '工号为空' : !name ? '姓名为空' : !supervisor ? '责任主管为空' : '课别为空' });
+                        continue;
+                    }
+                    if (existingIds.has(employeeId)) { errors.push({ ...row, 失败原因: '工号已存在' }); continue; }
+                    existingIds.add(employeeId);
+                    toAdd.push({ employeeId, name, supervisor, department, floor: String(row['楼层']||'').trim(), shift: String(row['班别']||'').trim(), status: '在职' });
+                }
+                const result = await DB.batchAdd('personnel', toAdd);
+                Utils.importResult(result.success, errors.concat(result.fail > 0 ? [{ 失败原因: `数据库写入失败 ${result.fail} 条` }] : []), '人员');
+                app.assets._personnelCache = null;
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+    
+    async export() {
+        const personnel = await DB.getAll('personnel');
+        const ws = XLSX.utils.json_to_sheet(personnel.map(p => ({'工号': p.employeeId, '姓名': p.name, '责任主管': p.supervisor, '课别': p.department, '楼层': p.floor||'', '班别': p.shift||'', '状态': p.status})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '人员信息');
+        XLSX.writeFile(wb, `人员信息_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 资产管理 ====================
+app.assets = {
+    _personnelCache: null,
+    async load() {
+        const assets = await DB.getAll('assets');
+        await this.render(assets);
+    },
+    
+    async render(list) {
+        const tbody = document.querySelector('#assets-table tbody');
+        if (!tbody) return;
+        const statusMap = { available: '库存', issued: '发放中', cleaning: '清洗中', lost: '丢失', scrapped: '报废' };
+        if (!this._personnelCache) {
+            this._personnelCache = {};
+            const personnelList = await DB.getAll('personnel');
+            personnelList.forEach(p => this._personnelCache[p.employeeId] = p);
+        }
+        const personnelMap = this._personnelCache;
+        const rows = [];
+        for (let i = 0; i < list.length; i++) {
+            const a = list[i];
+            const escapedCode = Utils.escapeHtml(a.code);
+            let employeeId = '', name = '', supervisor = '', department = '', floor = '', shift = '';
+            if (a.status === 'issued' && a.employeeId) {
+                const p = personnelMap[a.employeeId];
+                if (p) { employeeId = p.employeeId; name = p.name; supervisor = p.supervisor; department = p.department; floor = p.floor || ''; shift = p.shift || ''; }
+            }
+            rows.push(`
+            <tr>
+                <td>${i + 1}</td>
+                <td>${escapedCode}</td>
+                <td>${Utils.escapeHtml(a.type)}</td>
+                <td>${Utils.escapeHtml(a.color)}</td>
+                <td>${Utils.escapeHtml(a.size)}</td>
+                <td><span class="status-badge status-${a.status}">${statusMap[a.status] || a.status}</span></td>
+                <td>${Utils.escapeHtml(employeeId || '-')}</td>
+                <td>${Utils.escapeHtml(name || '-')}</td>
+                <td>${Utils.escapeHtml(supervisor || '-')}</td>
+                <td>${Utils.escapeHtml(department || '-')}</td>
+                <td>${Utils.escapeHtml(floor || '-')}</td>
+                <td>${Utils.escapeHtml(shift || '-')}</td>
+                <td>${Utils.escapeHtml(String(a.cleanCount || 0))}</td>
+                <td class="action-btns">
+                    <button class="btn btn-primary" onclick="app.assets.view('${Utils.escapeJs(a.code)}')">查看</button>
+                    <button class="btn btn-danger" onclick="app.assets.delete('${Utils.escapeJs(a.code)}')">删除</button>
+                </td>
+            </tr>
+            `);
+        }
+        tbody.innerHTML = rows.join('');
+    },
+    
+    showAddModal() {
+        Utils.showModal(`
+            <div id="asset-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>资产入库</h3><button class="modal-close" onclick="Utils.closeModal('asset-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>资产编码 *</label><input type="text" id="a-code"></div>
+                        <div class="form-group"><label>类型 *</label><select id="a-type"><option value="静电衣">静电衣</option><option value="静电鞋">静电鞋</option></select></div>
+                        <div class="form-group"><label>颜色 *</label><select id="a-color"><option value="黄色">黄色</option><option value="白色">白色</option></select></div>
+                        <div class="form-group"><label>尺码 *</label><input type="text" id="a-size"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('asset-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.assets.save()">保存</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const data = {
+            code: document.getElementById('a-code').value.trim(),
+            type: document.getElementById('a-type').value,
+            color: document.getElementById('a-color').value,
+            size: document.getElementById('a-size').value.trim(),
+            status: 'available',
+            cleanCount: 0,
+            employeeId: null,
+            lastIssueDate: null
+        };
+        if (!data.code || !data.type || !data.color || !data.size) { Logger.error('资产管理', '资产入库必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        if (await DB.get('assets', data.code)) { Logger.error('资产管理', '资产编码已存在'); Utils.showToast('资产编码已存在', 'error'); return; }
+        await DB.add('assets', data);
+        await Logger.log('create', '资产管理', `资产入库：${data.code}`);
+        Utils.closeModal('asset-modal');
+        this._personnelCache = null;
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async view(code) {
+        const a = await DB.get('assets', code);
+        if (!a) return;
+        const issueRecords = await DB.query('issueRecords', 'assetCode', code);
+        const cleaningRecords = await DB.query('cleaningRecords', 'assetCode', code);
+        let holder = a.employeeId && a.status === 'issued' ? (await DB.get('personnel', a.employeeId))?.name || a.employeeId : '-';
+        const statusMap = { available: '库存', issued: '发放中', cleaning: '清洗中', lost: '丢失', scrapped: '报废' };
+        const eh = Utils.escapeHtml;
+        Utils.showModal(`
+            <div id="asset-view-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>资产详情</h3><button class="modal-close" onclick="Utils.closeModal('asset-view-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group"><label>编码</label><input type="text" value="${eh(a.code)}" disabled></div>
+                            <div class="form-group"><label>类型</label><input type="text" value="${eh(a.type)}" disabled></div>
+                            <div class="form-group"><label>颜色</label><input type="text" value="${eh(a.color)}" disabled></div>
+                            <div class="form-group"><label>尺码</label><input type="text" value="${eh(a.size)}" disabled></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>状态</label><input type="text" value="${statusMap[a.status]}" disabled></div>
+                            <div class="form-group"><label>清洗次数</label><input type="text" value="${eh(String(a.cleanCount || 0))}" disabled></div>
+                            <div class="form-group"><label>当前持有人</label><input type="text" value="${eh(holder)}" disabled></div>
+                        </div>
+                        <h4 style="margin-top:20px;">发放历史</h4>
+                        <table style="font-size:12px;"><tr><th>发放日期</th><th>工号</th><th>发放人</th><th>归还日期</th></tr>${issueRecords.map(r => `<tr><td>${eh(r.issueDate)}</td><td>${eh(r.employeeId)}</td><td>${eh(r.issuer)}</td><td>${eh(r.returnDate || '-')}</td></tr>`).join('')}</table>
+                        <h4 style="margin-top:20px;">清洗历史</h4>
+                        <table style="font-size:12px;"><tr><th>送洗日期</th><th>返回日期</th></tr>${cleaningRecords.map(r => `<tr><td>${eh(r.sendDate)}</td><td>${eh(r.returnDate || '-')}</td></tr>`).join('')}</table>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-secondary" onclick="Utils.closeModal('asset-view-modal')">关闭</button></div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async delete(code) {
+        const a = await DB.get('assets', code);
+        if (!a) return;
+        if (['issued', 'cleaning'].includes(a.status)) { Logger.error('资产管理', '该资产正在发放中或清洗中'); Utils.showToast('该资产正在发放中或清洗中', 'error'); return; }
+        if (await app.confirm(`确定删除资产 ${code} 吗？`)) {
+            await DB.delete('assets', code);
+            await Logger.log('delete', '资产管理', `删除资产：${code}`);
+            this._personnelCache = null;
+            this.load();
+        }
+    },
+    
+    async search() {
+        const keyword = document.getElementById('assets-search').value.trim();
+        const type = document.getElementById('assets-type-filter').value;
+        const color = document.getElementById('assets-color-filter').value;
+        const status = document.getElementById('assets-status-filter').value;
+        let filtered = await DB.getAll('assets');
+        if (keyword) {
+            const kw = keyword.toLowerCase();
+            if (!this._personnelCache) {
+                this._personnelCache = {};
+                const personnelList = await DB.getAll('personnel');
+                personnelList.forEach(p => this._personnelCache[p.employeeId] = p);
+            }
+            filtered = filtered.filter(a => {
+                if (a.code.toLowerCase().includes(kw)) return true;
+                if (a.employeeId && a.employeeId.toLowerCase().includes(kw)) return true;
+                if (a.employeeId) {
+                    const p = this._personnelCache[a.employeeId];
+                    if (p && p.name && p.name.toLowerCase().includes(kw)) return true;
+                }
+                return false;
+            });
+        }
+        if (type) {
+            const normalizedType = Utils.normalize(type);
+            filtered = filtered.filter(a => Utils.normalize(a.type) === normalizedType);
+        }
+        if (color) {
+            const normalizedColor = Utils.normalize(color);
+            filtered = filtered.filter(a => Utils.normalize(a.color) === normalizedColor);
+        }
+        if (status) filtered = filtered.filter(a => a.status === status);
+        await this.render(filtered);
+    },
+    
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'编码': 'J-Y-001', '类型': '静电衣', '颜色': '黄色', '尺码': 'L'}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '资产模板');
+        XLSX.writeFile(wb, '资产导入模板.xlsx');
+    },
+    
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                const existingCodes = new Set((await DB.getAll('assets')).map(a => a.code));
+                const toAdd = [];
+                const errors = [];
+                for (const row of jsonData) {
+                    const code = String(row['编码'] || '').trim();
+                    if (!code) { errors.push({ ...row, 失败原因: '编码为空' }); continue; }
+                    if (existingCodes.has(code)) { errors.push({ ...row, 失败原因: '编码已存在' }); continue; }
+                    existingCodes.add(code);
+                    toAdd.push({
+                        code,
+                        type: String(row['类型']||'').trim(),
+                        color: String(row['颜色']||'').trim(),
+                        size: String(row['尺码']||'').trim(),
+                        status: 'available',
+                        cleanCount: 0,
+                        employeeId: null,
+                        lastIssueDate: null
+                    });
+                }
+                const result = await DB.batchAdd('assets', toAdd);
+                Utils.importResult(result.success, errors.concat(result.fail > 0 ? [{ 失败原因: `数据库写入失败 ${result.fail} 条` }] : []), '资产');
+                this._personnelCache = null;
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+    
+    async export() {
+        const assets = await DB.getAll('assets');
+        const statusMap = { available: '库存', issued: '发放中', cleaning: '清洗中', lost: '丢失', scrapped: '报废' };
+        const ws = XLSX.utils.json_to_sheet(assets.map(a => ({'编码': a.code, '类型': a.type, '颜色': a.color, '尺码': a.size, '状态': statusMap[a.status], '清洗次数': a.cleanCount || 0, '持有人': a.employeeId || ''})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '资产清单');
+        XLSX.writeFile(wb, `资产清单_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 发放管理 ====================
+app.issue = {
+    _cacheAssets: null,
+    _cachePersonnel: null,
+
+    async load() {
+        const records = (await DB.getAll('issueRecords')).sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+        await this.render(records);
+    },
+
+    async _ensureCache() {
+        if (!this._cacheAssets) this._cacheAssets = await DB.getAll('assets');
+        if (!this._cachePersonnel) this._cachePersonnel = await DB.getAll('personnel');
+    },
+
+    _invalidateCache() {
+        this._cacheAssets = null;
+        this._cachePersonnel = null;
+    },
+
+    async render(list) {
+        const tbody = document.querySelector('#issue-table tbody');
+        if (!tbody) return;
+        await this._ensureCache();
+        const assetMap = {}; this._cacheAssets.forEach(a => assetMap[a.code] = a);
+        const personnelMap = {}; this._cachePersonnel.forEach(p => personnelMap[p.employeeId] = p);
+        const rows = list.map((r, i) => {
+            const asset = assetMap[r.assetCode];
+            const p = personnelMap[r.employeeId];
+            return { ...r, assetType: asset?.type || '-', employeeName: p?.name || r.employeeId, seq: i + 1 };
+        });
+        tbody.innerHTML = rows.map(r => `
+            <tr>
+                <td>${r.seq}</td>
+                <td>${Utils.escapeHtml(r.employeeId)}</td>
+                <td>${Utils.escapeHtml(r.employeeName)}</td>
+                <td>${Utils.escapeHtml(r.assetCode)}</td>
+                <td>${Utils.escapeHtml(r.assetType)}</td>
+                <td>${Utils.escapeHtml(r.issueDate)}</td>
+                <td>${Utils.escapeHtml(r.issuer)}</td>
+                <td class="action-btns"><button class="btn btn-secondary" onclick="app.issue.view(${r.id})">查看</button></td>
+            </tr>
+        `).join('');
+    },
+    
+    async showIssueModal() {
+        const [personnel, assets] = await Promise.all([DB.getAll('personnel'), DB.getAll('assets')]);
+        const available = assets.filter(a => a.status === 'available');
+        Utils.showModal(`
+            <div id="issue-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>发放登记</h3><button class="modal-close" onclick="Utils.closeModal('issue-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>工号 *</label><input type="text" id="i-employeeId" list="employee-list">
+                            <datalist id="employee-list">${personnel.filter(p => p.status === '在职').map(p => `<option value="${p.employeeId}">${Utils.escapeHtml(p.name)}</option>`).join('')}</datalist>
+                        </div>
+                        <div class="form-group"><label>物品编码 *</label><select id="i-assetCode"><option value="">请选择</option>
+                            ${available.map(a => `<option value="${a.code}">${Utils.escapeHtml(a.code + ' - ' + a.type + ' ' + a.color + ' ' + a.size)}</option>`).join('')}
+                        </select></div>
+                        <div class="form-group"><label>发放人 *</label><input type="text" id="i-issuer" value="管理员"></div>
+                        <div class="form-group"><label>发放日期</label><input type="date" id="i-issueDate" value="${Utils.formatDate(new Date())}"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('issue-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.issue.save()">确认发放</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const employeeId = document.getElementById('i-employeeId').value.trim();
+        const assetCode = document.getElementById('i-assetCode').value;
+        const issuer = document.getElementById('i-issuer').value.trim();
+        const issueDate = document.getElementById('i-issueDate').value;
+        if (!employeeId || !assetCode || !issuer || !issueDate) { Logger.error('发放管理', '发放必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        if (!await DB.get('personnel', employeeId)) { Logger.error('发放管理', '工号不存在'); Utils.showToast('工号不存在', 'error'); return; }
+        const person = await DB.get('personnel', employeeId);
+        if (person.status !== '在职') { Utils.showToast('该人员已离职，无法发放', 'error'); return; }
+        const asset = await DB.get('assets', assetCode);
+        if (!asset || asset.status !== 'available') { Logger.error('发放管理', '该物品当前不可发放'); Utils.showToast('该物品当前不可发放', 'error'); return; }
+        asset.status = 'issued';
+        asset.employeeId = employeeId;
+        asset.lastIssueDate = issueDate;
+        await DB.put('assets', asset);
+        await DB.add('issueRecords', { employeeId, assetCode, issuer, issueDate, assetType: asset.type });
+        await AlertManager.checkMultiHold();
+        await Logger.log('create', '发放管理', `发放：${assetCode} -> ${employeeId}`);
+        Utils.closeModal('issue-modal');
+        this._invalidateCache();
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async view(id) {
+        const r = await DB.get('issueRecords', id);
+        if (!r) return;
+        const p = await DB.get('personnel', r.employeeId);
+        Utils.showModal(`
+            <div id="issue-view-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>发放详情</h3><button class="modal-close" onclick="Utils.closeModal('issue-view-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group"><label>工号</label><input type="text" value="${Utils.escapeHtml(r.employeeId)}" disabled></div>
+                            <div class="form-group"><label>姓名</label><input type="text" value="${Utils.escapeHtml(p?.name || '-')}" disabled></div>
+                            <div class="form-group"><label>物品编码</label><input type="text" value="${Utils.escapeHtml(r.assetCode)}" disabled></div>
+                            <div class="form-group"><label>类型</label><input type="text" value="${Utils.escapeHtml(r.assetType)}" disabled></div>
+                            <div class="form-group"><label>发放日期</label><input type="text" value="${Utils.escapeHtml(r.issueDate)}" disabled></div>
+                            <div class="form-group"><label>发放人</label><input type="text" value="${Utils.escapeHtml(r.issuer)}" disabled></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-secondary" onclick="Utils.closeModal('issue-view-modal')">关闭</button></div>
+                </div>
+            </div>
+        `);
+    },
+    
+    search() {
+        const keyword = document.getElementById('issue-search').value.trim();
+        const startDate = document.getElementById('issue-date-start').value;
+        const endDate = document.getElementById('issue-date-end').value;
+        const kw = keyword.toLowerCase();
+        DB.getAll('issueRecords').then(records => {
+            let filtered = records.filter(r => {
+                if (startDate && (!r.issueDate || r.issueDate < startDate)) return false;
+                if (endDate && (!r.issueDate || r.issueDate > endDate)) return false;
+                if (kw && !r.employeeId.toLowerCase().includes(kw) && !r.assetCode.toLowerCase().includes(kw)) return false;
+                return true;
+            }).sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+            this.render(filtered);
+        }).catch(console.error);
+    },
+    
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'工号': 'E001', '物品编码': 'J-Y-001', '发放人': '管理员', '发放日期': Utils.formatDate(new Date())}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '发放模板');
+        XLSX.writeFile(wb, '发放导入模板.xlsx');
+    },
+    
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                let success = 0;
+                const errors = [];
+                for (const row of jsonData) {
+                    const employeeId = String(row['工号'] || '').trim();
+                    const assetCode = String(row['物品编码'] || '').trim();
+                    if (!employeeId || !assetCode) { errors.push({ ...row, 失败原因: !employeeId ? '工号为空' : '物品编码为空' }); continue; }
+                    const asset = await DB.get('assets', assetCode);
+                    if (!asset) { errors.push({ ...row, 失败原因: '物品编码不存在' }); continue; }
+                    if (asset.status !== 'available') { errors.push({ ...row, 失败原因: `资产状态为"${asset.status}"，不可发放` }); continue; }
+                    const person = await DB.get('personnel', employeeId);
+                    if (!person) { errors.push({ ...row, 失败原因: '工号不存在' }); continue; }
+                    if (person.status !== '在职') { errors.push({ ...row, 失败原因: '人员已离职' }); continue; }
+                    asset.status = 'issued'; asset.employeeId = employeeId; asset.lastIssueDate = Utils.parseExcelDate(row['发放日期']);
+                    await DB.put('assets', asset);
+                    await DB.add('issueRecords', { employeeId, assetCode, issuer: String(row['发放人']||'管理员'), issueDate: asset.lastIssueDate, assetType: asset.type });
+                    success++;
+                }
+                Utils.importResult(success, errors, '发放');
+                await AlertManager.checkMultiHold();
+                if (app.issue) app.issue._invalidateCache();
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                } finally { this._saving = false; }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+    
+    async export() {
+        const records = (await DB.getAll('issueRecords')).sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+        await this._ensureCache();
+        const personnelMap = {}; this._cachePersonnel.forEach(p => personnelMap[p.employeeId] = p);
+        const ws = XLSX.utils.json_to_sheet(records.map(r => ({'工号': r.employeeId, '姓名': personnelMap[r.employeeId]?.name || '-', '物品编码': r.assetCode, '类型': r.assetType||'-', '发放日期': r.issueDate, '发放人': r.issuer})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '发放记录');
+        XLSX.writeFile(wb, `发放记录_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 清洗管理 ====================
+app.cleaning = {
+    async load() { this.showPage(0); },
+    
+    async showPage(pageIndex) {
+        document.querySelectorAll('#page-cleaning .tab').forEach((t, i) => t.classList.toggle('active', i === pageIndex));
+        document.getElementById('cleaning-page-0').style.display = pageIndex === 0 ? 'block' : 'none';
+        document.getElementById('cleaning-page-1').style.display = pageIndex === 1 ? 'block' : 'none';
+        if (pageIndex === 0) await this.loadCleaning();
+        else await this.loadHistory();
+    },
+    
+    // 1. 加载清洗中列表 (自动触发渲染)
+    async loadCleaning() {
+        const assets = (await DB.getAll('assets'))
+            .filter(a => a.status === 'cleaning')
+            .sort((a, b) => (a.lastSendDate || '').localeCompare(b.lastSendDate || ''));
+        this.renderCleaning(assets);
+    },
+
+    // 2. 渲染清洗中表格 (显示数据)
+    renderCleaning(assets) {
+        const tbody = document.querySelector('#cleaning-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = assets.map((a, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${Utils.escapeHtml(a.code)}</td>
+                <td>${Utils.escapeHtml(a.type)}</td>
+                <td>${Utils.escapeHtml(a.color)}</td>
+                <td>${Utils.escapeHtml(a.size)}</td>
+                <td>${Utils.escapeHtml(a.lastSendDate || '-')}</td>
+                <td>${Utils.escapeHtml(a.lastSender || '-')}</td>
+                <td><button class="btn btn-success" onclick="app.cleaning.complete('${Utils.escapeJs(a.code)}')">完成清洗</button></td>
+            </tr>
+        `).join('');
+    },
+
+    // 3. 搜索清洗中功能
+    async search() {
+        const keyword = document.getElementById('cleaning-search').value.trim().toLowerCase();
+        let assets = (await DB.getAll('assets')).filter(a => a.status === 'cleaning');
+        
+        if (keyword) {
+            assets = assets.filter(a => 
+                a.code.toLowerCase().includes(keyword) || 
+                (a.lastSender && a.lastSender.toLowerCase().includes(keyword))
+            );
+        }
+        
+        assets.sort((a, b) => (a.lastSendDate || '').localeCompare(b.lastSendDate || ''));
+        this.renderCleaning(assets);
+    },
+
+    // 4. 加载历史列表
+    async loadHistory() {
+        const records = (await DB.getAll('cleaningRecords'))
+            .filter(r => r.returnDate)
+            .sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate));
+        this.renderHistory(records);
+    },
+
+    // 5. 渲染历史表格 (显示数据)
+    renderHistory(records) {
+        const tbody = document.querySelector('#cleaning-history-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = records.map((r, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${Utils.escapeHtml(r.assetCode)}</td>
+                <td>${Utils.escapeHtml(r.assetType || '-')}</td>
+                <td>${Utils.escapeHtml(r.sendDate)}</td>
+                <td>${Utils.escapeHtml(r.returnDate)}</td>
+                <td>${r.cleanCount || '-'}</td>
+            </tr>
+        `).join('');
+    },
+
+    // 6. 搜索历史功能
+    async searchHistory() {
+        const keyword = document.getElementById('cleaning-history-search').value.trim().toLowerCase();
+        let records = (await DB.getAll('cleaningRecords')).filter(r => r.returnDate);
+        
+        if (keyword) {
+            records = records.filter(r => r.assetCode.toLowerCase().includes(keyword));
+        }
+        
+        records.sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate));
+        this.renderHistory(records);
+    },
+    
+    async showSendModal() {
+        const assets = await DB.getAll('assets');
+        const available = assets.filter(a => ['available', 'issued'].includes(a.status));
+        Utils.showModal(`
+            <div id="cleaning-send-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>送洗登记</h3><button class="modal-close" onclick="Utils.closeModal('cleaning-send-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>物品编码 *</label><select id="c-assetCode"><option value="">请选择</option>
+                            ${available.map(a => `<option value="${a.code}">${a.code} - ${a.type} ${a.color} ${a.size}</option>`).join('')}
+                        </select></div>
+                        <div class="form-group"><label>送洗人 *</label><input type="text" id="c-sender" value="管理员"></div>
+                        <div class="form-group"><label>送洗日期</label><input type="date" id="c-sendDate" value="${Utils.formatDate(new Date())}"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('cleaning-send-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.cleaning.saveSend()">确认送洗</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async saveSend() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const assetCode = document.getElementById('c-assetCode').value;
+        const sender = document.getElementById('c-sender').value.trim();
+        const sendDate = document.getElementById('c-sendDate').value;
+        if (!assetCode || !sender || !sendDate) { Logger.error('清洗管理', '送洗必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        const asset = await DB.get('assets', assetCode);
+        if (!asset) { Logger.error('清洗管理', '物品编码不存在'); Utils.showToast('物品编码不存在', 'error'); return; }
+        if (!['available', 'issued'].includes(asset.status)) { Logger.error('清洗管理', '非可用资产送洗: ' + assetCode); Utils.showToast('该物品当前状态无法送洗', 'error'); return; }
+        const oldStatus = asset.status;
+        const prevEmpId = asset.employeeId;
+        asset.status = 'cleaning';
+        asset.employeeId = null;
+        asset.lastSendDate = sendDate;
+        asset.lastSender = sender;
+        await DB.put('assets', asset);
+        await DB.add('cleaningRecords', { assetCode, sender, sendDate, assetType: asset.type, oldStatus, previousEmployeeId: prevEmpId });
+        await Logger.log('create', '清洗管理', `送洗：${assetCode}`);
+        if (app.issue) app.issue._invalidateCache();
+        await AlertManager.checkMultiHold();
+        Utils.closeModal('cleaning-send-modal');
+        this.loadCleaning();
+        } finally { this._saving = false; }
+    },
+    
+    async complete(assetCode) {
+        if (!await app.confirm(`确认完成 ${assetCode} 的清洗吗？`)) return;
+        const asset = await DB.get('assets', assetCode);
+        if (!asset || asset.status !== 'cleaning') { Logger.error('清洗管理', '该物品不在清洗状态'); Utils.showToast('该物品不在清洗状态', 'error'); return; }
+        const returnDate = Utils.formatDate(new Date());
+        const records = await DB.query('cleaningRecords', 'assetCode', assetCode);
+        records.sort((a, b) => (a.sendDate || '').localeCompare(b.sendDate || ''));
+        const lastRecord = records[records.length - 1];
+        const prevEmpId = lastRecord?.previousEmployeeId || null;
+        asset.status = 'available';
+        asset.cleanCount = (asset.cleanCount || 0) + 1;
+        asset.returnDate = returnDate;
+        asset.employeeId = null;
+        await DB.put('assets', asset);
+        if (lastRecord) {
+            lastRecord.returnDate = returnDate;
+            lastRecord.cleanCount = asset.cleanCount;
+            await DB.put('cleaningRecords', lastRecord);
+        }
+        if (prevEmpId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+            for (const issueRecord of issueRecords) {
+                if (!issueRecord.returned) {
+                    issueRecord.returned = true;
+                    issueRecord.returnDate = returnDate;
+                    await DB.put('issueRecords', issueRecord);
+                }
+            }
+        }
+        await Logger.log('update', '清洗管理', `完成清洗：${assetCode}`);
+        if (app.issue) app.issue._invalidateCache();
+        this.loadCleaning();
+    },
+    
+    importTemplate() {
+        const pageIndex = document.querySelector('#cleaning-page-1').style.display === 'block' ? 1 : 0;
+        if (pageIndex === 1) {
+            // 清洗历史页面 - 提供完成清洗模板
+            const ws = XLSX.utils.json_to_sheet([{'物品编码': 'J-Y-001'}]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '完成清洗模板');
+            XLSX.writeFile(wb, '清洗完成导入模板.xlsx');
+        } else {
+            // 清洗中物品页面 - 提供送洗模板
+            const ws = XLSX.utils.json_to_sheet([{'物品编码': 'J-Y-001', '送洗人': '管理员', '送洗日期': Utils.formatDate(new Date())}]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '送洗模板');
+            XLSX.writeFile(wb, '送洗导入模板.xlsx');
+        }
+    },
+    
+    async import(mode = 'send') {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                let success = 0;
+                const errors = [];
+                for (const row of jsonData) {
+                    const assetCode = String(row['物品编码'] || '').trim();
+                    if (!assetCode) { errors.push({ ...row, 失败原因: '物品编码为空' }); continue; }
+                    const asset = await DB.get('assets', assetCode);
+                    if (!asset) { errors.push({ ...row, 失败原因: '物品编码不存在' }); continue; }
+                    
+                    if (mode === 'send' && ['available', 'issued'].includes(asset.status)) {
+                        const oldStatus = asset.status;
+                        const prevEmpId = asset.employeeId;
+                        asset.status = 'cleaning';
+                        asset.employeeId = null;
+                        asset.lastSendDate = Utils.parseExcelDate(row['送洗日期']);
+                        asset.lastSender = String(row['送洗人']||'管理员');
+                        await DB.put('assets', asset);
+                        await DB.add('cleaningRecords', { assetCode, sender: asset.lastSender, sendDate: asset.lastSendDate, assetType: asset.type, oldStatus, previousEmployeeId: prevEmpId });
+                        await Logger.log('create', '清洗管理', '批量送洗：' + assetCode);
+                        success++;
+                    } else if (mode === 'complete' && asset.status === 'cleaning') {
+                        const returnDate = Utils.formatDate(new Date());
+                        const records = await DB.query('cleaningRecords', 'assetCode', assetCode);
+                        const lastRecord = records[records.length - 1];
+                        const prevEmpId = lastRecord?.previousEmployeeId || null;
+                        asset.status = 'available';
+                        asset.cleanCount = (asset.cleanCount || 0) + 1;
+                        asset.employeeId = null;
+                        await DB.put('assets', asset);
+                        if (lastRecord) {
+                            lastRecord.returnDate = returnDate;
+                            lastRecord.cleanCount = asset.cleanCount;
+                            await DB.put('cleaningRecords', lastRecord);
+                        }
+                        if (prevEmpId) {
+                            const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+                            for (const issueRecord of issueRecords) {
+                                if (!issueRecord.returned) {
+                                    issueRecord.returned = true;
+                                    issueRecord.returnDate = returnDate;
+                                    await DB.put('issueRecords', issueRecord);
+                                }
+                            }
+                        }
+                        await Logger.log('update', '清洗管理', '批量完成清洗：' + assetCode);
+                        success++;
+                    } else {
+                        const reason = mode === 'send'
+                            ? `资产状态为"${asset.status}"，不可送洗（需为 available 或 issued）`
+                            : `资产状态为"${asset.status}"，不可完成清洗（需为 cleaning）`;
+                        errors.push({ ...row, 失败原因: reason });
+                    }
+                }
+                const actionName = mode === 'send' ? '送洗' : '完成清洗';
+                Utils.importResult(success, errors, actionName);
+                if (app.issue) app.issue._invalidateCache();
+                this.loadCleaning();
+                // Refresh history tab if visible
+                const historyTable = document.querySelector('#cleaning-history-table tbody');
+                if (historyTable) this.loadHistory();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    }
+};
+
+// ==================== 回收管理 ====================
+app.return = {
+    async load() {
+        const records = (await DB.getAll('returnRecords')).sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate));
+        this.render(records);
+    },
+
+    render(list) {
+        const tbody = document.querySelector('#return-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = list.map((r, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${Utils.escapeHtml(r.assetCode)}</td>
+                <td>${Utils.escapeHtml(r.assetType || '-')}</td>
+                <td>${Utils.escapeHtml(r.returnerName || '-')}</td>
+                <td>${Utils.escapeHtml(r.returnDate)}</td>
+                <td>${Utils.escapeHtml(r.receiver)}</td>
+                <td>${Utils.escapeHtml(r.status || '正常')}</td>
+                <td>${Utils.escapeHtml(r.nextAction || '-')}</td>
+            </tr>
+        `).join('');
+    },
+
+    async showReturnModal() {
+        const assets = await DB.getAll('assets');
+        const returnable = assets.filter(a => a.status === 'issued' || a.status === 'cleaning');
+        Utils.showModal(`
+            <div id="return-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>回收登记</h3><button class="modal-close" onclick="Utils.closeModal('return-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>物品编码 *</label><select id="ret-assetCode"><option value="">请选择</option>
+                            ${returnable.map(a => `<option value="${a.code}">${Utils.escapeHtml(a.code + ' - ' + a.type + ' ' + a.color + ' ' + a.size)}</option>`).join('')}
+                        </select></div>
+                        <div class="form-group"><label>回收状态</label><select id="ret-status"><option value="正常">正常</option><option value="损坏">损坏</option><option value="脏污">脏污</option></select></div>
+                        <div class="form-group"><label>后续操作</label><select id="ret-nextAction"><option value="入库">入库</option><option value="送洗">送洗</option></select></div>
+                        <div class="form-group"><label>归还人</label><input type="text" id="ret-returnerName" placeholder="选填"></div>
+                        <div class="form-group"><label>回收人</label><input type="text" id="ret-receiver" value="管理员"></div>
+                        <div class="form-group"><label>回收日期</label><input type="date" id="ret-returnDate" value="${Utils.formatDate(new Date())}"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('return-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.return.save()">确认回收</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const assetCode = document.getElementById('ret-assetCode').value;
+        const status = document.getElementById('ret-status').value;
+        const nextAction = document.getElementById('ret-nextAction').value;
+        const returnerName = document.getElementById('ret-returnerName').value.trim();
+        const receiver = document.getElementById('ret-receiver').value.trim();
+        const returnDate = document.getElementById('ret-returnDate').value;
+        if (!assetCode || !returnDate) { Logger.error('回收管理', '回收必填项为空'); Utils.showToast('请填写物品编码和回收日期', 'error'); return; }
+        const asset = await DB.get('assets', assetCode);
+        if (!asset) { Logger.error('回收管理', '物品编码不存在'); Utils.showToast('物品编码不存在', 'error'); return; }
+        if (!['issued', 'cleaning'].includes(asset.status)) { Logger.error('回收管理', '该物品不可回收'); Utils.showToast('该物品当前状态不可回收', 'error'); return; }
+        const prevEmployeeId = asset.employeeId;
+        const prevStatus = asset.status;
+        asset.status = nextAction === '送洗' ? 'cleaning' : 'available';
+        if (nextAction === '送洗') asset.lastSendDate = returnDate;
+        asset.employeeId = null;
+        await DB.put('assets', asset);
+        await DB.add('returnRecords', { assetCode, assetType: asset.type, status, nextAction, returnerName, receiver, returnDate, previousEmployeeId: prevEmployeeId, previousStatus: prevStatus });
+        if (prevEmployeeId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+            for (const issueRecord of issueRecords) {
+                if (!issueRecord.returned) {
+                    issueRecord.returned = true;
+                    issueRecord.returnDate = returnDate;
+                    await DB.put('issueRecords', issueRecord);
+                }
+            }
+        }
+        await Logger.log('update', '回收管理', `回收：${assetCode}`);
+        await AlertManager.checkMultiHold();
+        if (app.issue) app.issue._invalidateCache();
+        Utils.closeModal('return-modal');
+        Utils.showToast('回收成功');
+        this.load();
+        } finally { this._saving = false; }
+    },
+
+    search() {
+        const keyword = document.getElementById('return-search').value.trim();
+        const startDate = document.getElementById('return-date-start').value;
+        const endDate = document.getElementById('return-date-end').value;
+        const kw = keyword.toLowerCase();
+        DB.getAll('returnRecords').then(records => {
+            let filtered = records.filter(r => {
+                if (kw && !r.assetCode.toLowerCase().includes(kw)) return false;
+                if (startDate && (!r.returnDate || r.returnDate < startDate)) return false;
+                if (endDate && (!r.returnDate || r.returnDate > endDate)) return false;
+                return true;
+            }).sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate));
+            this.render(filtered);
+        }).catch(console.error);
+    },
+
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'物品编码': 'J-Y-001', '回收状态': '正常', '后续操作': '入库', '归还人': '', '回收人': '管理员', '回收日期': Utils.formatDate(new Date())}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '回收模板');
+        XLSX.writeFile(wb, '回收导入模板.xlsx');
+    },
+
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                let success = 0;
+                const errors = [];
+                for (const row of jsonData) {
+                    const assetCode = String(row['物品编码'] || '').trim();
+                    if (!assetCode) { errors.push({ ...row, 失败原因: '物品编码为空' }); continue; }
+                    const asset = await DB.get('assets', assetCode);
+                    if (!asset) { errors.push({ ...row, 失败原因: '物品编码不存在' }); continue; }
+                    if (!['issued', 'cleaning'].includes(asset.status)) { errors.push({ ...row, 失败原因: `资产状态为"${asset.status}"，不可回收` }); continue; }
+                    const status = String(row['回收状态'] || '正常').trim();
+                    const nextAction = String(row['后续操作'] || '入库').trim();
+                    const returnerName = String(row['归还人'] || '').trim();
+                    const receiver = String(row['回收人'] || '管理员').trim();
+                    const returnDate = Utils.parseExcelDate(row['回收日期']);
+                    const prevEmployeeId = asset.employeeId;
+                    const prevStatus = asset.status;
+                    asset.status = nextAction === '送洗' ? 'cleaning' : 'available';
+                    if (nextAction === '送洗') asset.lastSendDate = returnDate;
+                    asset.employeeId = null;
+                    await DB.put('assets', asset);
+                    await DB.add('returnRecords', { assetCode, assetType: asset.type, status, nextAction, returnerName, receiver, returnDate, previousEmployeeId: prevEmployeeId, previousStatus: prevStatus });
+                    if (prevEmployeeId) {
+                        const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+                        for (const issueRecord of issueRecords) {
+                            if (!issueRecord.returned) {
+                                issueRecord.returned = true;
+                                issueRecord.returnDate = returnDate;
+                                await DB.put('issueRecords', issueRecord);
+                            }
+                        }
+                    }
+                    await Logger.log('update', '回收管理', '批量回收：' + assetCode);
+                    success++;
+                }
+                Utils.importResult(success, errors, '回收');
+                await AlertManager.checkMultiHold();
+                if (app.issue) app.issue._invalidateCache();
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+
+    async export() {
+        const records = (await DB.getAll('returnRecords')).sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate));
+        const ws = XLSX.utils.json_to_sheet(records.map(r => ({'物品编码': r.assetCode, '类型': r.assetType||'-', '归还人': r.returnerName||'-', '回收日期': r.returnDate, '回收人': r.receiver, '回收状态': r.status||'正常', '后续操作': r.nextAction||'-'})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '回收记录');
+        XLSX.writeFile(wb, `回收记录_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 报废管理 ====================
+app.scrapped = {
+    async load() {
+        const records = (await DB.getAll('scrappedRecords')).sort((a, b) => new Date(b.scrappedDate) - new Date(a.scrappedDate));
+        this.render(records);
+    },
+    
+    render(list) {
+        const tbody = document.querySelector('#scrapped-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = list.map((r, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${Utils.escapeHtml(r.assetCode)}</td>
+                <td>${Utils.escapeHtml(r.assetType || '-')}</td>
+                <td>${Utils.escapeHtml(r.scrappedDate)}</td>
+                <td>${Utils.escapeHtml(r.reason || '-')}</td>
+                <td><button class="btn btn-danger" onclick="app.scrapped.remove(${r.id})">删除</button></td>
+            </tr>
+        `).join('');
+    },
+    
+    async showScrapModal() {
+        const assets = await DB.getAll('assets');
+        const notScrapped = assets.filter(a => a.status !== 'scrapped');
+        Utils.showModal(`
+            <div id="scrapped-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>报废登记</h3><button class="modal-close" onclick="Utils.closeModal('scrapped-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>物品编码 *</label><select id="s-assetCode"><option value="">请选择</option>
+                            ${notScrapped.map(a => `<option value="${a.code}">${a.code} - ${a.type} ${a.color} ${a.size}</option>`).join('')}
+                        </select></div>
+                        <div class="form-group"><label>报废原因 *</label><select id="s-reason"><option value="破损">破损</option><option value="老化">老化</option><option value="其他">其他</option></select></div>
+                        <div class="form-group"><label>报废日期</label><input type="date" id="s-scrappedDate" value="${Utils.formatDate(new Date())}"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('scrapped-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.scrapped.save()">确认报废</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const assetCode = document.getElementById('s-assetCode').value;
+        const reason = document.getElementById('s-reason').value;
+        const scrappedDate = document.getElementById('s-scrappedDate').value;
+        if (!assetCode || !reason || !scrappedDate) { Logger.error('报废管理', '必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        const asset = await DB.get('assets', assetCode);
+        if (!asset) { Logger.error('报废管理', '物品编码不存在'); Utils.showToast('物品编码不存在', 'error'); return; }
+        const prevStatus = asset.status;
+        const prevEmpId = asset.employeeId;
+        const prevCleanCount = asset.cleanCount || 0;
+        const prevLastIssueDate = asset.lastIssueDate || null;
+        asset.status = 'scrapped';
+        asset.employeeId = null;
+        await DB.put('assets', asset);
+        await DB.add('scrappedRecords', { assetCode, reason, scrappedDate, assetType: asset.type, previousStatus: prevStatus, previousEmployeeId: prevEmpId, previousCleanCount: prevCleanCount, previousLastIssueDate: prevLastIssueDate });
+        if (prevEmpId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+            for (const issueRecord of issueRecords) {
+                if (!issueRecord.returned) {
+                    issueRecord.returned = true;
+                    issueRecord.returnDate = scrappedDate;
+                    await DB.put('issueRecords', issueRecord);
+                }
+            }
+        }
+        await Logger.log('create', '报废管理', `报废：${assetCode} (${reason})`);
+        if (app.issue) app.issue._invalidateCache();
+        await AlertManager.checkMultiHold();
+        Utils.closeModal('scrapped-modal');
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async remove(id) {
+        const r = await DB.get('scrappedRecords', id);
+        if (!r) { Logger.error('报废管理', '记录不存在'); Utils.showToast('记录不存在', 'error'); return; }
+        if (!await app.confirm('确定删除该报废记录并将物品 ' + r.assetCode + ' 恢复为入库状态吗？')) return;
+        const asset = await DB.get('assets', r.assetCode);
+        if (asset) {
+            asset.status = r.previousStatus || 'available';
+            asset.employeeId = r.previousEmployeeId || null;
+            asset.cleanCount = r.previousCleanCount || 0;
+            asset.lastIssueDate = r.previousLastIssueDate || null;
+            await DB.put('assets', asset);
+        }
+        if (r.previousStatus === 'issued' && r.previousEmployeeId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', r.assetCode);
+            const lastIssue = issueRecords[issueRecords.length - 1];
+            if (lastIssue && lastIssue.returned && lastIssue.employeeId === r.previousEmployeeId) {
+                lastIssue.returned = false;
+                lastIssue.returnDate = null;
+                await DB.put('issueRecords', lastIssue);
+            }
+        }
+        await DB.delete('scrappedRecords', id);
+        await Logger.log('delete', '报废管理', '删除报废记录并恢复资产：' + r.assetCode);
+        this.load();
+    },
+
+    async search() {
+        const keyword = document.getElementById('scrapped-search').value.trim();
+        const reason = document.getElementById('scrapped-reason-filter').value;
+        const startDate = document.getElementById('scrapped-date-start').value;
+        const endDate = document.getElementById('scrapped-date-end').value;
+        const kw = keyword.toLowerCase();
+        DB.getAll('scrappedRecords').then(records => {
+            let filtered = records.filter(r => {
+                if (kw && !r.assetCode.toLowerCase().includes(kw)) return false;
+                if (reason && r.reason !== reason) return false;
+                if (startDate && (!r.scrappedDate || r.scrappedDate < startDate)) return false;
+                if (endDate && (!r.scrappedDate || r.scrappedDate > endDate)) return false;
+                return true;
+            }).sort((a, b) => new Date(b.scrappedDate) - new Date(a.scrappedDate));
+            this.render(filtered);
+        }).catch(console.error);
+    },
+    
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'物品编码': 'J-Y-001', '报废原因': '破损', '报废日期': Utils.formatDate(new Date())}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '报废模板');
+        XLSX.writeFile(wb, '报废导入模板.xlsx');
+    },
+    
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                let success = 0;
+                const errors = [];
+                for (const row of jsonData) {
+                    const assetCode = String(row['物品编码'] || '').trim();
+                    const reason = String(row['报废原因']||'其他');
+                    if (!assetCode) { errors.push({ ...row, 失败原因: '物品编码为空' }); continue; }
+                    const asset = await DB.get('assets', assetCode);
+                    if (!asset) { errors.push({ ...row, 失败原因: '物品编码不存在' }); continue; }
+                    if (asset.status === 'scrapped') { errors.push({ ...row, 失败原因: '资产已被报废' }); continue; }
+                    const prevStatus = asset.status;
+                    const prevEmpId = asset.employeeId;
+                    const prevCleanCount = asset.cleanCount || 0;
+                    const prevLastIssueDate = asset.lastIssueDate || null;
+                    const scrappedDate = Utils.parseExcelDate(row['报废日期']);
+                    asset.status = 'scrapped';
+                    asset.employeeId = null;
+                    await DB.put('assets', asset);
+                    await DB.add('scrappedRecords', { assetCode, reason, scrappedDate, assetType: asset.type, previousStatus: prevStatus, previousEmployeeId: prevEmpId, previousCleanCount: prevCleanCount, previousLastIssueDate: prevLastIssueDate });
+                    if (prevEmpId) {
+                        const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+                        for (const issueRecord of issueRecords) {
+                            if (!issueRecord.returned) {
+                                issueRecord.returned = true;
+                                issueRecord.returnDate = scrappedDate;
+                                await DB.put('issueRecords', issueRecord);
+                            }
+                        }
+                    }
+                    await Logger.log('create', '报废管理', '批量报废：' + assetCode);
+                    success++;
+                }
+                Utils.importResult(success, errors, '报废');
+                if (app.issue) app.issue._invalidateCache();
+                await AlertManager.checkMultiHold();
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+    
+    async export() {
+        const records = (await DB.getAll('scrappedRecords')).sort((a, b) => new Date(b.scrappedDate) - new Date(a.scrappedDate));
+        const ws = XLSX.utils.json_to_sheet(records.map(r => ({'物品编码': r.assetCode, '类型': r.assetType||'-', '报废日期': r.scrappedDate, '报废原因': r.reason})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '报废记录');
+        XLSX.writeFile(wb, `报废记录_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 丢失管理 (移除赔偿选项) ====================
+app.lost = {
+    async load() {
+        const records = (await DB.getAll('lostRecords')).sort((a, b) => new Date(b.foundDate) - new Date(a.foundDate));
+        this.render(records);
+    },
+    
+    render(list) {
+        const tbody = document.querySelector('#lost-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = list.map((r, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${Utils.escapeHtml(r.assetCode)}</td>
+                <td>${Utils.escapeHtml(r.assetType || '-')}</td>
+                <td>${Utils.escapeHtml(r.employeeId || '-')}</td>
+                <td>${Utils.escapeHtml(r.foundDate)}</td>
+                <td>${Utils.escapeHtml(r.action || '-')}</td>
+                <td><button class="btn btn-danger" onclick="app.lost.remove(${r.id})">删除</button></td>
+            </tr>
+        `).join('');
+    },
+    
+    async showLostModal() {
+        const assets = await DB.getAll('assets');
+        const personnel = await DB.getAll('personnel');
+        const notLost = assets.filter(a => a.status !== 'lost');
+        Utils.showModal(`
+            <div id="lost-modal" class="modal show">
+                <div class="modal-content">
+                    <div class="modal-header"><h3>丢失登记</h3><button class="modal-close" onclick="Utils.closeModal('lost-modal')">&times;</button></div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>物品编码 *</label><select id="l-assetCode"><option value="">请选择</option>
+                            ${notLost.map(a => `<option value="${a.code}">${a.code} - ${a.type} ${a.color} ${a.size}</option>`).join('')}
+                        </select></div>
+                        <div class="form-group"><label>责任人工号</label><input type="text" id="l-employeeId" list="employee-list-lost">
+                            <datalist id="employee-list-lost">${personnel.filter(p => p.status === '在职').map(p => `<option value="${p.employeeId}">${p.name}</option>`).join('')}</datalist>
+                        </div>
+                        <div class="form-group"><label>处理方式</label><select id="l-action"><option value="补发">补发</option><option value="其他">其他</option></select></div>
+                        <div class="form-group"><label>发现日期</label><input type="date" id="l-foundDate" value="${Utils.formatDate(new Date())}"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="Utils.closeModal('lost-modal')">取消</button>
+                        <button class="btn btn-success" onclick="app.lost.save()">确认登记</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    },
+    
+    async save() {
+        if (this._saving) { Utils.showToast('请等待当前操作完成', 'error'); return; }
+        this._saving = true;
+        try {
+        const assetCode = document.getElementById('l-assetCode').value;
+        const employeeId = document.getElementById('l-employeeId').value.trim();
+        const action = document.getElementById('l-action').value;
+        const foundDate = document.getElementById('l-foundDate').value;
+        if (!assetCode || !foundDate) { Logger.error('丢失管理', '丢失必填项为空'); Utils.showToast('请填写所有必填项', 'error'); return; }
+        const asset = await DB.get('assets', assetCode);
+        if (!asset) { Logger.error('丢失管理', '物品编码不存在'); Utils.showToast('物品编码不存在', 'error'); return; }
+        if (employeeId && !await DB.get('personnel', employeeId)) { Logger.error('丢失管理', '工号不存在'); Utils.showToast('工号不存在', 'error'); return; }
+        const prevStatus = asset.status;
+        const prevEmpId = asset.employeeId;
+        const prevCleanCount = asset.cleanCount || 0;
+        const prevLastIssueDate = asset.lastIssueDate || null;
+        asset.status = 'lost';
+        asset.employeeId = null;
+        await DB.put('assets', asset);
+        await DB.add('lostRecords', { assetCode, employeeId, action, foundDate, assetType: asset.type, previousStatus: prevStatus, previousEmployeeId: prevEmpId, previousCleanCount: prevCleanCount, previousLastIssueDate: prevLastIssueDate });
+        if (prevEmpId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+            for (const issueRecord of issueRecords) {
+                if (!issueRecord.returned) {
+                    issueRecord.returned = true;
+                    issueRecord.returnDate = foundDate;
+                    await DB.put('issueRecords', issueRecord);
+                }
+            }
+        }
+        await Logger.log('create', '丢失管理', `丢失：${assetCode}`);
+        if (app.issue) app.issue._invalidateCache();
+        await AlertManager.checkMultiHold();
+        Utils.closeModal('lost-modal');
+        this.load();
+        } finally { this._saving = false; }
+    },
+    
+    async remove(id) {
+        const r = await DB.get('lostRecords', id);
+        if (!r) { Logger.error('丢失管理', '记录不存在'); Utils.showToast('记录不存在', 'error'); return; }
+        if (!await app.confirm('确定删除该丢失记录并将物品 ' + r.assetCode + ' 恢复为入库状态吗？')) return;
+        const asset = await DB.get('assets', r.assetCode);
+        if (asset) {
+            asset.status = r.previousStatus || 'available';
+            asset.employeeId = r.previousEmployeeId || null;
+            asset.cleanCount = r.previousCleanCount || 0;
+            asset.lastIssueDate = r.previousLastIssueDate || null;
+            await DB.put('assets', asset);
+        }
+        if (r.previousStatus === 'issued' && r.previousEmployeeId) {
+            const issueRecords = await DB.query('issueRecords', 'assetCode', r.assetCode);
+            const lastIssue = issueRecords[issueRecords.length - 1];
+            if (lastIssue && lastIssue.returned && lastIssue.employeeId === r.previousEmployeeId) {
+                lastIssue.returned = false;
+                lastIssue.returnDate = null;
+                await DB.put('issueRecords', lastIssue);
+            }
+        }
+        await DB.delete('lostRecords', id);
+        await Logger.log('delete', '丢失管理', '删除丢失记录并恢复资产：' + r.assetCode);
+        this.load();
+    },
+
+    search() {
+        const keyword = document.getElementById('lost-search').value.trim();
+        const startDate = document.getElementById('lost-date-start').value;
+        const endDate = document.getElementById('lost-date-end').value;
+        const kw = keyword.toLowerCase();
+        DB.getAll('lostRecords').then(records => {
+            let filtered = records.filter(r => {
+                if (kw && (!r.assetCode.toLowerCase().includes(kw) && !(r.employeeId||'').toLowerCase().includes(kw))) return false;
+                if (startDate && (!r.foundDate || r.foundDate < startDate)) return false;
+                if (endDate && (!r.foundDate || r.foundDate > endDate)) return false;
+                return true;
+            }).sort((a, b) => new Date(b.foundDate) - new Date(a.foundDate));
+            this.render(filtered);
+        }).catch(console.error);
+    },
+    
+    importTemplate() {
+        const ws = XLSX.utils.json_to_sheet([{'物品编码': 'J-Y-001', '责任人': 'E001', '处理方式': '补发', '发现日期': Utils.formatDate(new Date())}]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '丢失模板');
+        XLSX.writeFile(wb, '丢失导入模板.xlsx');
+    },
+    
+    async import() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.xlsx,.xls,.csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, defenc: true });
+                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                let success = 0;
+                const errors = [];
+                for (const row of jsonData) {
+                    const assetCode = String(row['物品编码'] || '').trim();
+                    const action = String(row['处理方式']||'其他').trim();
+                    if (!assetCode) { errors.push({ ...row, 失败原因: '物品编码为空' }); continue; }
+                    const asset = await DB.get('assets', assetCode);
+                    if (!asset) { errors.push({ ...row, 失败原因: '物品编码不存在' }); continue; }
+                    if (asset.status === 'lost') { errors.push({ ...row, 失败原因: '资产已为丢失状态' }); continue; }
+                    const prevStatus = asset.status;
+                    const prevEmpId = asset.employeeId;
+                    const prevCleanCount = asset.cleanCount || 0;
+                    const prevLastIssueDate = asset.lastIssueDate || null;
+                    const foundDate = Utils.parseExcelDate(row['发现日期']);
+                    asset.status = 'lost';
+                    asset.employeeId = null;
+                    await DB.put('assets', asset);
+                    await DB.add('lostRecords', { assetCode, employeeId: String(row['责任人']||'').trim(), action, foundDate, assetType: asset.type, previousStatus: prevStatus, previousEmployeeId: prevEmpId, previousCleanCount: prevCleanCount, previousLastIssueDate: prevLastIssueDate });
+                    if (prevEmpId) {
+                        const issueRecords = await DB.query('issueRecords', 'assetCode', assetCode);
+                        for (const issueRecord of issueRecords) {
+                            if (!issueRecord.returned) {
+                                issueRecord.returned = true;
+                                issueRecord.returnDate = foundDate;
+                                await DB.put('issueRecords', issueRecord);
+                            }
+                        }
+                    }
+                    await Logger.log('create', '丢失管理', '批量丢失登记：' + assetCode);
+                    success++;
+                }
+                Utils.importResult(success, errors, '丢失');
+                if (app.issue) app.issue._invalidateCache();
+                await AlertManager.checkMultiHold();
+                this.load();
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    Utils.showToast('导入失败: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    },
+    
+    async export() {
+        const records = (await DB.getAll('lostRecords')).sort((a, b) => new Date(b.foundDate) - new Date(a.foundDate));
+        const ws = XLSX.utils.json_to_sheet(records.map(r => ({'物品编码': r.assetCode, '类型': r.assetType||'-', '责任人': r.employeeId||'-', '发现日期': r.foundDate, '处理方式': r.action||'-'})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '丢失记录');
+        XLSX.writeFile(wb, `丢失记录_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 库存管理 ====================
+app.inventory = {
+    _statusMap: { available: '库存', issued: '发放中', cleaning: '清洗中', lost: '丢失', scrapped: '报废' },
+    async load() {
+        this._personnelCache = null;
+        await this.loadSummary();
+        await this.loadDetail();
+    },
+    
+    async loadSummary() {
+        const assets = await DB.getAll('assets');
+        const summary = {};
+        assets.forEach(a => {
+            const normalizedType = Utils.normalize(a.type);
+            const normalizedColor = Utils.normalize(a.color);
+            const key = `${normalizedType}-${normalizedColor}-${a.size}`;
+            if (!summary[key]) summary[key] = { type: a.type, color: a.color, size: a.size, available: 0, issued: 0, cleaning: 0 };
+            if (a.status === 'available') summary[key].available++;
+            else if (a.status === 'issued') summary[key].issued++;
+            else if (a.status === 'cleaning') summary[key].cleaning++;
+        });
+        const tbody = document.querySelector('#inventory-summary-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = Object.values(summary).map((s, i) => `<tr><td>${i+1}</td><td>${Utils.escapeHtml(s.type)}</td><td>${Utils.escapeHtml(s.color)}</td><td>${Utils.escapeHtml(s.size)}</td><td>${s.available}</td><td>${s.issued}</td><td>${s.cleaning}</td></tr>`).join('');
+    },
+    
+    async loadDetail() {
+        const assets = await DB.getAll('assets');
+        const body = document.querySelector('#inventory-detail-table tbody');
+        if (!body) return;
+        if (!this._personnelCache) this._personnelCache = await DB.getAll('personnel');
+        const personnelMap = {};
+        this._personnelCache.forEach(p => personnelMap[p.employeeId] = p);
+        const rows = assets.map((a, i) => {
+            let holder = '-';
+            if (a.status === 'issued' && a.employeeId) {
+                holder = (personnelMap[a.employeeId]?.name) || a.employeeId;
+            }
+            return `<tr><td>${i+1}</td><td>${Utils.escapeHtml(a.code)}</td><td>${Utils.escapeHtml(a.type)}</td><td>${Utils.escapeHtml(a.color)}</td><td>${Utils.escapeHtml(a.size)}</td><td>${Utils.escapeHtml(this._statusMap[a.status] || a.status)}</td><td>${Utils.escapeHtml(holder)}</td></tr>`;
+        });
+        body.innerHTML = rows.join('');
+    },
+    
+    search() {
+        const type = document.getElementById('inventory-type-filter').value;
+        const color = document.getElementById('inventory-color-filter').value;
+        DB.getAll('assets').then(async assets => {
+            let filtered = assets;
+            if (type) {
+                const normalizedType = Utils.normalize(type);
+                filtered = filtered.filter(a => Utils.normalize(a.type) === normalizedType);
+            }
+            if (color) {
+                const normalizedColor = Utils.normalize(color);
+                filtered = filtered.filter(a => Utils.normalize(a.color) === normalizedColor);
+            }
+            const summary = {};
+            filtered.forEach(a => {
+                const normalizedType = Utils.normalize(a.type);
+                const normalizedColor = Utils.normalize(a.color);
+                const key = `${normalizedType}-${normalizedColor}-${a.size}`;
+                if (!summary[key]) summary[key] = { type: a.type, color: a.color, size: a.size, available: 0, issued: 0, cleaning: 0 };
+                if (a.status === 'available') summary[key].available++;
+                else if (a.status === 'issued') summary[key].issued++;
+                else if (a.status === 'cleaning') summary[key].cleaning++;
+            });
+            const tbody = document.querySelector('#inventory-summary-table tbody');
+            if (tbody) tbody.innerHTML = Object.values(summary).map((s, i) => `<tr><td>${i+1}</td><td>${Utils.escapeHtml(s.type)}</td><td>${Utils.escapeHtml(s.color)}</td><td>${Utils.escapeHtml(s.size)}</td><td>${s.available}</td><td>${s.issued}</td><td>${s.cleaning}</td></tr>`).join('');
+            const tbody2 = document.querySelector('#inventory-detail-table tbody');
+            if (tbody2) {
+                if (!this._personnelCache) this._personnelCache = await DB.getAll('personnel');
+                const personnelMap = {};
+                this._personnelCache.forEach(p => personnelMap[p.employeeId] = p);
+                const rows = [];
+                for (const a of filtered) {
+                    let holder = '-';
+                    if (a.status === 'issued' && a.employeeId) {
+                        holder = (personnelMap[a.employeeId]?.name) || a.employeeId;
+                    }
+                    rows.push({ code: a.code, type: a.type, color: a.color, size: a.size, statusText: this._statusMap[a.status] || a.status, holder });
+                }
+                tbody2.innerHTML = rows.map((r, i) => `<tr><td>${i+1}</td><td>${Utils.escapeHtml(r.code)}</td><td>${Utils.escapeHtml(r.type)}</td><td>${Utils.escapeHtml(r.color)}</td><td>${Utils.escapeHtml(r.size)}</td><td>${Utils.escapeHtml(r.statusText)}</td><td>${Utils.escapeHtml(r.holder)}</td></tr>`).join('');
+            }
+        }).catch(console.error);
+    },
+    
+    async export() {
+        const assets = await DB.getAll('assets');
+        const allPersonnel = await DB.getAll('personnel');
+        const personnelMap = {};
+        allPersonnel.forEach(p => personnelMap[p.employeeId] = p);
+        const rows = [];
+        for (const a of assets) {
+            let holder = '-';
+            if (a.status === 'issued' && a.employeeId) {
+                holder = (personnelMap[a.employeeId]?.name) || a.employeeId;
+            }
+            rows.push({'编码': a.code, '类型': a.type, '颜色': a.color, '尺码': a.size, '状态': this._statusMap[a.status] || a.status || '-', '持有人': holder});
+        }
+        const ws = XLSX.utils.json_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '库存清单');
+        XLSX.writeFile(wb, `库存清单_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 报表中心 ====================
+app.reports = {
+    async showType(type) {
+        this.currentReportType = type;
+        document.querySelectorAll('#page-reports .tab').forEach((t, i) => {
+            const types = ['issue', 'return', 'cleaning', 'scrapped', 'lost', 'holding'];
+            t.classList.toggle('active', types[i] === type);
+        });
+        await this.generate();
+    },
+    
+    async generate() {
+        const startDate = document.getElementById('report-date-start').value;
+        const endDate = document.getElementById('report-date-end').value;
+        const table = document.getElementById('report-table');
+        let data = [], columns = [];
+        let seq = 0;
+        const inRange = (dateVal) => {
+            const d = (dateVal || '').slice(0, 10);
+            if (startDate && d < startDate) return false;
+            if (endDate && d > endDate) return false;
+            return true;
+        };
+        
+        switch (this.currentReportType) {
+            case 'issue':
+                columns = ['序号', '工号', '姓名', '物品编码', '类型', '发放日期', '发放人'];
+                const issueData = await DB.getAll('issueRecords');
+                const personnelData = await DB.getAll('personnel');
+                const personnelMap = {};
+                personnelData.forEach(p => personnelMap[p.employeeId] = p);
+                seq = 0;
+                for (let i = 0; i < issueData.length; i++) {
+                    const r = issueData[i];
+                    if (!inRange(r.issueDate)) continue;
+                    seq++;
+                    const p = personnelMap[r.employeeId];
+                    data.push([seq, r.employeeId, p?.name || r.employeeId, r.assetCode, r.assetType, r.issueDate, r.issuer]);
+                }
+                break;
+            case 'return':
+                columns = ['序号', '物品编码', '类型', '归还人', '回收日期', '回收人', '状态'];
+                const returnData = await DB.getAll('returnRecords');
+                seq = 0;
+                for (let i = 0; i < returnData.length; i++) {
+                    const r = returnData[i];
+                    if (!inRange(r.returnDate)) continue;
+                    seq++;
+                    data.push([seq, r.assetCode, r.assetType||'-', r.returnerName||'-', r.returnDate, r.receiver, r.status||'-']);
+                }
+                break;
+            case 'cleaning':
+                columns = ['序号', '物品编码', '类型', '送洗日期', '返回日期', '清洗次数'];
+                const cleaningData = await DB.getAll('cleaningRecords');
+                seq = 0;
+                for (let i = 0; i < cleaningData.length; i++) {
+                    const r = cleaningData[i];
+                    if (!inRange(r.sendDate)) continue;
+                    seq++;
+                    data.push([seq, r.assetCode, r.assetType||'-', r.sendDate, r.returnDate||'-', r.cleanCount||'-']);
+                }
+                break;
+            case 'scrapped':
+                columns = ['序号', '物品编码', '类型', '报废日期', '报废原因'];
+                const scrappedData = await DB.getAll('scrappedRecords');
+                seq = 0;
+                for (let i = 0; i < scrappedData.length; i++) {
+                    const r = scrappedData[i];
+                    if (!inRange(r.scrappedDate)) continue;
+                    seq++;
+                    data.push([seq, r.assetCode, r.assetType||'-', r.scrappedDate, r.reason||'-']);
+                }
+                break;
+            case 'lost':
+                columns = ['序号', '物品编码', '类型', '责任人', '发现日期', '处理方式'];
+                const lostData = await DB.getAll('lostRecords');
+                seq = 0;
+                for (let i = 0; i < lostData.length; i++) {
+                    const r = lostData[i];
+                    if (!inRange(r.foundDate)) continue;
+                    seq++;
+                    data.push([seq, r.assetCode, r.assetType||'-', r.employeeId||'-', r.foundDate, r.action||'-']);
+                }
+                break;
+            case 'holding':
+                columns = ['序号', '工号', '姓名', '物品编码', '类型', '颜色', '尺码'];
+                const assets = await DB.getAll('assets');
+                const holdingPersonnelData = await DB.getAll('personnel');
+                const holdingPersonnelMap = {};
+                holdingPersonnelData.forEach(p => holdingPersonnelMap[p.employeeId] = p);
+                let idx = 0;
+                for (const a of assets) {
+                    if (a.status !== 'issued' || !a.employeeId) continue;
+                    const p = holdingPersonnelMap[a.employeeId];
+                    data.push([++idx, a.employeeId, p?.name || a.employeeId, a.code, a.type, a.color, a.size]);
+                }
+                break;
+            default:
+                Utils.showToast('请选择报表类型', 'error');
+                return;
+        }
+        
+        this._lastData = data;
+        this._lastColumns = columns;
+        table.innerHTML = '<thead><tr>' + columns.map(c => `<th>${c}</th>`).join('') + '</tr></thead>' +
+            '<tbody>' + data.map(row => '<tr>' + row.map(c => `<td>${Utils.escapeHtml(c != null ? String(c) : '-')}</td>`).join('') + '</tr>').join('') + '</tbody>';
+    },
+    
+    async export() {
+        const data = this._lastData;
+        const columns = this._lastColumns;
+        if (!data || !columns) { Utils.showToast('请先生成报表', 'error'); return; }
+        const rows = data.map(row => {
+            const obj = {};
+            columns.forEach((col, i) => obj[col] = row[i] || '-');
+            return obj;
+        });
+        const ws = XLSX.utils.json_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, this.currentReportType);
+        XLSX.writeFile(wb, `${this.currentReportType}_报表_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 系统设置 ====================
+app.settings = {
+    async loadLogs() {
+        const logs = (await DB.getAll('logs')).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        const container = document.getElementById('log-container');
+        if (!container) return;
+        container.innerHTML = logs.slice(0, 100).map(l => `<div class="log-entry"><div class="log-time">${new Date(l.timestamp).toLocaleString()} - ${Utils.escapeHtml(l.user)}</div><div><strong>${Utils.escapeHtml(l.type)}</strong> - ${Utils.escapeHtml(l.module)}: ${Utils.escapeHtml(l.detail)}</div></div>`).join('');
+    },
+    
+    async backupJSON() {
+        const data = {};
+        const stores = ['personnel', 'assets', 'issueRecords', 'returnRecords', 'cleaningRecords', 'scrappedRecords', 'lostRecords', 'alerts', 'logs', 'config'];
+        for (const store of stores) data[store] = await DB.getAll(store);
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `备份_${Utils.formatDate(new Date())}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    },
+    
+    restoreJSON() { document.getElementById('restore-file').click(); },
+    
+    async handleRestoreFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        if (!await app.confirm('恢复数据将覆盖现有数据，确定继续吗？')) { input.value = ''; return; }
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const data = JSON.parse(event.target.result);
+                if (!data || typeof data !== 'object') { Utils.showToast('备份文件格式无效', 'error'); return; }
+                const stores = ['personnel', 'assets', 'issueRecords', 'returnRecords', 'cleaningRecords', 'scrappedRecords', 'lostRecords', 'alerts', 'logs', 'config'];
+                for (const store of stores) {
+                    if (data[store] && data[store].length > 0) {
+                        await DB.clear(store);
+                        await DB.batchAdd(store, data[store]);
+                    }
+                }
+                Utils.showToast('数据恢复成功');
+                location.reload();
+            } catch (err) { Logger.error('系统设置', '恢复失败：' + err.message); Utils.showToast('恢复失败：' + err.message, 'error'); }
+            input.value = '';
+        };
+        reader.readAsText(file);
+    },
+    
+    async clearAllData() {
+        if (!await app.confirm('⚠️ 警告：此操作将删除所有数据且无法恢复！确定继续吗？')) return;
+        if (!await app.confirm('请再次确认：所有数据将被永久删除！')) return;
+        const stores = ['personnel', 'assets', 'issueRecords', 'returnRecords', 'cleaningRecords', 'scrappedRecords', 'lostRecords', 'alerts', 'logs', 'config'];
+        for (const store of stores) await DB.clear(store);
+        Utils.showToast('所有数据已清除');
+        location.reload();
+    },
+    
+    async exportLogs() {
+        const logs = await DB.getAll('logs');
+        const ws = XLSX.utils.json_to_sheet(logs.map(l => ({'时间': new Date(l.timestamp).toLocaleString(), '用户': l.user, '类型': l.type, '模块': l.module, '详情': l.detail})));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '操作日志');
+        XLSX.writeFile(wb, `操作日志_${Utils.formatDate(new Date())}.xlsx`);
+    }
+};
+
+// ==================== 报警中心 ====================
+app.alerts = {
+    async load() {
+        this.allAlerts = await AlertManager.getAll();
+        this.render(this.allAlerts);
+    },
+    
+    async render(list) {
+        const tbody = document.querySelector('#alerts-table tbody');
+        if (!tbody) return;
+        const allPersonnel = await DB.getAll('personnel');
+        const personnelMap = {};
+        allPersonnel.forEach(p => personnelMap[p.employeeId] = p);
+        const rows = [];
+        for (let i = 0; i < list.length; i++) {
+            const a = list[i];
+            const empId = a.detail?.employeeId || '';
+            const p = empId ? personnelMap[empId] : null;
+            const empName = p?.name || '-';
+            rows.push(`
+            <tr>
+                <td>${i + 1}</td>
+                <td>一人多持</td>
+                <td>${Utils.escapeHtml(empId)}</td>
+                <td>${Utils.escapeHtml(empName)}</td>
+                <td>${Utils.escapeHtml(a.description)}</td>
+                <td>${a.timestamp ? new Date(a.timestamp).toLocaleString() : '-'}</td>
+                <td><span class="status-badge ${a.resolved ? 'status-scrapped' : 'status-available'}">${a.resolved ? '已处理' : '未处理'}</span></td>
+                <td class="action-btns">${!a.resolved ? `<button class="btn btn-success" onclick="app.alerts.resolve(${a.id})">标记处理</button>` : '-'}</td>
+            </tr>
+            `);
+        }
+        tbody.innerHTML = rows.join('');
+    },
+    
+    async resolve(id) {
+        await AlertManager.resolve(id);
+        this.load();
+        app.updateAlertCount();
+    },
+    
+    async clearResolved() {
+        if (await app.confirm('确定清除所有已处理的报警吗？')) {
+            await AlertManager.clearResolved();
+            this.load();
+            app.updateAlertCount();
+        }
+    }
+};
+
+// 初始化
+window.onload = () => app.init().catch(err => { console.error('Init failed:', err); Utils.showToast('系统初始化失败，请刷新重试', 'error'); });
+var _multiHoldTimer = null;
+function scheduleMultiHoldCheck() {
+    if (_multiHoldTimer) clearTimeout(_multiHoldTimer);
+    _multiHoldTimer = setTimeout(async () => {
+        if (document.hidden) { scheduleMultiHoldCheck(); return; }
+        try { await AlertManager.checkMultiHold(); } catch (e) { console.error('checkMultiHold error:', e); }
+        scheduleMultiHoldCheck();
+    }, 120000);
+}
+scheduleMultiHoldCheck();
+    </script>
+
+
+</body></html>
