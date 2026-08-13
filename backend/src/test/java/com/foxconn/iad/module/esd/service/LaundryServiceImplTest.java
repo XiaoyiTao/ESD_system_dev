@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Set;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,7 +40,7 @@ class LaundryServiceImplTest {
     @InjectMocks
     private LaundryServiceImpl laundryService;
 
-    private final LoginUserContext operator = new LoginUserContext(1L, 1L, Set.of("ZZ"), false);
+    private final LoginUserContext operator = new LoginUserContext(1L, 1L, Collections.singleton("ZZ"), false);
 
     @Test
     @DisplayName("送洗登記時待送洗推進為清洗中並寫入送洗時間")

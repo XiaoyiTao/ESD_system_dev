@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,7 +51,7 @@ class ReturnServiceImplTest {
     @InjectMocks
     private ReturnServiceImpl returnService;
 
-    private final LoginUserContext operator = new LoginUserContext(1L, 1L, Set.of("ZZ"), false);
+    private final LoginUserContext operator = new LoginUserContext(1L, 1L, Collections.singleton("ZZ"), false);
 
     @Test
     @DisplayName("回收直接入庫時結算發放記錄並回到庫存")
