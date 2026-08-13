@@ -9,7 +9,11 @@ import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetUpdateReqVO;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
+import com.foxconn.iad.module.esd.dal.dataobject.IssueRecordDO;
+import com.foxconn.iad.module.esd.dal.dataobject.LaundryRecordDO;
 import com.foxconn.iad.module.esd.dal.mapper.AssetMapper;
+import com.foxconn.iad.module.esd.dal.mapper.IssueRecordMapper;
+import com.foxconn.iad.module.esd.dal.mapper.LaundryRecordMapper;
 import com.foxconn.iad.module.esd.domain.AssetLifecycleStatus;
 import com.foxconn.iad.module.esd.exception.BusinessException;
 import com.foxconn.iad.module.esd.security.LoginUserContext;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,10 @@ public class AssetServiceImpl implements AssetService {
 
     /** 資產主表 Mapper。 */
     private final AssetMapper assetMapper;
+    /** 發放記錄 Mapper，用於查詢最近一次發放。 */
+    private final IssueRecordMapper issueRecordMapper;
+    /** 清洗記錄 Mapper，用於查詢最近一次清洗。 */
+    private final LaundryRecordMapper laundryRecordMapper;
     /** 統一登錄廠區權限校驗器。 */
     private final SiteAccessService siteAccessService;
 
@@ -109,7 +118,48 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public AssetRespVO get(Long id, String siteCode) {
         siteAccessService.requireSite(siteCode);
-        return toResponse(requireAsset(id, siteCode));
+        AssetDO asset = requireAsset(id, siteCode);
+        AssetRespVO response = toResponse(asset);
+        // 發放歷史與清洗歷史只顯示最近一次，避免詳情過載。
+        response.setLatestIssue(latestIssue(asset.getId(), siteCode));
+        response.setLatestLaundry(latestLaundry(asset.getId(), siteCode));
+        return response;
+    }
+
+    /** 查詢資產最近一次發放記錄，無發放歷史返回空。 */
+    private AssetRespVO.LatestIssueVO latestIssue(Long assetId, String siteCode) {
+        IssueRecordDO record = issueRecordMapper.selectOne(new LambdaQueryWrapper<IssueRecordDO>()
+                .eq(IssueRecordDO::getSiteCode, siteCode)
+                .eq(IssueRecordDO::getAssetId, assetId)
+                .orderByDesc(IssueRecordDO::getCreateTime)
+                .last("LIMIT 1"));
+        if (record == null) {
+            return null;
+        }
+        AssetRespVO.LatestIssueVO latest = new AssetRespVO.LatestIssueVO();
+        latest.setIssueDate(record.getIssueDate());
+        latest.setEmployeeNo(record.getEmployeeNo());
+        latest.setEmployeeName(record.getEmployeeName());
+        latest.setIssueOperatorName(record.getIssueOperatorName());
+        latest.setReturnDate(record.getCloseTime() == null ? null
+                : LocalDate.from(record.getCloseTime()));
+        return latest;
+    }
+
+    /** 查詢資產最近一次清洗記錄，無清洗歷史返回空。 */
+    private AssetRespVO.LatestLaundryVO latestLaundry(Long assetId, String siteCode) {
+        LaundryRecordDO record = laundryRecordMapper.selectOne(new LambdaQueryWrapper<LaundryRecordDO>()
+                .eq(LaundryRecordDO::getSiteCode, siteCode)
+                .eq(LaundryRecordDO::getAssetId, assetId)
+                .orderByDesc(LaundryRecordDO::getCreateTime)
+                .last("LIMIT 1"));
+        if (record == null) {
+            return null;
+        }
+        AssetRespVO.LatestLaundryVO latest = new AssetRespVO.LatestLaundryVO();
+        latest.setSendTime(record.getSendTime());
+        latest.setCompleteTime(record.getCompleteTime());
+        return latest;
     }
 
     /** 在指定廠區內查找資產，不向調用方暴露其他廠區同 ID 的數據。 */

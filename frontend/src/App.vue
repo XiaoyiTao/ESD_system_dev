@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Box, Location, Monitor, Setting, User } from '@element-plus/icons-vue'
+import { Box, Download, Location, Monitor, Refresh, Upload, User } from '@element-plus/icons-vue'
 import { useSessionStore } from './stores/session'
 
 const route = useRoute()
@@ -34,9 +34,17 @@ onMounted(() => session.initialize())
           <el-icon><Box /></el-icon>
           <template #title>資產管理</template>
         </el-menu-item>
-        <el-menu-item index="/settings" disabled>
-          <el-icon><Setting /></el-icon>
-          <template #title>系統設置</template>
+        <el-menu-item index="/issues">
+          <el-icon><Upload /></el-icon>
+          <template #title>發放管理</template>
+        </el-menu-item>
+        <el-menu-item index="/returns">
+          <el-icon><Download /></el-icon>
+          <template #title>回收管理</template>
+        </el-menu-item>
+        <el-menu-item index="/laundries">
+          <el-icon><Refresh /></el-icon>
+          <template #title>清洗管理</template>
         </el-menu-item>
       </el-menu>
       <button class="collapse-button" type="button" @click="collapsed = !collapsed">

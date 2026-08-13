@@ -133,6 +133,21 @@ public class PersonProfileServiceImpl implements PersonProfileService {
         return toResponse(requireProfile(id, siteCode));
     }
 
+    @Override
+    public PersonProfileRespVO requireEnabledByUser(String siteCode, Long platformUserId) {
+        siteAccessService.requireSite(siteCode);
+        PersonProfileDO profile = personProfileMapper.selectOne(new LambdaQueryWrapper<PersonProfileDO>()
+                .eq(PersonProfileDO::getSiteCode, siteCode)
+                .eq(PersonProfileDO::getPlatformUserId, platformUserId));
+        if (profile == null) {
+            throw new BusinessException(404, "員工未綁定當前廠區");
+        }
+        if (!Integer.valueOf(1).equals(profile.getEsdStatus())) {
+            throw new BusinessException(400, "員工 ESD 人員檔已停用");
+        }
+        return toResponse(profile);
+    }
+
     /** 讀取指定廠區內的人員檔，不允許僅憑全局 ID 查詢。 */
     private PersonProfileDO requireProfile(Long id, String siteCode) {
         PersonProfileDO profile = personProfileMapper.selectOne(

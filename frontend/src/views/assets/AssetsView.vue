@@ -16,9 +16,9 @@ const rows = ref<Asset[]>([])
 const query = reactive({ keyword: '', pageNo: 1, pageSize: 20, assetType: undefined as number | undefined, lifecycleStatus: undefined as number | undefined })
 const form = reactive({ assetCode: '', assetType: 1, colorCode: '', sizeCode: '' })
 
-const statusName: Record<number, string> = { 10: '可用庫存', 20: '已發放', 30: '清洗中', 40: '已報廢', 50: '已遺失' }
+const statusName: Record<number, string> = { 10: '庫存', 20: '發放中', 25: '待送洗', 30: '清洗中', 40: '報廢', 50: '丟失' }
 // Element Plus 標簽類型只接受有限字符串，因此在映射中收窄類型，避免模板運行時計算顏色。
-const statusType: Record<number, 'success' | 'primary' | 'warning' | 'info' | 'danger'> = { 10: 'success', 20: 'primary', 30: 'warning', 40: 'info', 50: 'danger' }
+const statusType: Record<number, 'success' | 'primary' | 'warning' | 'info' | 'danger'> = { 10: 'success', 20: 'primary', 25: 'info', 30: 'warning', 40: 'info', 50: 'danger' }
 
 /** 按當前廠區和篩選條件刷新資產列表。 */
 async function load() {

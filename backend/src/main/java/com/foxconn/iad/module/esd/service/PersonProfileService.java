@@ -25,4 +25,11 @@ public interface PersonProfileService {
 
     /** 查詢指定廠區的人員詳情。 */
     PersonProfileRespVO get(Long id, String siteCode);
+
+    /**
+     * 查詢指定廠區內綁定平台用戶的啟用人員檔，供發放等交易校驗並快照員工信息。
+     *
+     * <p>人員檔不存在或已停用時拋出業務異常。</p>
+     */
+    PersonProfileRespVO requireEnabledByUser(String siteCode, Long platformUserId);
 }

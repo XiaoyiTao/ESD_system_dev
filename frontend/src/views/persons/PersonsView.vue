@@ -106,12 +106,6 @@ watch(siteCode, (value, previous) => {
       <el-table-column prop="supervisorName" label="責任主管" min-width="120" />
       <el-table-column prop="floorCode" label="樓層" width="100" />
       <el-table-column prop="shiftCode" label="班別" width="100" />
-      <el-table-column label="當前持有" min-width="150">
-        <template #default="{ row }">
-          <span class="hold-count">衣 {{ row.garmentCount }}</span>
-          <span class="hold-count hold-count-shoes">鞋 {{ row.shoesCount }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="狀態" width="90">
         <template #default="{ row }">
           <el-tag :type="row.esdStatus === 1 ? 'success' : 'info'" effect="plain">{{ row.esdStatus === 1 ? '啟用' : '停用' }}</el-tag>

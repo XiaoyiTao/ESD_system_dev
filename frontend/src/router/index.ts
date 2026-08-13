@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// 使用懶加載讓 Dashboard、人員和資產頁面按路由拆包，降低首屏下載量。
+// 使用懶加載讓各業務頁面按路由拆包，降低首屏下載量。
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -8,6 +8,9 @@ const router = createRouter({
     { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
     { path: '/persons', component: () => import('../views/persons/PersonsView.vue') },
     { path: '/assets', component: () => import('../views/assets/AssetsView.vue') },
+    { path: '/issues', component: () => import('../views/issues/IssuesView.vue') },
+    { path: '/returns', component: () => import('../views/returns/ReturnsView.vue') },
+    { path: '/laundries', component: () => import('../views/laundries/LaundriesView.vue') },
   ],
 })
 
