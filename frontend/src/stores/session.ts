@@ -34,7 +34,7 @@ export const useSessionStore = defineStore('session', {
       try {
         const response = await getPlatformPermissionInfo()
         if (response.data.code !== 0 || !response.data.data?.user) {
-          throw new Error(response.data.msg || '平台登录信息不可用')
+          throw new Error(response.data.msg || '平台登錄信息不可用')
         }
         // 服務端返回的廠區範圍是權限邊界，前端只能在其中選擇當前操作廠區。
         this.user = response.data.data.user
@@ -45,7 +45,7 @@ export const useSessionStore = defineStore('session', {
         this.sites = debugSites()
         const debugUserId = Number(import.meta.env.VITE_ESD_DEBUG_USER_ID || 1)
         if (import.meta.env.DEV) {
-          this.user = { id: debugUserId, username: 'local-debug', nickname: '本地调试用户' }
+          this.user = { id: debugUserId, username: 'local-debug', nickname: '本地調試用戶' }
         }
       } finally {
         // 記住上次選擇，但必須重新檢查它仍屬於本次登錄的權限範圍。

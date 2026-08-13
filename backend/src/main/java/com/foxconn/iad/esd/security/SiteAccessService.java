@@ -15,7 +15,7 @@ public class SiteAccessService {
     public LoginUserContext requireSite(String siteCode) {
         LoginUserContext currentUser = loginUserContextResolver.requireCurrentUser();
         if (!currentUser.canAccessSite(siteCode)) {
-            throw new BusinessException(403, "无权访问厂区：" + siteCode);
+            throw new BusinessException(403, "無權訪問廠區：" + siteCode);
         }
         return currentUser;
     }

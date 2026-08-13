@@ -29,7 +29,7 @@ class PlatformUserGatewayTest {
         when(platformUserClient.getUser(7L)).thenReturn(result(user));
 
         assertThatThrownBy(() -> gateway.requireEnabledUser(7L, "ZZ"))
-                .hasMessage("平台用户已停用：E10007");
+                .hasMessage("平台用戶已停用：E10007");
     }
 
     @Test
@@ -43,7 +43,7 @@ class PlatformUserGatewayTest {
         when(platformUserClient.getUser(7L)).thenReturn(result(user));
 
         assertThatThrownBy(() -> gateway.requireEnabledUser(7L, "ZZ"))
-                .hasMessage("平台用户不属于厂区：ZZ");
+                .hasMessage("平台用戶不屬於廠區：ZZ");
     }
 
     /** 構造平台 CommonResult 成功響應，隔離 Feign DTO 細節。 */

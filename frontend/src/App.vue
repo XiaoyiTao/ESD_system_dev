@@ -56,7 +56,7 @@ onMounted(() => session.initialize())
             v-if="session.sites.length"
             :model-value="session.currentSite"
             class="site-selector"
-            aria-label="当前厂区"
+            aria-label="當前廠區"
             @update:model-value="session.selectSite"
           >
             <template #prefix><el-icon><Location /></el-icon></template>
@@ -64,14 +64,14 @@ onMounted(() => session.initialize())
           </el-select>
           <div class="header-user">
             <el-icon><User /></el-icon>
-            <span>{{ session.user?.nickname || '平台用户' }}</span>
+            <span>{{ session.user?.nickname || '平台用戶' }}</span>
           </div>
         </div>
       </el-header>
       <el-main class="app-main">
         <!-- 會話未完成時不加載業務頁面，避免用空廠區發出無效請求。 -->
         <div v-if="session.loading" class="page-loading"><el-skeleton :rows="5" animated /></div>
-        <el-empty v-else-if="!session.currentSite" description="当前账号未配置厂区权限" />
+        <el-empty v-else-if="!session.currentSite" description="當前帳號未配置廠區權限" />
         <router-view v-else />
       </el-main>
     </el-container>

@@ -59,7 +59,7 @@ public class AssetService {
         try {
             assetMapper.insert(asset);
         } catch (DuplicateKeyException exception) {
-            throw new BusinessException(400, "资产编码已存在：" + request.getAssetCode());
+            throw new BusinessException(400, "資產編碼已存在：" + request.getAssetCode());
         }
         return asset.getId();
     }
@@ -70,7 +70,7 @@ public class AssetService {
         AssetDO asset = requireAsset(id, request.getSiteCode());
         // 先讀版本可以快速返回明確錯誤；最終 UPDATE 的 version 條件仍是並發安全的關鍵。
         if (request.getVersion() == null || !request.getVersion().equals(asset.getVersion())) {
-            throw new BusinessException(409, "资产已被其他操作更新，请刷新后重试");
+            throw new BusinessException(409, "資產已被其他操作更新，請刷新後重試");
         }
         asset.setColorCode(request.getColorCode().trim());
         asset.setSizeCode(request.getSizeCode().trim());
@@ -82,7 +82,7 @@ public class AssetService {
                 .eq(AssetDO::getSiteCode, request.getSiteCode())
                 .eq(AssetDO::getVersion, request.getVersion()));
         if (updated != 1) {
-            throw new BusinessException(409, "资产已被其他操作更新，请刷新后重试");
+            throw new BusinessException(409, "資產已被其他操作更新，請刷新後重試");
         }
     }
 
@@ -118,7 +118,7 @@ public class AssetService {
                 .eq(AssetDO::getId, id)
                 .eq(AssetDO::getSiteCode, siteCode));
         if (asset == null) {
-            throw new BusinessException(404, "资产不存在");
+            throw new BusinessException(404, "資產不存在");
         }
         return asset;
     }

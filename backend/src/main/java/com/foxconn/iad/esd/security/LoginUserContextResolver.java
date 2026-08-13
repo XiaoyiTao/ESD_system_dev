@@ -35,7 +35,7 @@ public class LoginUserContextResolver {
         if (localDebugAuthEnabled) {
             return parseDebugHeaders();
         }
-        throw new BusinessException(401, "未登录或登录信息已失效");
+        throw new BusinessException(401, "未登錄或登錄信息已失效");
     }
 
     private LoginUserContext parsePlatformHeader(String encodedLoginUser) {
@@ -48,13 +48,13 @@ public class LoginUserContextResolver {
             LoginUserContext context = new LoginUserContext(
                     userId, tenantId, LoginUserContext.parseSites(sites), false);
             if (context.getSiteCodes().isEmpty()) {
-                throw new BusinessException(403, "当前账号未配置厂区权限");
+                throw new BusinessException(403, "當前帳號未配置廠區權限");
             }
             return context;
         } catch (BusinessException exception) {
             throw exception;
         } catch (Exception exception) {
-            throw new BusinessException(401, "无法解析统一登录信息");
+            throw new BusinessException(401, "無法解析統一登錄信息");
         }
     }
 
@@ -63,24 +63,24 @@ public class LoginUserContextResolver {
         String sites = request.getHeader(DEBUG_SITE_HEADER);
         if (rawUserId == null || sites == null) {
             throw new BusinessException(401,
-                    "本地调试请提供 X-ESD-Debug-User-Id 和 X-ESD-Debug-Sites");
+                    "本地調試請提供 X-ESD-Debug-User-Id 和 X-ESD-Debug-Sites");
         }
         try {
             LoginUserContext context = new LoginUserContext(Long.valueOf(rawUserId), 1L,
                     LoginUserContext.parseSites(sites), true);
             if (context.getSiteCodes().isEmpty()) {
-                throw new BusinessException(403, "本地调试厂区不能为空");
+                throw new BusinessException(403, "本地調試廠區不能為空");
             }
             return context;
         } catch (NumberFormatException exception) {
-            throw new BusinessException(400, "本地调试用户编号格式错误");
+            throw new BusinessException(400, "本地調試用戶編號格式錯誤");
         }
     }
 
     private Long requiredLong(JsonNode root, String field) {
         Long value = optionalLong(root, field);
         if (value == null) {
-            throw new BusinessException(401, "统一登录信息缺少用户编号");
+            throw new BusinessException(401, "統一登錄信息缺少用戶編號");
         }
         return value;
     }

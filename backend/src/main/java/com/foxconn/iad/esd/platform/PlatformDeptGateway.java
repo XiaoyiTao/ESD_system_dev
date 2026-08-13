@@ -24,13 +24,13 @@ public class PlatformDeptGateway {
             result = platformDeptClient.getDept(deptId);
         } catch (Exception exception) {
             // 平台異常不能降級為本地空部門，否則會產生錯誤組織快照。
-            throw new BusinessException(503, "统一部门服务暂时不可用");
+            throw new BusinessException(503, "統一部門服務暫時不可用");
         }
         if (result == null || !Integer.valueOf(0).equals(result.getCode()) || result.getData() == null) {
-            throw new BusinessException(400, "平台部门不存在：" + deptId);
+            throw new BusinessException(400, "平台部門不存在：" + deptId);
         }
         if (!Integer.valueOf(PLATFORM_DEPT_ENABLED).equals(result.getData().getStatus())) {
-            throw new BusinessException(400, "平台部门已停用：" + result.getData().getName());
+            throw new BusinessException(400, "平台部門已停用：" + result.getData().getName());
         }
         return result.getData();
     }

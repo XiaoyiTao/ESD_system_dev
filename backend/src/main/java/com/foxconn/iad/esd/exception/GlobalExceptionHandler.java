@@ -26,14 +26,14 @@ public class GlobalExceptionHandler {
             ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleValidationException(Exception exception) {
-        return ApiResponse.failure(400, "请求参数不合法");
+        return ApiResponse.failure(400, "請求參數不合法");
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Void> handleUnexpectedException(Exception exception) {
         log.error("Unexpected ESD request failure", exception);
-        return ApiResponse.failure(500, "系统处理失败，请稍后重试");
+        return ApiResponse.failure(500, "系統處理失敗，請稍後重試");
     }
 }
     /** 將 Bean Validation 的字段錯誤隱藏為統一的參數錯誤提示。 */

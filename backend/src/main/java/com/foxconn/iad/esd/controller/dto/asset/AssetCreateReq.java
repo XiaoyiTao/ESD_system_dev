@@ -15,7 +15,7 @@ public class AssetCreateReq {
     /** 資產編碼，只允許便於標簽打印和掃描的 ASCII 字符。 */
     @NotBlank
     @Size(max = 64)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "资产编码只能包含字母、数字、下划线和连字符")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "資產編碼只能包含字母、數字、下劃線和連字符")
     private String assetCode;
     @NotBlank
     @Size(max = 32)

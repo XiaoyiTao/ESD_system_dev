@@ -72,7 +72,7 @@ public class PersonProfileService {
             personProfileMapper.insert(profile);
         } catch (DuplicateKeyException exception) {
             // 資料庫唯一索引是最終防線，處理重複提交或並發綁定。
-            throw new BusinessException(400, "该员工已绑定当前厂区");
+            throw new BusinessException(400, "該員工已綁定當前廠區");
         }
         return profile.getId();
     }
@@ -85,7 +85,7 @@ public class PersonProfileService {
         if (Integer.valueOf(0).equals(request.getEsdStatus())) {
             long issuedCount = countHeldAssets(profile.getPlatformUserId(), request.getSiteCode(), null);
             if (issuedCount > 0) {
-                throw new BusinessException(400, "员工仍持有资产，不能停用 ESD 人员档");
+                throw new BusinessException(400, "員工仍持有資產，不能停用 ESD 人員檔");
             }
         }
         PlatformUserResp supervisor = request.getSupervisorUserId() == null ? null
@@ -133,7 +133,7 @@ public class PersonProfileService {
                         .eq(PersonProfileDO::getId, id)
                         .eq(PersonProfileDO::getSiteCode, siteCode));
         if (profile == null) {
-            throw new BusinessException(404, "人员档不存在");
+            throw new BusinessException(404, "人員檔不存在");
         }
         return profile;
     }
