@@ -6,5 +6,5 @@ import './styles.css'
 import App from './App.vue'
 import router from './router'
 
-// Pinia 必须在 App 挂载前注册，保证顶部会话上下文和各业务页面共享同一状态。
+// Pinia 必須在 App 掛載前註冊，保證頂部會話上下文和各業務頁面共享同一狀態。
 createApp(App).use(createPinia()).use(router).use(ElementPlus).mount('#app')

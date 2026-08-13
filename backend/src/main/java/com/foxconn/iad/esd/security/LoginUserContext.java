@@ -11,16 +11,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class LoginUserContext {
 
-    /** 统一平台登录用户 ID。 */
+    /** 統一平台登錄用戶 ID。 */
     private final Long userId;
-    /** 租户 ID，当前本地调试固定为 1。 */
+    /** 租戶 ID，當前本地調試固定為 1。 */
     private final Long tenantId;
-    /** 当前账号可访问的厂区集合。 */
+    /** 當前帳號可訪問的廠區集合。 */
     private final Set<String> siteCodes;
-    /** 是否来自本地调试头；正式网关头为 false。 */
+    /** 是否來自本地調試頭；正式網關頭為 false。 */
     private final boolean localDebug;
 
-    /** 判断账号是否拥有指定厂区权限。 */
+    /** 判斷帳號是否擁有指定廠區權限。 */
     public boolean canAccessSite(String siteCode) {
         return siteCode != null && siteCodes.contains(siteCode);
     }
@@ -39,4 +39,4 @@ public class LoginUserContext {
         return Collections.unmodifiableSet(sites);
     }
 }
-    /** 将平台逗号分隔厂区字段转换为去空格、去重且不可修改的集合。 */
+    /** 將平台逗號分隔廠區字段轉換為去空格、去重且不可修改的集合。 */

@@ -12,14 +12,14 @@ import org.springframework.context.annotation.Configuration;
 public class EsdConfiguration {
 
     /**
-     * 注册 MyBatis-Plus 分页拦截器。
+     * 註冊 MyBatis-Plus 分頁攔截器。
      *
-     * <p>分页查询使用 MySQL 方言生成 count 和 limit 语句，避免业务服务手写分页 SQL。</p>
+     * <p>分頁查詢使用 MySQL 方言生成 count 和 limit 語句，避免業務服務手寫分頁 SQL。</p>
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 该项目当前数据库固定为 MySQL；未来切换数据库时应同步调整方言。
+        // 該項目當前資料庫固定為 MySQL；未來切換資料庫時應同步調整方言。
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }

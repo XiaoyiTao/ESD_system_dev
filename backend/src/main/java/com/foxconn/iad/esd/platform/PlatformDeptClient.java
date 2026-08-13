@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
         path = "/rpc-api/system/dept")
 public interface PlatformDeptClient {
 
-    /** 通过平台部门 ID 查询部门主数据。 */
+    /** 通過平台部門 ID 查詢部門主數據。 */
     @GetMapping("/get")
     PlatformRpcResult<PlatformDeptResp> getDept(@RequestParam("id") Long id);
 }

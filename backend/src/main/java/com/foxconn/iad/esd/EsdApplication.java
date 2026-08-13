@@ -9,9 +9,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class EsdApplication {
 
     /**
-     * ESD 业务服务启动入口。
+     * ESD 業務服務啟動入口。
      *
-     * <p>平台账号认证由统一后台负责，本服务通过 Feign 调用平台主数据 RPC。</p>
+     * <p>平台帳號認證由統一後台負責，本服務通過 Feign 調用平台主數據 RPC。</p>
      */
     public static void main(String[] args) {
         SpringApplication.run(EsdApplication.class, args);

@@ -1,10 +1,10 @@
-/** 与后端 PageResponse 对齐的分页数据。 */
+/** 與後端 PageResponse 對齊的分頁數據。 */
 export interface PageResponse<T> {
   list: T[]
   total: number
 }
 
-/** 人员扩展档及实时持有数量。 */
+/** 人員擴展檔及實時持有數量。 */
 export interface PersonProfile {
   id: number
   siteCode: string
@@ -22,7 +22,7 @@ export interface PersonProfile {
   shoesCount: number
 }
 
-/** 资产主档及生命周期展示信息。 */
+/** 資產主檔及生命周期展示信息。 */
 export interface Asset {
   id: number
   assetCode: string

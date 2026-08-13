@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Data
 public class AssetCreateReq {
 
-    /** 资产编码，只允许便于标签打印和扫描的 ASCII 字符。 */
+    /** 資產編碼，只允許便於標簽打印和掃描的 ASCII 字符。 */
     @NotBlank
     @Size(max = 64)
     @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "资产编码只能包含字母、数字、下划线和连字符")
@@ -31,7 +31,7 @@ public class AssetCreateReq {
     @Size(max = 32)
     private String sizeCode;
 }
-    /** 入库所属厂区；服务端会与当前登录用户的厂区权限比对。 */
-    /** 1 静电衣，2 静电鞋。 */
-    /** 颜色编码或名称。 */
-    /** 衣服尺码或鞋子尺码。 */
+    /** 入庫所屬廠區；服務端會與當前登錄用戶的廠區權限比對。 */
+    /** 1 靜電衣，2 靜電鞋。 */
+    /** 顏色編碼或名稱。 */
+    /** 衣服尺碼或鞋子尺碼。 */

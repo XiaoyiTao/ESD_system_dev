@@ -1,4 +1,4 @@
-/** ESD 健康接口的返回数据。 */
+/** ESD 健康接口的返回數據。 */
 export interface HealthResponse {
   status: string
   service: string
@@ -6,7 +6,7 @@ export interface HealthResponse {
   version: string
 }
 
-/** 后续 Dashboard 状态统计接口复用的摘要结构。 */
+/** 後續 Dashboard 狀態統計接口復用的摘要結構。 */
 export interface AssetStatusSummary {
   code: number
   name: string

@@ -17,10 +17,10 @@ const query = reactive({ keyword: '', pageNo: 1, pageSize: 20, assetType: undefi
 const form = reactive({ assetCode: '', assetType: 1, colorCode: '', sizeCode: '' })
 
 const statusName: Record<number, string> = { 10: '可用库存', 20: '已发放', 30: '清洗中', 40: '已报废', 50: '已遗失' }
-// Element Plus 标签类型只接受有限字符串，因此在映射中收窄类型，避免模板运行时计算颜色。
+// Element Plus 標簽類型只接受有限字符串，因此在映射中收窄類型，避免模板運行時計算顏色。
 const statusType: Record<number, 'success' | 'primary' | 'warning' | 'info' | 'danger'> = { 10: 'success', 20: 'primary', 30: 'warning', 40: 'info', 50: 'danger' }
 
-/** 按当前厂区和筛选条件刷新资产列表。 */
+/** 按當前廠區和篩選條件刷新資產列表。 */
 async function load() {
   loading.value = true
   try {
@@ -35,7 +35,7 @@ async function load() {
   }
 }
 
-/** 校验最小表单条件后提交资产入库。 */
+/** 校驗最小表單條件後提交資產入庫。 */
 async function submit() {
   if (!form.assetCode || !form.colorCode || !form.sizeCode) {
     ElMessage.warning('请填写资产编码、颜色和尺码')
@@ -55,13 +55,13 @@ async function submit() {
   }
 }
 
-/** 恢复默认筛选条件并重新查询。 */
+/** 恢復默認篩選條件並重新查詢。 */
 function resetQuery() {
   Object.assign(query, { keyword: '', assetType: undefined, lifecycleStatus: undefined, pageNo: 1 })
   load()
 }
 
-// 首次进入页面等待根布局完成会话初始化；厂区变化由 watch 触发刷新。
+// 首次進入頁面等待根布局完成會話初始化；廠區變化由 watch 觸發刷新。
 onMounted(() => { if (siteCode.value) load() })
 watch(siteCode, (value, previous) => {
   if (value && value !== previous) {
@@ -72,7 +72,7 @@ watch(siteCode, (value, previous) => {
 </script>
 
 <template>
-  <!-- 资产主档页面：筛选工具栏、分页表格和入库弹窗。 -->
+  <!-- 資產主檔頁面：篩選工具欄、分頁表格和入庫彈窗。 -->
   <section class="page-heading page-heading-compact">
     <div>
       <div class="section-kicker">ASSET REGISTER / INVENTORY</div>
@@ -99,7 +99,7 @@ watch(siteCode, (value, previous) => {
       <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
     </div>
 
-    <!-- 表格字段直接对应后端 AssetResp，状态名称由后端优先提供。 -->
+    <!-- 表格字段直接對應後端 AssetResp，狀態名稱由後端優先提供。 -->
     <el-table v-loading="loading" :data="rows" row-key="id" empty-text="当前厂区暂无资产">
       <el-table-column prop="assetCode" label="资产编码" min-width="150" />
       <el-table-column label="类型" width="100">
@@ -122,7 +122,7 @@ watch(siteCode, (value, previous) => {
     </div>
   </section>
 
-  <!-- 入库只提交基础属性，生命周期和版本由后端统一生成。 -->
+  <!-- 入庫只提交基礎屬性，生命周期和版本由後端統一生成。 -->
   <el-dialog v-model="dialogVisible" title="资产入库" width="500px" destroy-on-close>
     <el-form label-position="top">
       <el-form-item label="资产编码" required><el-input v-model="form.assetCode" maxlength="64" show-word-limit placeholder="如 J-Y-001" /></el-form-item>

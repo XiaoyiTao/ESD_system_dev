@@ -7,36 +7,36 @@ import java.time.LocalDateTime;
 @Data
 public class PersonProfileResp {
 
-    /** ESD 人员档主键。 */
+    /** ESD 人員檔主鍵。 */
     private Long id;
-    /** 当前厂区。 */
+    /** 當前廠區。 */
     private String siteCode;
-    /** 平台用户 ID。 */
+    /** 平台用戶 ID。 */
     private Long platformUserId;
-    /** 员工工號和姓名快照。 */
+    /** 員工工號和姓名快照。 */
     private String employeeNo;
-    /** 员工姓名快照。 */
+    /** 員工姓名快照。 */
     private String employeeName;
-    /** 平台部门 ID。 */
+    /** 平台部門 ID。 */
     private Long deptId;
-    /** 平台部门名称快照。 */
+    /** 平台部門名稱快照。 */
     private String deptName;
-    /** 责任主管平台用户 ID。 */
+    /** 責任主管平台用戶 ID。 */
     private Long supervisorUserId;
-    /** 责任主管姓名快照。 */
+    /** 責任主管姓名快照。 */
     private String supervisorName;
-    /** 现场楼层属性。 */
+    /** 現場樓層屬性。 */
     private String floorCode;
-    /** 现场班别属性。 */
+    /** 現場班別屬性。 */
     private String shiftCode;
-    /** 1 启用，0 停用。 */
+    /** 1 啟用，0 停用。 */
     private Integer esdStatus;
-    /** 当前持有的静电衣数量。 */
+    /** 當前持有的靜電衣數量。 */
     private long garmentCount;
-    /** 当前持有的静电鞋数量。 */
+    /** 當前持有的靜電鞋數量。 */
     private long shoesCount;
-    /** 档案创建时间。 */
+    /** 檔案創建時間。 */
     private LocalDateTime createTime;
-    /** 档案最后修改时间。 */
+    /** 檔案最後修改時間。 */
     private LocalDateTime updateTime;
 }

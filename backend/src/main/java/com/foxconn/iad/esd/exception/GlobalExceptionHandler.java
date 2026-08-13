@@ -15,7 +15,7 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /** 将服务端主动抛出的业务异常转换为统一响应。 */
+    /** 將服務端主動拋出的業務異常轉換為統一響應。 */
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleBusinessException(BusinessException exception) {
@@ -36,5 +36,5 @@ public class GlobalExceptionHandler {
         return ApiResponse.failure(500, "系统处理失败，请稍后重试");
     }
 }
-    /** 将 Bean Validation 的字段错误隐藏为统一的参数错误提示。 */
-    /** 记录未预期异常的完整堆栈，但只向客户端返回通用错误。 */
+    /** 將 Bean Validation 的字段錯誤隱藏為統一的參數錯誤提示。 */
+    /** 記錄未預期異常的完整堆棧，但只向客戶端返回通用錯誤。 */

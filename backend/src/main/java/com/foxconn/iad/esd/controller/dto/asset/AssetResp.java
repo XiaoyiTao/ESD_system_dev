@@ -7,34 +7,34 @@ import java.time.LocalDateTime;
 @Data
 public class AssetResp {
 
-    /** 资产主键。 */
+    /** 資產主鍵。 */
     private Long id;
-    /** 资产编码。 */
+    /** 資產編碼。 */
     private String assetCode;
-    /** 所属厂区。 */
+    /** 所屬廠區。 */
     private String siteCode;
-    /** 1 静电衣，2 静电鞋。 */
+    /** 1 靜電衣，2 靜電鞋。 */
     private Integer assetType;
-    /** 颜色。 */
+    /** 顏色。 */
     private String colorCode;
-    /** 尺码。 */
+    /** 尺碼。 */
     private String sizeCode;
-    /** 生命周期状态编码。 */
+    /** 生命周期狀態編碼。 */
     private Integer lifecycleStatus;
-    /** 生命周期状态中文名称。 */
+    /** 生命周期狀態中文名稱。 */
     private String lifecycleStatusName;
-    /** 当前持有人平台用户 ID。 */
+    /** 當前持有人平台用戶 ID。 */
     private Long currentHolderUserId;
-    /** 当前持有人工号。 */
+    /** 當前持有人工號。 */
     private String currentHolderNo;
-    /** 当前持有人姓名。 */
+    /** 當前持有人姓名。 */
     private String currentHolderName;
-    /** 完成清洗的累计次数。 */
+    /** 完成清洗的累計次數。 */
     private Integer cleanCount;
-    /** 编辑乐观锁版本号。 */
+    /** 編輯樂觀鎖版本號。 */
     private Integer version;
-    /** 入库时间。 */
+    /** 入庫時間。 */
     private LocalDateTime createTime;
-    /** 最后修改时间。 */
+    /** 最後修改時間。 */
     private LocalDateTime updateTime;
 }

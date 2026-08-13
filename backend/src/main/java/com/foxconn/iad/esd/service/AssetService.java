@@ -28,20 +28,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssetService {
 
-    /** 资产主表 Mapper。 */
+    /** 資產主表 Mapper。 */
     private final AssetMapper assetMapper;
-    /** 统一登录厂区权限校验器。 */
+    /** 統一登錄廠區權限校驗器。 */
     private final SiteAccessService siteAccessService;
 
     /**
-     * 创建资产主档。
+     * 創建資產主檔。
      *
-     * <p>所有新资产从可用库存开始，发放、清洗和终止状态只能由后续业务交易改变。</p>
+     * <p>所有新資產從可用庫存開始，發放、清洗和終止狀態只能由後續業務交易改變。</p>
      */
     @Transactional
     public Long create(AssetCreateReq request) {
         LoginUserContext operator = siteAccessService.requireSite(request.getSiteCode());
-        // 插入前先校验厂区，避免客户端伪造 siteCode 写入其他厂区的数据。
+        // 插入前先校驗廠區，避免客戶端偽造 siteCode 寫入其他廠區的數據。
         AssetDO asset = new AssetDO();
         asset.setAssetCode(request.getAssetCode().trim());
         asset.setSiteCode(request.getSiteCode().trim());
@@ -50,7 +50,7 @@ public class AssetService {
         asset.setSizeCode(request.getSizeCode().trim());
         asset.setLifecycleStatus(AssetLifecycleStatus.AVAILABLE.getCode());
         asset.setCleanCount(0);
-        // 版本从 0 开始，后续编辑和交易都通过版本条件防止覆盖并发修改。
+        // 版本從 0 開始，後續編輯和交易都通過版本條件防止覆蓋並發修改。
         asset.setVersion(0);
         asset.setCreator(String.valueOf(operator.getUserId()));
         asset.setUpdater(String.valueOf(operator.getUserId()));
@@ -68,7 +68,7 @@ public class AssetService {
     public void update(Long id, AssetUpdateReq request) {
         LoginUserContext operator = siteAccessService.requireSite(request.getSiteCode());
         AssetDO asset = requireAsset(id, request.getSiteCode());
-        // 先读版本可以快速返回明确错误；最终 UPDATE 的 version 条件仍是并发安全的关键。
+        // 先讀版本可以快速返回明確錯誤；最終 UPDATE 的 version 條件仍是並發安全的關鍵。
         if (request.getVersion() == null || !request.getVersion().equals(asset.getVersion())) {
             throw new BusinessException(409, "资产已被其他操作更新，请刷新后重试");
         }
@@ -88,7 +88,7 @@ public class AssetService {
 
     public PageResponse<AssetResp> page(AssetPageReq request) {
         siteAccessService.requireSite(request.getSiteCode());
-        // 厂区条件始终作为 AND 条件，防止关键字 OR 子句突破数据隔离边界。
+        // 廠區條件始終作為 AND 條件，防止關鍵字 OR 子句突破數據隔離邊界。
         LambdaQueryWrapper<AssetDO> query = new LambdaQueryWrapper<AssetDO>()
                 .eq(AssetDO::getSiteCode, request.getSiteCode())
                 .eq(request.getAssetType() != null, AssetDO::getAssetType, request.getAssetType())
@@ -132,7 +132,7 @@ public class AssetService {
         response.setColorCode(asset.getColorCode());
         response.setSizeCode(asset.getSizeCode());
         response.setLifecycleStatus(asset.getLifecycleStatus());
-        // 数据库状态受 CHECK 约束；循环转换避免 API 层直接暴露枚举实现细节。
+        // 資料庫狀態受 CHECK 約束；循環轉換避免 API 層直接暴露枚舉實現細節。
         for (AssetLifecycleStatus status : AssetLifecycleStatus.values()) {
             if (status.getCode() == asset.getLifecycleStatus()) {
                 response.setLifecycleStatusName(status.getDisplayName());
@@ -150,12 +150,12 @@ public class AssetService {
     }
 }
     /**
-     * 编辑资产的基础属性。
+     * 編輯資產的基礎屬性。
      *
-     * <p>使用“查询版本 + UPDATE ... WHERE version = 旧版本”的 CAS 方式，
-     * 因此两个页面同时编辑时只有一个请求可以成功。</p>
+     * <p>使用“查詢版本 + UPDATE ... WHERE version = 舊版本”的 CAS 方式，
+     * 因此兩個頁面同時編輯時只有一個請求可以成功。</p>
      */
-    /** 按厂区分页查询资产，关键字同时搜索编码和当前持有人快照。 */
-    /** 查询单件资产详情。 */
-    /** 在指定厂区内查找资产，不向调用方暴露其他厂区同 ID 的数据。 */
-    /** 将数据库对象转换成稳定的 API 响应，并补充状态中文名称。 */
+    /** 按廠區分頁查詢資產，關鍵字同時搜索編碼和當前持有人快照。 */
+    /** 查詢單件資產詳情。 */
+    /** 在指定廠區內查找資產，不向調用方暴露其他廠區同 ID 的數據。 */
+    /** 將資料庫對象轉換成穩定的 API 響應，並補充狀態中文名稱。 */

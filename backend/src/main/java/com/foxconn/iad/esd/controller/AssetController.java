@@ -19,10 +19,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AssetController {
 
-    /** 资产主档业务服务。 */
+    /** 資產主檔業務服務。 */
     private final AssetService assetService;
 
-    /** 新增一件可用库存资产。 */
+    /** 新增一件可用庫存資產。 */
     @PostMapping
     public ApiResponse<Long> create(@Valid @RequestBody AssetCreateReq request) {
         return ApiResponse.success(assetService.create(request));
@@ -46,6 +46,6 @@ public class AssetController {
         return ApiResponse.success(assetService.get(id, siteCode));
     }
 }
-    /** 编辑颜色和尺码，并要求客户端带回最新版本号。 */
-    /** 按厂区和筛选条件分页查询资产。 */
-    /** 查询单件资产详情，并再次校验厂区权限。 */
+    /** 編輯顏色和尺碼，並要求客戶端帶回最新版本號。 */
+    /** 按廠區和篩選條件分頁查詢資產。 */
+    /** 查詢單件資產詳情，並再次校驗廠區權限。 */

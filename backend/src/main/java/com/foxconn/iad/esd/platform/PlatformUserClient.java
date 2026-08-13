@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 平台用户 RPC 契约。ESD 服务只读取主数据，不保存账号密码。
+ * 平台用戶 RPC 契約。ESD 服務只讀取主數據，不保存帳號密碼。
  */
 @FeignClient(name = "${esd.platform-system-service:platform-system-server}", contextId = "platformUserClient",
         path = "/rpc-api/system/user")
 public interface PlatformUserClient {
 
-    /** 通过平台用户 ID 查询用户主数据。 */
+    /** 通過平台用戶 ID 查詢用戶主數據。 */
     @GetMapping("/get")
     PlatformRpcResult<PlatformUserResp> getUser(@RequestParam("id") Long id);
 }

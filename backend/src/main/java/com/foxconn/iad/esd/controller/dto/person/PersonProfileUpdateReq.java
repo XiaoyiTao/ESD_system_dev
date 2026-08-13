@@ -10,19 +10,19 @@ import javax.validation.constraints.Size;
 @Data
 public class PersonProfileUpdateReq {
 
-    /** 用于确认记录所属厂区并执行数据隔离。 */
+    /** 用於確認記錄所屬廠區並執行數據隔離。 */
     @NotBlank
     @Size(max = 32)
     private String siteCode;
-    /** 可选责任主管，必须来自同一厂区且处于启用状态。 */
+    /** 可選責任主管，必須來自同一廠區且處於啟用狀態。 */
     private Long supervisorUserId;
-    /** 现场楼层属性。 */
+    /** 現場樓層屬性。 */
     @Size(max = 32)
     private String floorCode;
-    /** 现场班别属性。 */
+    /** 現場班別屬性。 */
     @Size(max = 32)
     private String shiftCode;
-    /** 1 启用，0 停用；停用前必须确认没有持有资产。 */
+    /** 1 啟用，0 停用；停用前必須確認沒有持有資產。 */
     @Min(0)
     @Max(1)
     private Integer esdStatus;

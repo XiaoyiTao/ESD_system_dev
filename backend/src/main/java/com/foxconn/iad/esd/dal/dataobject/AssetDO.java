@@ -12,40 +12,40 @@ import java.time.LocalDateTime;
 @TableName("esd_asset")
 public class AssetDO {
 
-    /** 资产主键。 */
+    /** 資產主鍵。 */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
-    /** 全局资产编码，入库时必须唯一。 */
+    /** 全局資產編碼，入庫時必須唯一。 */
     private String assetCode;
-    /** 资产所属厂区。 */
+    /** 資產所屬廠區。 */
     private String siteCode;
-    /** 1 静电衣，2 静电鞋。 */
+    /** 1 靜電衣，2 靜電鞋。 */
     private Integer assetType;
-    /** 颜色编码或颜色名称。 */
+    /** 顏色編碼或顏色名稱。 */
     private String colorCode;
-    /** 衣服尺码或鞋子尺码。 */
+    /** 衣服尺碼或鞋子尺碼。 */
     private String sizeCode;
-    /** 生命周期状态，取 AssetLifecycleStatus 的稳定编码。 */
+    /** 生命周期狀態，取 AssetLifecycleStatus 的穩定編碼。 */
     private Integer lifecycleStatus;
-    /** 当前持有人平台用户 ID；仅已发放状态允许非空。 */
+    /** 當前持有人平台用戶 ID；僅已發放狀態允許非空。 */
     private Long currentHolderUserId;
-    /** 当前持有人工号快照。 */
+    /** 當前持有人工號快照。 */
     private String currentHolderNo;
-    /** 当前持有人姓名快照。 */
+    /** 當前持有人姓名快照。 */
     private String currentHolderName;
-    /** 已完成清洗次数。 */
+    /** 已完成清洗次數。 */
     private Integer cleanCount;
-    /** 业务版本号，用于防止编辑覆盖并发交易。 */
+    /** 業務版本號，用於防止編輯覆蓋並發交易。 */
     private Integer version;
-    /** 创建操作人 ID。 */
+    /** 創建操作人 ID。 */
     private String creator;
-    /** 创建时间。 */
+    /** 創建時間。 */
     private LocalDateTime createTime;
-    /** 最后修改操作人 ID。 */
+    /** 最後修改操作人 ID。 */
     private String updater;
-    /** 最后修改时间。 */
+    /** 最後修改時間。 */
     private LocalDateTime updateTime;
-    /** 逻辑删除标记。 */
+    /** 邏輯刪除標記。 */
     @TableLogic
     private Boolean deleted;
 }

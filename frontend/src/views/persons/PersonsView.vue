@@ -16,7 +16,7 @@ const rows = ref<PersonProfile[]>([])
 const query = reactive({ keyword: '', pageNo: 1, pageSize: 20, esdStatus: 1 })
 const form = reactive({ platformUserId: undefined as number | undefined, floorCode: '', shiftCode: '' })
 
-/** 按当前厂区、关键字和启停状态刷新人员档。 */
+/** 按當前廠區、關鍵字和啟停狀態刷新人員檔。 */
 async function load() {
   loading.value = true
   try {
@@ -31,7 +31,7 @@ async function load() {
   }
 }
 
-/** 使用平台用户 ID 创建绑定，员工主数据由后端 RPC 校验。 */
+/** 使用平台用戶 ID 創建綁定，員工主數據由後端 RPC 校驗。 */
 async function submit() {
   const platformUserId = form.platformUserId
   if (!platformUserId) {
@@ -56,14 +56,14 @@ async function submit() {
   }
 }
 
-/** 清除关键字并回到第一页。 */
+/** 清除關鍵字並回到第一頁。 */
 function resetQuery() {
   query.keyword = ''
   query.pageNo = 1
   load()
 }
 
-// 厂区由顶部会话选择器控制，切换后重新从服务端加载隔离数据。
+// 廠區由頂部會話選擇器控制，切換後重新從服務端加載隔離數據。
 onMounted(() => { if (siteCode.value) load() })
 watch(siteCode, (value, previous) => {
   if (value && value !== previous) {
@@ -74,7 +74,7 @@ watch(siteCode, (value, previous) => {
 </script>
 
 <template>
-  <!-- 人员扩展档页面：查询、持有数量展示和平台用户绑定。 -->
+  <!-- 人員擴展檔頁面：查詢、持有數量展示和平台用戶綁定。 -->
   <section class="page-heading page-heading-compact">
     <div>
       <div class="section-kicker">MASTER DATA / PEOPLE</div>
@@ -98,7 +98,7 @@ watch(siteCode, (value, previous) => {
       <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
     </div>
 
-    <!-- 持有数量由后端根据已发放资产实时统计，不能使用前端缓存推算。 -->
+    <!-- 持有數量由後端根據已發放資產實時統計，不能使用前端緩存推算。 -->
     <el-table v-loading="loading" :data="rows" row-key="id" empty-text="当前厂区暂无人员档案">
       <el-table-column prop="employeeNo" label="工号" min-width="130" />
       <el-table-column prop="employeeName" label="姓名" min-width="100" />
@@ -124,7 +124,7 @@ watch(siteCode, (value, previous) => {
     </div>
   </section>
 
-  <!-- 当前先输入平台 userId；后续接入平台员工选择器时只替换这一块表单。 -->
+  <!-- 當前先輸入平台 userId；後續接入平台員工選擇器時只替換這一塊表單。 -->
   <el-dialog v-model="dialogVisible" title="绑定平台人员" width="480px" destroy-on-close>
     <el-form label-position="top" @submit.prevent="submit">
       <el-form-item label="平台用户编号" required>

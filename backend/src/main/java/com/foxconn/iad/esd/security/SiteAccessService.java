@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SiteAccessService {
 
-    /** 负责从网关头或本地调试头解析当前用户。 */
+    /** 負責從網關頭或本地調試頭解析當前用戶。 */
     private final LoginUserContextResolver loginUserContextResolver;
 
-    /** 校验请求厂区属于当前登录用户，所有业务服务必须先调用此方法。 */
+    /** 校驗請求廠區屬於當前登錄用戶，所有業務服務必須先調用此方法。 */
     public LoginUserContext requireSite(String siteCode) {
         LoginUserContext currentUser = loginUserContextResolver.requireCurrentUser();
         if (!currentUser.canAccessSite(siteCode)) {
@@ -24,5 +24,5 @@ public class SiteAccessService {
         return loginUserContextResolver.requireCurrentUser();
     }
 }
-        // 不能仅相信前端传入的 siteCode，服务端必须以统一登录上下文为准。
-    /** 获取当前用户上下文，供记录操作人和跨表业务使用。 */
+        // 不能僅相信前端傳入的 siteCode，服務端必須以統一登錄上下文為準。
+    /** 獲取當前用戶上下文，供記錄操作人和跨表業務使用。 */

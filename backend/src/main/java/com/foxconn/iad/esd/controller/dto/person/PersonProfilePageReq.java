@@ -10,13 +10,13 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 public class PersonProfilePageReq extends PageQuery {
 
-    /** 查询边界由当前登录用户的厂区权限再次校验。 */
+    /** 查詢邊界由當前登錄用戶的廠區權限再次校驗。 */
     @NotBlank
     private String siteCode;
-    /** 同时匹配工号和姓名。 */
+    /** 同時匹配工號和姓名。 */
     private String keyword;
-    /** 平台部门 ID 过滤条件。 */
+    /** 平台部門 ID 過濾條件。 */
     private Long deptId;
-    /** 1 启用，0 停用；为空时查询全部状态。 */
+    /** 1 啟用，0 停用；為空時查詢全部狀態。 */
     private Integer esdStatus;
 }

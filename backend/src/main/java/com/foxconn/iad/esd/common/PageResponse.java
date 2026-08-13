@@ -9,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PageResponse<T> {
 
-    /** 当前页数据。 */
+    /** 當前頁數據。 */
     private List<T> list;
-    /** 按过滤条件计算出的总记录数。 */
+    /** 按過濾條件計算出的總記錄數。 */
     private long total;
 }

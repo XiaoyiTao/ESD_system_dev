@@ -7,7 +7,7 @@ import type { HealthResponse } from '../types/api'
 const loading = ref(true)
 const health = ref<HealthResponse>()
 
-// 当前阶段首页只验证服务连接；库存和报警统计留给后续 Dashboard 接口。
+// 當前階段首頁只驗證服務連接；庫存和報警統計留給後續 Dashboard 接口。
 onMounted(async () => {
   try {
     const response = await getEsdHealth()
@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- 首页先提供运营入口和服务状态，避免在统计接口完成前伪造业务数据。 -->
+  <!-- 首頁先提供運營入口和服務狀態，避免在統計接口完成前偽造業務數據。 -->
   <section class="page-heading">
     <div>
       <div class="section-kicker">CONTROL ROOM / 01</div>
@@ -33,7 +33,7 @@ onMounted(async () => {
     </el-tag>
   </section>
 
-  <!-- 指标占位明确标记待接入，后续由真实聚合接口替换。 -->
+  <!-- 指標佔位明確標記待接入，後續由真實聚合接口替換。 -->
   <section class="metric-grid">
     <article class="metric-card metric-card-primary">
       <span class="metric-label">可用庫存</span>
@@ -57,7 +57,7 @@ onMounted(async () => {
     </article>
   </section>
 
-  <!-- 生命周期图与服务状态用于快速理解当前已交付范围。 -->
+  <!-- 生命周期圖與服務狀態用於快速理解當前已交付範圍。 -->
   <section class="dashboard-grid">
     <article class="panel panel-flow">
       <div class="panel-heading">

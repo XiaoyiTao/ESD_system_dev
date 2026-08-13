@@ -8,11 +8,11 @@ import javax.validation.constraints.Min;
 @Data
 public class PageQuery {
 
-    /** 页码从 1 开始，避免前端传入 0 导致数据库分页语义不一致。 */
+    /** 頁碼從 1 開始，避免前端傳入 0 導致資料庫分頁語義不一致。 */
     @Min(1)
     private long pageNo = 1;
 
-    /** 单页最多 200 条，限制一次请求的数据库和网络负载。 */
+    /** 單頁最多 200 條，限制一次請求的資料庫和網絡負載。 */
     @Min(1)
     @Max(200)
     private long pageSize = 20;

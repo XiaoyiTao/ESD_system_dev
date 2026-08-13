@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class PlatformDeptResp {
 
-    /** 部门 ID。 */
+    /** 部門 ID。 */
     private Long id;
-    /** 部门名称。 */
+    /** 部門名稱。 */
     private String name;
-    /** 父部门 ID。 */
+    /** 父部門 ID。 */
     private Long parentId;
-    /** 部门负责人用户 ID。 */
+    /** 部門負責人用戶 ID。 */
     private Long leaderUserId;
-    /** 部门状态，0 为启用。 */
+    /** 部門狀態，0 為啟用。 */
     private Integer status;
 }
