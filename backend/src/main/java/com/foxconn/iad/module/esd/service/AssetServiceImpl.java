@@ -8,6 +8,7 @@ import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetUpdateReqVO;
+import com.foxconn.iad.module.esd.convert.AssetConvert;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.IssueRecordDO;
 import com.foxconn.iad.module.esd.dal.dataobject.LaundryRecordDO;
@@ -110,7 +111,7 @@ public class AssetServiceImpl implements AssetService {
         IPage<AssetDO> page = assetMapper.selectPage(new Page<>(request.getPageNo(), request.getPageSize()), query);
         List<AssetRespVO> list = new ArrayList<>();
         for (AssetDO asset : page.getRecords()) {
-            list.add(toResponse(asset));
+            list.add(AssetConvert.INSTANCE.convert(asset));
         }
         return new PageResult<>(list, page.getTotal());
     }
@@ -119,7 +120,7 @@ public class AssetServiceImpl implements AssetService {
     public AssetRespVO get(Long id, String siteCode) {
         siteAccessService.requireSite(siteCode);
         AssetDO asset = requireAsset(id, siteCode);
-        AssetRespVO response = toResponse(asset);
+        AssetRespVO response = AssetConvert.INSTANCE.convert(asset);
         // 發放歷史與清洗歷史只顯示最近一次，避免詳情過載。
         response.setLatestIssue(latestIssue(asset.getId(), siteCode));
         response.setLatestLaundry(latestLaundry(asset.getId(), siteCode));
@@ -171,32 +172,5 @@ public class AssetServiceImpl implements AssetService {
             throw new BusinessException(404, "資產不存在");
         }
         return asset;
-    }
-
-    /** 將資料庫對象轉換成穩定的 API 響應，並補充狀態中文名稱。 */
-    private AssetRespVO toResponse(AssetDO asset) {
-        AssetRespVO response = new AssetRespVO();
-        response.setId(asset.getId());
-        response.setAssetCode(asset.getAssetCode());
-        response.setSiteCode(asset.getSiteCode());
-        response.setAssetType(asset.getAssetType());
-        response.setColorCode(asset.getColorCode());
-        response.setSizeCode(asset.getSizeCode());
-        response.setLifecycleStatus(asset.getLifecycleStatus());
-        // 資料庫狀態受 CHECK 約束；循環轉換避免 API 層直接暴露枚舉實現細節。
-        for (AssetLifecycleStatus status : AssetLifecycleStatus.values()) {
-            if (status.getCode() == asset.getLifecycleStatus()) {
-                response.setLifecycleStatusName(status.getDisplayName());
-                break;
-            }
-        }
-        response.setCurrentHolderUserId(asset.getCurrentHolderUserId());
-        response.setCurrentHolderNo(asset.getCurrentHolderNo());
-        response.setCurrentHolderName(asset.getCurrentHolderName());
-        response.setCleanCount(asset.getCleanCount());
-        response.setVersion(asset.getVersion());
-        response.setCreateTime(asset.getCreateTime());
-        response.setUpdateTime(asset.getUpdateTime());
-        return response;
     }
 }

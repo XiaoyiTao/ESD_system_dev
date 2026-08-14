@@ -8,6 +8,7 @@ import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssuePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueRespVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
+import com.foxconn.iad.module.esd.convert.IssueConvert;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetEventDO;
 import com.foxconn.iad.module.esd.dal.dataobject.IssueRecordDO;
@@ -110,7 +111,7 @@ public class IssueServiceImpl implements IssueService {
                 new Page<>(request.getPageNo(), request.getPageSize()), query);
         List<IssueRespVO> list = new ArrayList<>();
         for (IssueRecordDO record : page.getRecords()) {
-            list.add(toResponse(record));
+            list.add(IssueConvert.INSTANCE.convert(record));
         }
         return new PageResult<>(list, page.getTotal());
     }
@@ -124,25 +125,6 @@ public class IssueServiceImpl implements IssueService {
             throw new BusinessException(404, "資產不存在");
         }
         return asset;
-    }
-
-    /** 將發放記錄轉換成 API 響應。 */
-    private IssueRespVO toResponse(IssueRecordDO record) {
-        IssueRespVO response = new IssueRespVO();
-        response.setId(record.getId());
-        response.setAssetCode(record.getAssetCode());
-        response.setAssetType(record.getAssetType());
-        response.setEmployeeUserId(record.getEmployeeUserId());
-        response.setEmployeeNo(record.getEmployeeNo());
-        response.setEmployeeName(record.getEmployeeName());
-        response.setSupervisorName(record.getSupervisorName());
-        response.setDeptName(record.getDeptName());
-        response.setFloorCode(record.getFloorCode());
-        response.setIssueOperatorName(record.getIssueOperatorName());
-        response.setIssueDate(record.getIssueDate());
-        response.setRecordStatus(record.getRecordStatus());
-        response.setCloseTime(record.getCloseTime());
-        return response;
     }
 
     /** 追加資產事件帳，記錄狀態流轉與操作人。 */

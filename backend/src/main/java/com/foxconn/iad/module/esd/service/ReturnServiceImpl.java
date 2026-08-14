@@ -8,6 +8,7 @@ import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnRespVO;
+import com.foxconn.iad.module.esd.convert.ReturnConvert;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetEventDO;
 import com.foxconn.iad.module.esd.dal.dataobject.IssueRecordDO;
@@ -133,7 +134,7 @@ public class ReturnServiceImpl implements ReturnService {
                 new Page<>(request.getPageNo(), request.getPageSize()), query);
         List<ReturnRespVO> list = new ArrayList<>();
         for (ReturnRecordDO record : page.getRecords()) {
-            list.add(toResponse(record));
+            list.add(ReturnConvert.INSTANCE.convert(record));
         }
         return new PageResult<>(list, page.getTotal());
     }
@@ -172,27 +173,6 @@ public class ReturnServiceImpl implements ReturnService {
             }
         }
         throw new BusinessException(400, "回收後續處置不合法");
-    }
-
-    /** 將回收記錄轉換成 API 響應。 */
-    private ReturnRespVO toResponse(ReturnRecordDO record) {
-        ReturnRespVO response = new ReturnRespVO();
-        response.setId(record.getId());
-        response.setAssetCode(record.getAssetCode());
-        response.setAssetType(record.getAssetType());
-        response.setEmployeeNo(record.getEmployeeNo());
-        response.setEmployeeName(record.getEmployeeName());
-        response.setReturnerName(record.getReturnerName());
-        response.setReceiverName(record.getReceiverName());
-        response.setReturnDate(record.getReturnDate());
-        response.setDisposition(record.getDisposition());
-        for (ReturnDisposition disposition : ReturnDisposition.values()) {
-            if (disposition.getCode() == record.getDisposition()) {
-                response.setDispositionName(disposition.getDisplayName());
-                break;
-            }
-        }
-        return response;
     }
 
     /** 追加資產事件帳。 */

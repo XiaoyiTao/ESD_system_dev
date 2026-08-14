@@ -28,4 +28,17 @@ public enum ReturnDisposition {
     public String getDisplayName() {
         return displayName;
     }
+
+    /** 依資料庫編碼查詢中文名稱，未知或空編碼返回 null。 */
+    public static String displayNameOf(Integer code) {
+        if (code == null) {
+            return null;
+        }
+        for (ReturnDisposition disposition : values()) {
+            if (disposition.getCode() == code) {
+                return disposition.getDisplayName();
+            }
+        }
+        return null;
+    }
 }

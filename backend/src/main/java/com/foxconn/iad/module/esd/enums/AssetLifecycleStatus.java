@@ -63,4 +63,17 @@ public enum AssetLifecycleStatus {
     public boolean canTransitionTo(AssetLifecycleStatus target) {
         return target != null && TRANSITIONS.get(this).contains(target);
     }
+
+    /** 依資料庫編碼查詢中文名稱，未知或空編碼返回 null。 */
+    public static String displayNameOf(Integer code) {
+        if (code == null) {
+            return null;
+        }
+        for (AssetLifecycleStatus status : values()) {
+            if (status.getCode() == code) {
+                return status.getDisplayName();
+            }
+        }
+        return null;
+    }
 }

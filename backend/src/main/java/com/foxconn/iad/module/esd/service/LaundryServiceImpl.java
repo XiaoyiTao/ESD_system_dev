@@ -2,6 +2,7 @@ package com.foxconn.iad.module.esd.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.foxconn.iad.module.esd.controller.admin.laundry.vo.LaundryRespVO;
+import com.foxconn.iad.module.esd.convert.LaundryConvert;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetEventDO;
 import com.foxconn.iad.module.esd.dal.dataobject.LaundryRecordDO;
@@ -60,7 +61,7 @@ public class LaundryServiceImpl implements LaundryService {
             if (asset == null) {
                 continue;
             }
-            list.add(toResponse(record, asset));
+            list.add(LaundryConvert.INSTANCE.convert(record, asset));
         }
         return list;
     }
@@ -148,26 +149,6 @@ public class LaundryServiceImpl implements LaundryService {
             throw new BusinessException(404, "資產不存在");
         }
         return asset;
-    }
-
-    /** 將清洗記錄與資產組裝成 API 響應。 */
-    private LaundryRespVO toResponse(LaundryRecordDO record, AssetDO asset) {
-        LaundryRespVO response = new LaundryRespVO();
-        response.setId(record.getId());
-        response.setAssetCode(asset.getAssetCode());
-        response.setAssetType(asset.getAssetType());
-        response.setColorCode(asset.getColorCode());
-        response.setSizeCode(asset.getSizeCode());
-        response.setLifecycleStatus(asset.getLifecycleStatus());
-        for (AssetLifecycleStatus status : AssetLifecycleStatus.values()) {
-            if (status.getCode() == asset.getLifecycleStatus()) {
-                response.setLifecycleStatusName(status.getDisplayName());
-                break;
-            }
-        }
-        response.setSendTime(record.getSendTime());
-        response.setSendOperatorName(record.getSendOperatorName());
-        return response;
     }
 
     /** 追加資產事件帳。 */

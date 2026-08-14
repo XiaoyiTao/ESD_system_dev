@@ -8,6 +8,7 @@ import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreate
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileUpdateReqVO;
+import com.foxconn.iad.module.esd.convert.PersonProfileConvert;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.PersonProfileDO;
 import com.foxconn.iad.module.esd.dal.mysql.AssetMapper;
@@ -162,23 +163,9 @@ public class PersonProfileServiceImpl implements PersonProfileService {
 
     /** 組裝 API 響應，並實時統計當前持有的衣鞋數量。 */
     private PersonProfileRespVO toResponse(PersonProfileDO profile) {
-        PersonProfileRespVO response = new PersonProfileRespVO();
-        response.setId(profile.getId());
-        response.setSiteCode(profile.getSiteCode());
-        response.setPlatformUserId(profile.getPlatformUserId());
-        response.setEmployeeNo(profile.getEmployeeNo());
-        response.setEmployeeName(profile.getEmployeeName());
-        response.setDeptId(profile.getDeptId());
-        response.setDeptName(profile.getDeptName());
-        response.setSupervisorUserId(profile.getSupervisorUserId());
-        response.setSupervisorName(profile.getSupervisorName());
-        response.setFloorCode(profile.getFloorCode());
-        response.setShiftCode(profile.getShiftCode());
-        response.setEsdStatus(profile.getEsdStatus());
+        PersonProfileRespVO response = PersonProfileConvert.INSTANCE.convert(profile);
         response.setGarmentCount(countHeldAssets(profile.getPlatformUserId(), profile.getSiteCode(), 1));
         response.setShoesCount(countHeldAssets(profile.getPlatformUserId(), profile.getSiteCode(), 2));
-        response.setCreateTime(profile.getCreateTime());
-        response.setUpdateTime(profile.getUpdateTime());
         return response;
     }
 
