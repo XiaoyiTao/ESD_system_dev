@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.domain;
+package com.foxconn.iad.module.esd.enums;
 
 /**
  * 回收後續處置方式。

@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.domain;
+package com.foxconn.iad.module.esd.enums;
 
 /** ESD 資產類型；資料庫使用 1/2 進行持久化。 */
 public enum AssetType {

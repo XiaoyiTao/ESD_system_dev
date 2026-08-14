@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.domain;
+package com.foxconn.iad.module.esd.enums;
 
 import java.util.Collections;
 import java.util.EnumMap;

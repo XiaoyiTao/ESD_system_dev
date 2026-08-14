@@ -10,8 +10,8 @@ import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileUpdateReqVO;
 import com.foxconn.iad.module.esd.dal.dataobject.AssetDO;
 import com.foxconn.iad.module.esd.dal.dataobject.PersonProfileDO;
-import com.foxconn.iad.module.esd.dal.mapper.AssetMapper;
-import com.foxconn.iad.module.esd.dal.mapper.PersonProfileMapper;
+import com.foxconn.iad.module.esd.dal.mysql.AssetMapper;
+import com.foxconn.iad.module.esd.dal.mysql.PersonProfileMapper;
 import com.foxconn.iad.module.esd.exception.BusinessException;
 import com.foxconn.iad.module.esd.platform.PlatformDeptGateway;
 import com.foxconn.iad.module.esd.platform.PlatformDeptResp;

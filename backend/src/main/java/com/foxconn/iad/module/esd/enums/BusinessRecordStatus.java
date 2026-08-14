@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.domain;
+package com.foxconn.iad.module.esd.enums;
 
 /**
  * 業務交易記錄的通用狀態。

@@ -1,4 +1,4 @@
-package com.foxconn.iad.module.esd.dal.mapper;
+package com.foxconn.iad.module.esd.dal.mysql;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.foxconn.iad.module.esd.dal.dataobject.IssueRecordDO;
