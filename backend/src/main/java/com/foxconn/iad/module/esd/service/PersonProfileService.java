@@ -1,6 +1,6 @@
 package com.foxconn.iad.module.esd.service;
 
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
@@ -21,7 +21,7 @@ public interface PersonProfileService {
     void update(Long id, PersonProfileUpdateReqVO request);
 
     /** 按廠區、部門、啟停狀態和關鍵字分頁查詢。 */
-    PageResponse<PersonProfileRespVO> page(PersonProfilePageReqVO request);
+    PageResult<PersonProfileRespVO> page(PersonProfilePageReqVO request);
 
     /** 查詢指定廠區的人員詳情。 */
     PersonProfileRespVO get(Long id, String siteCode);

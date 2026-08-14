@@ -3,7 +3,7 @@ package com.foxconn.iad.module.esd.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
@@ -93,7 +93,7 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public PageResponse<AssetRespVO> page(AssetPageReqVO request) {
+    public PageResult<AssetRespVO> page(AssetPageReqVO request) {
         siteAccessService.requireSite(request.getSiteCode());
         // 廠區條件始終作為 AND 條件，防止關鍵字 OR 子句突破數據隔離邊界。
         LambdaQueryWrapper<AssetDO> query = new LambdaQueryWrapper<AssetDO>()
@@ -112,7 +112,7 @@ public class AssetServiceImpl implements AssetService {
         for (AssetDO asset : page.getRecords()) {
             list.add(toResponse(asset));
         }
-        return new PageResponse<>(list, page.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override

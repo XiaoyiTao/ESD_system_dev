@@ -1,5 +1,5 @@
 import request from './request'
-import type { PageResponse, PersonProfile } from '../types/esd'
+import type { PageResult, PersonProfile } from '../types/esd'
 
 /** 人員檔列表的服務端分頁和過濾條件。 */
 export interface PersonPageQuery {
@@ -21,7 +21,7 @@ export interface PersonCreatePayload {
 
 /** 查詢 ESD 人員擴展檔。 */
 export function getPersonPage(params: PersonPageQuery) {
-  return request.get<{ data: PageResponse<PersonProfile> }>('/esd/person-profiles', { params })
+  return request.get<{ data: PageResult<PersonProfile> }>('/esd/person-profiles', { params })
 }
 
 /** 將平台用戶綁定為當前廠區的 ESD 業務人員。 */

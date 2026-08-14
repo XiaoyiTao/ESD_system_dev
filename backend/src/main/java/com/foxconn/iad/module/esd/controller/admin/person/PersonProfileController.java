@@ -1,7 +1,7 @@
 package com.foxconn.iad.module.esd.controller.admin.person;
 
-import com.foxconn.iad.module.esd.common.ApiResponse;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.CommonResult;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
@@ -24,26 +24,26 @@ public class PersonProfileController {
 
     /** 從平台校驗用戶後創建 ESD 人員檔。 */
     @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody PersonProfileCreateReqVO request) {
-        return ApiResponse.success(personProfileService.create(request));
+    public CommonResult<Long> create(@Valid @RequestBody PersonProfileCreateReqVO request) {
+        return CommonResult.success(personProfileService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Boolean> update(@PathVariable Long id,
+    public CommonResult<Boolean> update(@PathVariable Long id,
                                        @Valid @RequestBody PersonProfileUpdateReqVO request) {
         personProfileService.update(id, request);
-        return ApiResponse.success(true);
+        return CommonResult.success(true);
     }
 
     @GetMapping
-    public ApiResponse<PageResponse<PersonProfileRespVO>> page(@Valid PersonProfilePageReqVO request) {
-        return ApiResponse.success(personProfileService.page(request));
+    public CommonResult<PageResult<PersonProfileRespVO>> page(@Valid PersonProfilePageReqVO request) {
+        return CommonResult.success(personProfileService.page(request));
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<PersonProfileRespVO> get(@PathVariable Long id,
+    public CommonResult<PersonProfileRespVO> get(@PathVariable Long id,
                                              @RequestParam String siteCode) {
-        return ApiResponse.success(personProfileService.get(id, siteCode));
+        return CommonResult.success(personProfileService.get(id, siteCode));
     }
 }
     /** 更新主管、樓層、班別和啟停狀態。 */

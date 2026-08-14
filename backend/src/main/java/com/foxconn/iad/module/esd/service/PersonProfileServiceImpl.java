@@ -3,7 +3,7 @@ package com.foxconn.iad.module.esd.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfilePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.person.vo.PersonProfileRespVO;
@@ -107,7 +107,7 @@ public class PersonProfileServiceImpl implements PersonProfileService {
     }
 
     @Override
-    public PageResponse<PersonProfileRespVO> page(PersonProfilePageReqVO request) {
+    public PageResult<PersonProfileRespVO> page(PersonProfilePageReqVO request) {
         siteAccessService.requireSite(request.getSiteCode());
         // 先拼接廠區 AND，再拼接關鍵字括號，保證 OR 查詢不會越權。
         LambdaQueryWrapper<PersonProfileDO> query = new LambdaQueryWrapper<PersonProfileDO>()
@@ -124,7 +124,7 @@ public class PersonProfileServiceImpl implements PersonProfileService {
         for (PersonProfileDO profile : page.getRecords()) {
             list.add(toResponse(profile));
         }
-        return new PageResponse<>(list, page.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override

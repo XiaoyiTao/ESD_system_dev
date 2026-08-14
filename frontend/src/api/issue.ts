@@ -1,5 +1,5 @@
 import request from './request'
-import type { IssueRecord, PageResponse } from '../types/esd'
+import type { IssueRecord, PageResult } from '../types/esd'
 
 /** 發放列表的服務端分頁和過濾條件。 */
 export interface IssuePageQuery {
@@ -20,7 +20,7 @@ export interface IssueCreatePayload {
 
 /** 查詢發放記錄分頁數據，一個資產多次發放全部顯示。 */
 export function getIssuePage(params: IssuePageQuery) {
-  return request.get<{ data: PageResponse<IssueRecord> }>('/esd/issues/page', { params })
+  return request.get<{ data: PageResult<IssueRecord> }>('/esd/issues/page', { params })
 }
 
 /** 單筆發放：庫存 -> 發放中。 */

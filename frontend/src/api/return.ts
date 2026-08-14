@@ -1,5 +1,5 @@
 import request from './request'
-import type { PageResponse, ReturnRecord } from '../types/esd'
+import type { PageResult, ReturnRecord } from '../types/esd'
 
 /** 回收列表的服務端分頁和過濾條件。 */
 export interface ReturnPageQuery {
@@ -20,7 +20,7 @@ export interface ReturnCreatePayload {
 
 /** 查詢回收記錄分頁數據。 */
 export function getReturnPage(params: ReturnPageQuery) {
-  return request.get<{ data: PageResponse<ReturnRecord> }>('/esd/returns/page', { params })
+  return request.get<{ data: PageResult<ReturnRecord> }>('/esd/returns/page', { params })
 }
 
 /** 單筆回收：發放中 -> 庫存 或 發放中 -> 待送洗。 */

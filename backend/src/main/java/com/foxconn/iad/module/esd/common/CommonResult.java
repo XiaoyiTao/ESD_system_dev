@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse<T> {
+public class CommonResult<T> {
 
     /** 0 表示成功；非 0 值與 HTTP 狀態共同表達業務錯誤。 */
     private int code;
@@ -17,12 +17,12 @@ public class ApiResponse<T> {
     private T data;
 
     /** 構造成功響應，保持與平台 CommonResult 的 code 約定一致。 */
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(0, "success", data);
+    public static <T> CommonResult<T> success(T data) {
+        return new CommonResult<>(0, "success", data);
     }
 
     /** 構造失敗響應，避免控制器重複創建響應對象。 */
-    public static <T> ApiResponse<T> failure(int code, String message) {
-        return new ApiResponse<>(code, message, null);
+    public static <T> CommonResult<T> failure(int code, String message) {
+        return new CommonResult<>(code, message, null);
     }
 }

@@ -1,5 +1,5 @@
 import request from './request'
-import type { Asset, PageResponse } from '../types/esd'
+import type { Asset, PageResult } from '../types/esd'
 
 /** 資產列表的服務端分頁和過濾條件。 */
 export interface AssetPageQuery {
@@ -22,7 +22,7 @@ export interface AssetCreatePayload {
 
 /** 查詢資產主檔分頁數據。 */
 export function getAssetPage(params: AssetPageQuery) {
-  return request.get<{ data: PageResponse<Asset> }>('/esd/assets', { params })
+  return request.get<{ data: PageResult<Asset> }>('/esd/assets', { params })
 }
 
 /** 新增一件資產，不允許前端指定生命周期和版本。 */

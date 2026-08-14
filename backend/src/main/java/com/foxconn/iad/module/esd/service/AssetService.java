@@ -1,6 +1,6 @@
 package com.foxconn.iad.module.esd.service;
 
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
@@ -20,7 +20,7 @@ public interface AssetService {
     void update(Long id, AssetUpdateReqVO request);
 
     /** 按廠區和篩選條件分頁查詢資產，關鍵字同時搜索編碼和當前持有人快照。 */
-    PageResponse<AssetRespVO> page(AssetPageReqVO request);
+    PageResult<AssetRespVO> page(AssetPageReqVO request);
 
     /** 查詢單件資產詳情，並再次校驗廠區權限。 */
     AssetRespVO get(Long id, String siteCode);

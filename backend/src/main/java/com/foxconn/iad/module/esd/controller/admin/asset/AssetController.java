@@ -1,7 +1,7 @@
 package com.foxconn.iad.module.esd.controller.admin.asset;
 
-import com.foxconn.iad.module.esd.common.ApiResponse;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.CommonResult;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.asset.vo.AssetRespVO;
@@ -24,26 +24,26 @@ public class AssetController {
 
     /** 新增一件可用庫存資產。 */
     @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody AssetCreateReqVO request) {
-        return ApiResponse.success(assetService.create(request));
+    public CommonResult<Long> create(@Valid @RequestBody AssetCreateReqVO request) {
+        return CommonResult.success(assetService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Boolean> update(@PathVariable Long id,
+    public CommonResult<Boolean> update(@PathVariable Long id,
                                        @Valid @RequestBody AssetUpdateReqVO request) {
         assetService.update(id, request);
-        return ApiResponse.success(true);
+        return CommonResult.success(true);
     }
 
     @GetMapping
-    public ApiResponse<PageResponse<AssetRespVO>> page(@Valid AssetPageReqVO request) {
-        return ApiResponse.success(assetService.page(request));
+    public CommonResult<PageResult<AssetRespVO>> page(@Valid AssetPageReqVO request) {
+        return CommonResult.success(assetService.page(request));
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<AssetRespVO> get(@PathVariable Long id,
+    public CommonResult<AssetRespVO> get(@PathVariable Long id,
                                      @RequestParam String siteCode) {
-        return ApiResponse.success(assetService.get(id, siteCode));
+        return CommonResult.success(assetService.get(id, siteCode));
     }
 }
     /** 編輯顏色和尺碼，並要求客戶端帶回最新版本號。 */

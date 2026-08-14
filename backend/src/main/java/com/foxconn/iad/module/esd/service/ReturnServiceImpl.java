@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnRespVO;
@@ -123,7 +123,7 @@ public class ReturnServiceImpl implements ReturnService {
     }
 
     @Override
-    public PageResponse<ReturnRespVO> page(ReturnPageReqVO request) {
+    public PageResult<ReturnRespVO> page(ReturnPageReqVO request) {
         siteAccessService.requireSite(request.getSiteCode());
         LambdaQueryWrapper<ReturnRecordDO> query = new LambdaQueryWrapper<ReturnRecordDO>()
                 .eq(ReturnRecordDO::getSiteCode, request.getSiteCode())
@@ -135,7 +135,7 @@ public class ReturnServiceImpl implements ReturnService {
         for (ReturnRecordDO record : page.getRecords()) {
             list.add(toResponse(record));
         }
-        return new PageResponse<>(list, page.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     /** 結算指定資產尚未歸還的發放記錄。 */

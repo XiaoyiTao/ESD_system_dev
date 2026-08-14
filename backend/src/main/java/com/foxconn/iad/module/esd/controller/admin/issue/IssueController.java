@@ -1,7 +1,7 @@
 package com.foxconn.iad.module.esd.controller.admin.issue;
 
-import com.foxconn.iad.module.esd.common.ApiResponse;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.CommonResult;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssuePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueRespVO;
@@ -27,13 +27,13 @@ public class IssueController {
 
     /** 單筆發放。 */
     @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody IssueCreateReqVO request) {
-        return ApiResponse.success(issueService.create(request));
+    public CommonResult<Long> create(@Valid @RequestBody IssueCreateReqVO request) {
+        return CommonResult.success(issueService.create(request));
     }
 
     /** 按廠區分頁查詢發放記錄，一個資產多次發放全部顯示。 */
     @GetMapping("/page")
-    public ApiResponse<PageResponse<IssueRespVO>> page(@Valid IssuePageReqVO request) {
-        return ApiResponse.success(issueService.page(request));
+    public CommonResult<PageResult<IssueRespVO>> page(@Valid IssuePageReqVO request) {
+        return CommonResult.success(issueService.page(request));
     }
 }

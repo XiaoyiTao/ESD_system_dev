@@ -3,7 +3,7 @@ package com.foxconn.iad.module.esd.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssuePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueRespVO;
@@ -97,7 +97,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public PageResponse<IssueRespVO> page(IssuePageReqVO request) {
+    public PageResult<IssueRespVO> page(IssuePageReqVO request) {
         siteAccessService.requireSite(request.getSiteCode());
         LambdaQueryWrapper<IssueRecordDO> query = new LambdaQueryWrapper<IssueRecordDO>()
                 .eq(IssueRecordDO::getSiteCode, request.getSiteCode())
@@ -112,7 +112,7 @@ public class IssueServiceImpl implements IssueService {
         for (IssueRecordDO record : page.getRecords()) {
             list.add(toResponse(record));
         }
-        return new PageResponse<>(list, page.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     /** 按編碼查找指定廠區內的資產。 */

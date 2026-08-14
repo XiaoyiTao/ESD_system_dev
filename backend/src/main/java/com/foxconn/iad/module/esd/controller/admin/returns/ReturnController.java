@@ -1,7 +1,7 @@
 package com.foxconn.iad.module.esd.controller.admin.returns;
 
-import com.foxconn.iad.module.esd.common.ApiResponse;
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.CommonResult;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnRespVO;
@@ -27,13 +27,13 @@ public class ReturnController {
 
     /** 單筆回收：直接入庫或送洗。 */
     @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody ReturnCreateReqVO request) {
-        return ApiResponse.success(returnService.create(request));
+    public CommonResult<Long> create(@Valid @RequestBody ReturnCreateReqVO request) {
+        return CommonResult.success(returnService.create(request));
     }
 
     /** 按廠區分頁查詢回收記錄。 */
     @GetMapping("/page")
-    public ApiResponse<PageResponse<ReturnRespVO>> page(@Valid ReturnPageReqVO request) {
-        return ApiResponse.success(returnService.page(request));
+    public CommonResult<PageResult<ReturnRespVO>> page(@Valid ReturnPageReqVO request) {
+        return CommonResult.success(returnService.page(request));
     }
 }

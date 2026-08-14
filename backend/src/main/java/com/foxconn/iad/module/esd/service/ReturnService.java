@@ -1,6 +1,6 @@
 package com.foxconn.iad.module.esd.service;
 
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnPageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.returns.vo.ReturnRespVO;
@@ -17,5 +17,5 @@ public interface ReturnService {
     Long create(ReturnCreateReqVO request);
 
     /** 按廠區分頁查詢回收記錄。 */
-    PageResponse<ReturnRespVO> page(ReturnPageReqVO request);
+    PageResult<ReturnRespVO> page(ReturnPageReqVO request);
 }

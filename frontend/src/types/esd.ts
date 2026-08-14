@@ -1,5 +1,5 @@
-/** 與後端 PageResponse 對齊的分頁數據。 */
-export interface PageResponse<T> {
+/** 與後端 PageResult 對齊的分頁數據。 */
+export interface PageResult<T> {
   list: T[]
   total: number
 }

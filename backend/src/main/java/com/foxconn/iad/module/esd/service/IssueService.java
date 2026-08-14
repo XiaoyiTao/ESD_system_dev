@@ -1,6 +1,6 @@
 package com.foxconn.iad.module.esd.service;
 
-import com.foxconn.iad.module.esd.common.PageResponse;
+import com.foxconn.iad.module.esd.common.PageResult;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueCreateReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssuePageReqVO;
 import com.foxconn.iad.module.esd.controller.admin.issue.vo.IssueRespVO;
@@ -17,5 +17,5 @@ public interface IssueService {
     Long create(IssueCreateReqVO request);
 
     /** 按廠區分頁查詢發放記錄，一個資產多次發放全部顯示。 */
-    PageResponse<IssueRespVO> page(IssuePageReqVO request);
+    PageResult<IssueRespVO> page(IssuePageReqVO request);
 }

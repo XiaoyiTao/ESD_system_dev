@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class PageResponse<T> {
+public class PageResult<T> {
 
     /** 當前頁數據。 */
     private List<T> list;
